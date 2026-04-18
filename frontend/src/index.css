@@ -1,0 +1,271 @@
+/* ═══════════════════════════════════════════
+   Design Tokens (CSS Variables)
+═══════════════════════════════════════════ */
+:root {
+  --blue: #3B5BDB;
+  --blueDark: #2C3E8F;
+  --blueLight: #EEF2FF;
+  --blueMid: #C5D3FF;
+
+  --green: #10B981;
+  --greenBg: #ECFDF5;
+  --orange: #F97316;
+  --orangeBg: #FFF7ED;
+  --red: #EF4444;
+  --redBg: #FEF2F2;
+  --gold: #F59E0B;
+  --goldBg: #FFFBEB;
+
+  --dark: #111827;
+  --body: #374151;
+  --muted: #6B7280;
+  --border: #E5E7EB;
+  --bg: #F9FAFB;
+  --white: #FFFFFF;
+  --footerBg: #111827;
+}
+
+[data-theme="dark"] {
+  --blue: #5C7CFA;
+  --blueDark: #3B5BDB;
+  --blueLight: #1E2548;
+  --blueMid: #3A467C;
+
+  --green: #20C997;
+  --greenBg: #14352B;
+  --orange: #FF922B;
+  --orangeBg: #3E2514;
+  --red: #FF6B6B;
+  --redBg: #3F191B;
+  --gold: #FCC419;
+  --goldBg: #3D2D11;
+
+  --dark: #F8F9FA;
+  --body: #E9ECEF;
+  --muted: #ADB5BD;
+  --border: #2C3238;
+  --bg: #121212;
+  --white: #1E1E1E;
+  --footerBg: #121212;
+}
+
+/* ═══════════════════════════════════════════
+   Base Reset & Typography
+═══════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg);
+  color: var(--body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a { color: inherit; text-decoration: none; }
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+/* ═══════════════════════════════════════════
+   Responsive Container
+═══════════════════════════════════════════ */
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+}
+
+@media (max-width: 360px) {
+  .container { padding: 0 12px; }
+}
+
+/* ═══════════════════════════════════════════
+   Responsive Grid Utilities
+═══════════════════════════════════════════ */
+.grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .grid-auto { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* ═══════════════════════════════════════════
+   Show / Hide Utilities
+═══════════════════════════════════════════ */
+.mobile-only   { display: none !important; }
+.desktop-only  { display: block !important; }
+.flex-desktop  { display: flex !important; }
+
+@media (max-width: 768px) {
+  .mobile-only   { display: block !important; }
+  .desktop-only  { display: none !important; }
+  .flex-desktop  { display: none !important; }
+}
+
+/* ═══════════════════════════════════════════
+   Responsive Tables
+═══════════════════════════════════════════ */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+}
+
+.table-responsive table {
+  min-width: 600px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* ═══════════════════════════════════════════
+   Responsive Cards
+═══════════════════════════════════════════ */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+}
+
+@media (max-width: 480px) {
+  .card-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+
+/* ═══════════════════════════════════════════
+   Responsive Forms
+═══════════════════════════════════════════ */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 600px) {
+  .form-grid-2 { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* ═══════════════════════════════════════════
+   Scrollbar Styling
+═══════════════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3B5BDB; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2C3E8F; }
+
+/* ═══════════════════════════════════════════
+   Animations
+═══════════════════════════════════════════ */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ═══════════════════════════════════════════
+   Page Responsive Adjustments
+═══════════════════════════════════════════ */
+
+/* Hero / Public pages padding */
+@media (max-width: 768px) {
+  section { padding: 40px 0 !important; }
+  h1 { font-size: 1.85rem !important; line-height: 1.25 !important; letter-spacing: -0.02em; }
+  h2 { font-size: 1.45rem !important; line-height: 1.3 !important; }
+  h3 { font-size: 1.1rem !important; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.6rem !important; }
+  p { font-size: 0.92rem !important; line-height: 1.7 !important; }
+}
+
+@media (max-width: 480px) {
+  h1 { font-size: 1.6rem !important; }
+}
+
+/* Dashboard main area */
+@media (max-width: 768px) {
+  /* Stats cards inline → wrap */
+  [style*="display:\"flex\""][style*="gap:"] > * {
+    flex-shrink: 0;
+  }
+}
+
+/* Modals and overlays */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+  padding: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.modal-box {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 540px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: fadeIn 0.2s ease;
+}
+
+@media (max-width: 480px) {
+  .modal-box { padding: 20px 16px; border-radius: 16px; }
+}
+
+/* ═══════════════════════════════════════════
+   Print Styles
+═══════════════════════════════════════════ */
+@media print {
+  .no-print { display: none !important; }
+  body { print-color-adjust: exact; }
+}
