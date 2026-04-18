@@ -84,22 +84,24 @@ class ProfileController extends Controller
         $profile = $user->profile;
 
         if ($request->hasFile('avatar')) {
-            $imageName = time() . '_' . $user->id . '.' . $request->avatar->extension();
-            
-            // Delete old avatar if it's local
-            if ($profile->avatar_url && str_starts_with($profile->avatar_url, '/uploads/avatars/')) {
-                $oldPath = public_path($profile->avatar_url);
-                if (file_exists($oldPath)) {
-                    unlink($oldPath);
-                }
+            // Delete old avatar from Cloudinary if it exists
+            if ($profile->cloudinary_avatar_id) {
+                cloudinary()->destroy($profile->cloudinary_avatar_id);
             }
 
-            $request->avatar->move(public_path('uploads/avatars'), $imageName);
-            $profile->avatar_url = '/uploads/avatars/' . $imageName;
+            // Upload new avatar to Cloudinary
+            $result = cloudinary()->upload($request->file('avatar')->getRealPath(), [
+                'folder'         => 'eliteplatform/avatars',
+                'public_id'      => 'user_' . $user->id . '_' . time(),
+                'transformation' => [['width' => 300, 'height' => 300, 'crop' => 'fill']],
+            ]);
+
+            $profile->avatar_url           = $result->getSecurePath();
+            $profile->cloudinary_avatar_id = $result->getPublicId();
             $profile->save();
 
             return response()->json([
-                'message' => 'Avatar uploaded successfully',
+                'message'    => 'Avatar uploaded successfully',
                 'avatar_url' => $profile->avatar_url
             ]);
         }
@@ -114,15 +116,13 @@ class ProfileController extends Controller
         $profile = $user->profile;
 
         if ($profile->avatar_url) {
-            // Delete old avatar if it's local
-            if (str_starts_with($profile->avatar_url, '/uploads/avatars/')) {
-                $oldPath = public_path($profile->avatar_url);
-                if (file_exists($oldPath)) {
-                    unlink($oldPath);
-                }
+            // Delete from Cloudinary if exists
+            if ($profile->cloudinary_avatar_id) {
+                cloudinary()->destroy($profile->cloudinary_avatar_id);
             }
 
-            $profile->avatar_url = null;
+            $profile->avatar_url           = null;
+            $profile->cloudinary_avatar_id = null;
             $profile->save();
 
             return response()->json([

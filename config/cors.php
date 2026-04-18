@@ -20,6 +20,7 @@ return [
     'allowed_methods' => ['*'],
 
     'allowed_origins' => [
+        // Local development
         'http://localhost:3000',
         'http://127.0.0.1:3000',
         'http://10.31.55.147:3000',
@@ -28,9 +29,13 @@ return [
         'http://192.168.8.103:3000',
         'http://192.168.0.101:3000',
         'http://192.168.0.103:3000',
+        // Production (Vercel) — update after deployment
+        env('FRONTEND_URL', 'https://eliteplatform.vercel.app'),
     ],
 
-    'allowed_origins_patterns' => [],
+    'allowed_origins_patterns' => [
+        '#^https://eliteplatform.*\.vercel\.app$#',  // Vercel preview deployments
+    ],
 
     'allowed_headers' => ['*'],
 

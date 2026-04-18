@@ -382,15 +382,20 @@ class AdminAcademicController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imageName = time() . '_' . $id . '.' . $request->image->extension();
-            $request->image->move(public_path('uploads/majors'), $imageName);
-            
-            $major->image_url = url('uploads/majors/' . $imageName);
+            // Upload to Cloudinary
+            $result = cloudinary()->upload($request->file('image')->getRealPath(), [
+                'folder'         => 'eliteplatform/majors',
+                'public_id'      => 'major_' . $id . '_' . time(),
+                'transformation' => [['width' => 800, 'height' => 600, 'crop' => 'fill']],
+            ]);
+
+            $major->image_url            = $result->getSecurePath();
+            $major->cloudinary_image_id  = $result->getPublicId();
             $major->save();
 
             return response()->json([
                 'image_url' => $major->image_url,
-                'major' => $major
+                'major'     => $major
             ]);
         }
 
