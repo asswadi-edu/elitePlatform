@@ -1,25 +1,27 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "منصة النخبة",
+  "name": "منصة النخبة - اكتشف تخصصك بثقة",
+  "description": "منصة النخبة تساعدك على اكتشاف تخصصك الجامعي المناسب بناءً على ميولك وقدراتك عبر أدوات ذكية ومتطورة.",
   "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "orientation": "portrait",
+  "theme_color": "#3B5BDB",
+  "background_color": "#F0F4FF",
+  "lang": "ar",
+  "dir": "rtl"
 }
