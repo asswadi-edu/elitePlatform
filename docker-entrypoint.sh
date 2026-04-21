@@ -1,16 +1,13 @@
 #!/bin/bash
 set -e
 
-# Render provides PORT as an env variable — Apache must listen on it
 APP_PORT=${PORT:-80}
 
-echo "==> Configuring Apache to listen on port $APP_PORT ..."
+echo "==> [1/6] Configuring Apache on port $APP_PORT ..."
 sed -i "s/Listen 80/Listen ${APP_PORT}/" /etc/apache2/ports.conf
 sed -i "s/*:80/*:${APP_PORT}/" /etc/apache2/sites-available/000-default.conf
 
-echo "==> Creating .env file from environment variables ..."
-
-# Write each line individually to safely handle special characters in values
+echo "==> [2/6] Creating .env file ..."
 {
   echo "APP_NAME=\"${APP_NAME:-ElitePlatform}\""
   echo "APP_ENV=${APP_ENV:-production}"
@@ -19,8 +16,8 @@ echo "==> Creating .env file from environment variables ..."
   echo "APP_URL=${APP_URL:-http://localhost}"
   echo "FRONTEND_URL=${FRONTEND_URL:-}"
   echo ""
-  echo "LOG_CHANNEL=stack"
-  echo "LOG_LEVEL=error"
+  echo "LOG_CHANNEL=stderr"
+  echo "LOG_LEVEL=debug"
   echo ""
   echo "DB_CONNECTION=${DB_CONNECTION:-mysql}"
   echo "DB_HOST=${DB_HOST}"
@@ -36,8 +33,8 @@ echo "==> Creating .env file from environment variables ..."
   echo ""
   echo "SANCTUM_STATEFUL_DOMAINS=${SANCTUM_STATEFUL_DOMAINS}"
   echo ""
-  echo "CACHE_STORE=${CACHE_STORE:-file}"
-  echo "QUEUE_CONNECTION=${QUEUE_CONNECTION:-sync}"
+  echo "CACHE_STORE=array"
+  echo "QUEUE_CONNECTION=sync"
   echo "FILESYSTEM_DISK=local"
   echo ""
   printf 'CLOUDINARY_URL=%s\n' "${CLOUDINARY_URL}"
@@ -54,20 +51,33 @@ echo "==> Creating .env file from environment variables ..."
   echo "PYTHON_API_URL=${PYTHON_API_URL:-}"
 } > /var/www/html/.env
 
-echo "==> Running storage:link ..."
-php artisan storage:link || true
+echo "==> .env written. Contents (masked):"
+grep -v "PASSWORD\|KEY\|SECRET\|URL" /var/www/html/.env || true
 
-echo "==> Running database migrations ..."
-php artisan migrate --force
+echo "==> [3/6] Testing DB connection ..."
+php -r "
+  try {
+    \$pdo = new PDO(
+      'mysql:host=${DB_HOST};port=${DB_PORT:-3306};dbname=${DB_DATABASE}',
+      '${DB_USERNAME}',
+      getenv('DB_PASSWORD')
+    );
+    echo 'DB connection OK' . PHP_EOL;
+  } catch (Exception \$e) {
+    echo 'DB connection FAILED: ' . \$e->getMessage() . PHP_EOL;
+  }
+" || true
 
-echo "==> Caching Laravel config/routes/views ..."
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+echo "==> [4/6] Running artisan commands ..."
+php artisan storage:link --force || echo "storage:link failed (non-fatal)"
+php artisan migrate --force || echo "migrate FAILED — check DB connection above"
+php artisan config:cache || echo "config:cache failed"
+php artisan route:cache  || echo "route:cache failed"
+php artisan view:cache   || echo "view:cache failed"
 
-echo "==> Fixing storage permissions ..."
+echo "==> [5/6] Setting permissions ..."
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-echo "==> Starting Apache on port $APP_PORT ..."
+echo "==> [6/6] Starting Apache on port $APP_PORT ..."
 exec apache2-foreground
