@@ -20,6 +20,7 @@ export default function TestPage({ setPage, inDashboard = false, isUniversity, u
   const [submitting, setSubmitting] = useState(false);
   const [isTimeUp, setIsTimeUp] = useState(false);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchQuestions();
   }, []);

@@ -41,6 +41,7 @@ export default function TestResultPage({ setPage, elapsed = 0, uuid = null, requ
       .catch(e => console.error(e));
   }, []);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (uuid) {
         fetchExistingResult();
