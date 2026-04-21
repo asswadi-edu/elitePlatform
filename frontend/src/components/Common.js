@@ -330,7 +330,7 @@ export function MajorDetailsModal({ major, onClose, t }) {
             )}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 32 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 16, marginBottom: 32 }}>
             <div style={{ background: C.bg, padding: "12px 16px", borderRadius: 12, border: `1px solid ${C.border}` }}>
               <div style={{ fontSize: "0.75rem", color: C.muted, fontWeight: 700, marginBottom: 4 }}>{t ? t("مدة الدراسة") : "Duration"}</div>
               <div style={{ fontWeight: 800, color: C.dark }}>{m.duration || (t ? t("غير محدد") : "Not specified")}</div>
@@ -339,34 +339,133 @@ export function MajorDetailsModal({ major, onClose, t }) {
               <div style={{ fontSize: "0.75rem", color: C.muted, fontWeight: 700, marginBottom: 4 }}>{t ? t("نوع الدرجة") : "Degree"}</div>
               <div style={{ fontWeight: 800, color: C.dark }}>{m.degree_type || (t ? t("غير محدد") : "Not specified")}</div>
             </div>
+            <div style={{ background: C.bg, padding: "12px 16px", borderRadius: 12, border: `1px solid ${C.border}` }}>
+              <div style={{ fontSize: "0.75rem", color: C.muted, fontWeight: 700, marginBottom: 4 }}>{t ? t("طبيعة الدراسة") : "Nature of Study"}</div>
+              <div style={{ fontWeight: 800, color: C.dark }}>{m.study_nature || (t ? t("غير محدد") : "Not specified")}</div>
+            </div>
           </div>
           
-          <div style={{ marginBottom: 32 }}>
-            <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 10, fontSize: "1rem" }}>{t ? t("نبذة عن التخصص") : "About Major"}</h4>
-            <p style={{ color: C.muted, fontSize: "0.95rem", lineHeight: 1.8 }}>{m.description || (t ? t("لا يوجد وصف تفصيلي متاح حالياً.") : "No description available.")}</p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 24, marginBottom: 32 }}>
+            {m.description && (
+              <div>
+                <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 10, fontSize: "1rem" }}>{t ? t("نبذة عن التخصص") : "About Major"}</h4>
+                <p style={{ color: C.muted, fontSize: "0.95rem", lineHeight: 1.8 }}>{m.description}</p>
+              </div>
+            )}
+
+            {m.why_choose_major && (
+              <div>
+                <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 10, fontSize: "1rem" }}>{t ? t("لماذا تختار هذا التخصص؟") : "Why Choose This"}</h4>
+                <p style={{ color: C.muted, fontSize: "0.95rem", lineHeight: 1.8 }}>{m.why_choose_major}</p>
+              </div>
+            )}
+
+            {m.future_of_major && (
+              <div>
+                <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 10, fontSize: "1rem" }}>{t ? t("مستقبل التخصص") : "Future of Major"}</h4>
+                <p style={{ color: C.muted, fontSize: "0.95rem", lineHeight: 1.8 }}>{m.future_of_major}</p>
+              </div>
+            )}
           </div>
 
-          {m.core_subjects?.length > 0 && (
-            <div style={{ marginBottom: 32 }}>
-               <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("أبرز المواد الدراسية") : "Core Subjects"}</h4>
-               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                 {m.core_subjects.map((s, i) => (
-                   <span key={i} style={{ padding: "6px 14px", background: C.blueLight, color: C.blue, borderRadius: 20, fontSize: "0.84rem", fontWeight: 700 }}>{s}</span>
-                 ))}
-               </div>
-            </div>
-          )}
-          
-          {m.careers?.length > 0 && (
-            <div style={{ background: C.bg, borderRadius: 16, padding: "24px", marginBottom: 32, border: `1px solid ${C.border}` }}>
-              <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("المستقبل الوظيفي") : "Career Paths"}</h4>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {m.careers.map((career, i) => (
-                  <div key={i} style={{ padding: "8px 16px", background: C.white, borderRadius: 10, fontSize: "0.86rem", color: C.dark, fontWeight: 700, border: `1px solid ${C.border}`, boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>
-                    {career}
-                  </div>
-                ))}
+          <div style={{ display: "flex", flexDirection: "column", gap: 24, marginBottom: 32 }}>
+            {m.core_subjects?.length > 0 && (
+              <div>
+                 <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("أبرز المواد الدراسية") : "Core Subjects"}</h4>
+                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                   {m.core_subjects.map((s, i) => (
+                     <span key={i} style={{ padding: "6px 14px", background: C.blueLight, color: C.blue, borderRadius: 20, fontSize: "0.84rem", fontWeight: 700 }}>{s}</span>
+                   ))}
+                 </div>
               </div>
+            )}
+
+            {m.required_skills?.length > 0 && (
+              <div>
+                 <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("المهارات المطلوبة قبل دخول التخصص") : "Required Skills"}</h4>
+                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                   {m.required_skills.map((s, i) => (
+                     <span key={i} style={{ padding: "6px 14px", background: "#e8f5e9", color: "#2e7d32", borderRadius: 20, fontSize: "0.84rem", fontWeight: 700 }}>{s}</span>
+                   ))}
+                 </div>
+              </div>
+            )}
+
+            {m.acquired_skills?.length > 0 && (
+              <div>
+                 <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("مواصفات الخريج (المهارات المكتسبة)") : "Acquired Skills"}</h4>
+                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                   {m.acquired_skills.map((s, i) => (
+                     <span key={i} style={{ padding: "6px 14px", background: C.blueLight, color: C.blue, borderRadius: 20, fontSize: "0.84rem", fontWeight: 700 }}>{s}</span>
+                   ))}
+                 </div>
+              </div>
+            )}
+
+            {m.sustaining_skills?.length > 0 && (
+              <div>
+                 <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("المهارات التي تبقيك مطلوباً") : "Sustaining Skills"}</h4>
+                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                   {m.sustaining_skills.map((s, i) => (
+                     <span key={i} style={{ padding: "6px 14px", background: "#fff9db", color: "#f59f00", borderRadius: 20, fontSize: "0.84rem", fontWeight: 700 }}>{s}</span>
+                   ))}
+                 </div>
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 24, marginBottom: 32 }}>
+            {m.workplaces?.length > 0 && (
+              <div>
+                 <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("أين سيعمل الخريجون") : "Workplaces"}</h4>
+                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                   {m.workplaces.map((w, i) => (
+                     <div key={i} style={{ padding: "8px 16px", background: C.white, borderRadius: 10, fontSize: "0.86rem", color: C.dark, fontWeight: 700, border: `1px solid ${C.border}`, boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>{w}</div>
+                   ))}
+                 </div>
+              </div>
+            )}
+
+            {m.in_demand_jobs?.length > 0 && (
+              <div>
+                 <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("أكثر الوظائف طلباً محلياً وإقليمياً") : "In-Demand Jobs"}</h4>
+                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                   {m.in_demand_jobs.map((j, i) => (
+                     <div key={i} style={{ padding: "8px 16px", background: "#e8f5e9", color: "#2e7d32", borderRadius: 10, fontSize: "0.86rem", fontWeight: 700, border: `1px solid #2e7d3230` }}>{j}</div>
+                   ))}
+                 </div>
+              </div>
+            )}
+
+            {m.careers?.length > 0 && (
+              <div>
+                 <h4 style={{ fontWeight: 800, color: C.dark, marginBottom: 12, fontSize: "1rem" }}>{t ? t("المستقبل الوظيفي (مسميات أخرى)") : "Other Career Paths"}</h4>
+                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                   {m.careers.map((career, i) => (
+                     <div key={i} style={{ padding: "8px 16px", background: C.white, borderRadius: 10, fontSize: "0.86rem", color: C.dark, fontWeight: 700, border: `1px solid ${C.border}`, boxShadow: "0 2px 4px rgba(0,0,0,0.02)" }}>
+                       {career}
+                     </div>
+                   ))}
+                 </div>
+              </div>
+            )}
+          </div>
+
+          {(m.when_not_suitable || m.global_opportunities) && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 24, marginBottom: 32, background: C.bg, padding: 24, borderRadius: 16, border: `1px solid ${C.border}` }}>
+              {m.when_not_suitable && (
+                <div>
+                  <h4 style={{ fontWeight: 800, color: "#e03131", marginBottom: 10, fontSize: "1rem" }}>{t ? t("متى لا يكون مناسباً لك؟") : "When is it not suitable"}</h4>
+                  <p style={{ color: C.muted, fontSize: "0.95rem", lineHeight: 1.8 }}>{m.when_not_suitable}</p>
+                </div>
+              )}
+              
+              {m.global_opportunities && (
+                <div>
+                  <h4 style={{ fontWeight: 800, color: C.blue, marginBottom: 10, fontSize: "1rem" }}>{t ? t("فرص العمل عالمياً") : "Global Opportunities"}</h4>
+                  <p style={{ color: C.muted, fontSize: "0.95rem", lineHeight: 1.8 }}>{m.global_opportunities}</p>
+                </div>
+              )}
             </div>
           )}
           
