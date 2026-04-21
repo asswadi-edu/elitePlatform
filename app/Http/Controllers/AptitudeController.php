@@ -85,12 +85,14 @@ class AptitudeController extends Controller
         $test = AptitudeTest::where('is_active', true)->firstOrFail();
 
         try {
-            // 2. إرسال البيانات إلى سيرفر البايثون على البورت 8001 مع الحفاظ على الترتيب الأصلي المطلوب للموديل (q1-q30)
-            $response = \Illuminate\Support\Facades\Http::post('http://127.0.0.1:8001/predict', $validatedData);
+            // Use PYTHON_API_URL env variable (falls back to localhost for development)
+            $pythonApiUrl = rtrim(env('PYTHON_API_URL', 'http://127.0.0.1:8001'), '/');
+            $response = \Illuminate\Support\Facades\Http::timeout(30)
+                ->post("{$pythonApiUrl}/predict", $validatedData);
 
             if (!$response->successful()) {
                 return response()->json([
-                    'message' => 'حدث خطأ أثناء التواصل مع محرك الذكاء الاصطناعي على البورت 8001.',
+                    'message' => 'حدث خطأ أثناء التواصل مع محرك الذكاء الاصطناعي.',
                     'error' => $response->body()
                 ], $response->status());
             }

@@ -34,6 +34,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage reports',
             'manage suggestions',
             'view dashboard',
+            // Student permissions
+            'take_aptitude_test',
+            'view_resources',
+            'view_majors',
+            'view_challenges',
+            'view_announcements',
         ];
 
         foreach ($permissions as $permission) {
@@ -41,7 +47,7 @@ class RolesAndPermissionsSeeder extends Seeder
         }
 
         // Create Roles and Assign Permissions
-        
+
         // Admin: Everything
         $adminRole = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
         $adminRole->givePermissionTo(Permission::all());
@@ -60,9 +66,23 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Student (School/General)
         $studentSchoolRole = Role::firstOrCreate(['name' => 'student_school', 'guard_name' => 'web']);
+        $studentSchoolRole->givePermissionTo([
+            'take_aptitude_test',
+            'view_resources',
+            'view_majors',
+            'view_challenges',
+            'view_announcements',
+        ]);
 
         // Student (University)
         $studentUniRole = Role::firstOrCreate(['name' => 'student_university', 'guard_name' => 'web']);
+        $studentUniRole->givePermissionTo([
+            'take_aptitude_test',
+            'view_resources',
+            'view_majors',
+            'view_challenges',
+            'view_announcements',
+        ]);
 
         $this->command->info('Roles and permissions wiped and re-seeded successfully.');
     }
