@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 // Dictionaries mapping Arabic (Default) to English
 export const dictionaries = {
-  ar: { },
+  ar: {},
   en: {
     // Navigation & Layouts
     "النخبة": "Elite",
@@ -51,7 +51,7 @@ export const dictionaries = {
     "انضم لأكثر من 2000 طالب وطالبة": "Join over 2000 students",
     "طلاب يدرسون معًا": "Students studying together",
     "تم تحديد التخصص": "Major Identified",
-    "علوم الحاسب — 98% توافق": "Computer Science — 98% Match",
+    "تقنية معلومات  — 98% توافق": "Computer Science — 98% Match",
     "ماذا تقدم لك منصة النخبة؟": "What does the Elite Platform offer you?",
     "نقدم لك مجموعة متكاملة من الأدوات لمساعدتك في كل خطوة من رحلتك الأكاديمية": "We offer a complete suite of tools to help you every step of your academic journey",
     "اكتشف تخصصك المناسب": "Discover Your Perfect Major",
@@ -843,7 +843,7 @@ export const dictionaries = {
 
 export const LanguageContext = createContext({
   lang: 'ar',
-  toggleLang: () => {},
+  toggleLang: () => { },
   t: (text) => text,
   dir: 'rtl'
 });
