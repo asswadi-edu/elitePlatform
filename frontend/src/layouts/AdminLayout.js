@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import "../admin/admin-mobile.css";
 import { C } from "../tokens";
 import {
   PiChartBarDuotone, PiUsersDuotone, PiBankDuotone,
@@ -129,7 +130,7 @@ export default function AdminLayout({ activeSub, setPage, onLogout: propsLogout,
         </aside>
 
         {/* Main */}
-        <main style={{ flex:1, padding:"24px 28px", minWidth:0 }}>{children}</main>
+        <main className="admin-main-content" style={{ flex:1, padding:"24px 28px", minWidth:0 }}>{children}</main>
       </div>
 
       <style>{`

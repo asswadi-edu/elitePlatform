@@ -322,7 +322,7 @@ export default function AdminUsers({ setPage }) {
     <>
       {toast && <div style={{ position: "fixed", top: 72, left: "50%", transform: "translateX(-50%)", background: C.dark, color: C.white, padding: "12px 24px", borderRadius: 12, fontSize: "0.9rem", fontWeight: 600, zIndex: 1001, borderRight: `4px solid ${toast.color}`, boxShadow: "0 8px 32px rgba(0,0,0,0.18)" }}>{toast.msg}</div>}
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+      <div className="admin-page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
         <div>
           <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: C.dark, margin: "0 0 6px" }}>{t("إدارة المستخدمين")}</h1>
           <p style={{ color: C.muted, fontSize: "0.88rem" }}>{t("متابعة نشاط الطلاب، تغيير الأدوار، وإدارة صلاحيات الوصول")}</p>
@@ -330,7 +330,7 @@ export default function AdminUsers({ setPage }) {
         <Btn onClick={() => setShowAdd(true)} style={{ display: 'flex', alignItems: 'center', gap: 8 }}><PiUserPlusDuotone size={20}/> {t("إضافة مستخدم جديد")}</Btn>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
+      <div className="admin-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
         {[
           [t("إجمالي المستخدمين"), stats.total, C.blue, <PiUsersDuotone/>],
           [t("حسابات نشطة"), stats.active, C.green, <PiShieldCheckDuotone/>],
@@ -350,7 +350,7 @@ export default function AdminUsers({ setPage }) {
       </div>
 
       <Card style={{ padding: 20, marginBottom: 20 }}>
-        <div style={{ display: "flex", gap: 12 }}>
+        <div className="admin-filter-bar" style={{ display: "flex", gap: 12 }}>
           <div style={{ flex: 1, position: "relative" }}>
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder={t("البحث بالاسم أو البريد...")} style={{ ...inputStyle, paddingRight: 40 }} />
             <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", color: C.muted, display: 'flex' }}><PiMagnifyingGlassDuotone size={18}/></span>
@@ -372,68 +372,70 @@ export default function AdminUsers({ setPage }) {
       </Card>
 
       <Card style={{ padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.86rem" }}>
-          <thead>
-            <tr style={{ background: C.bg, borderBottom: `2px solid ${C.border}` }}>
-              {[t("المستخدم"), t("الدور"), t("النقاط"), t("الموارد"), t("الاشتراك"), t("الحالة"), t("إجراءات")].map(h => (
-                <th key={h} style={{ padding: "14px 20px", textAlign: "start", fontWeight: 700, color: C.muted, fontSize: '0.8rem' }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              Array(5).fill(0).map((_, i) => (
-                <tr key={i} style={{ borderBottom: `1px solid ${C.bg}` }}>
-                  <td style={{ padding: "14px 20px" }}><Skeleton width="36px" height="36px" borderRadius="10px" /></td>
-                  <td><Skeleton width="120px" height="15px" /><br /><Skeleton width="80px" height="10px" margin="4px 0 0" /></td>
-                  <td><Skeleton width="80px" height="20px" /></td>
-                  <td><Skeleton width="50px" height="15px" /></td>
-                  <td><Skeleton width="100px" height="15px" /></td>
-                  <td><Skeleton width="60px" height="22px" borderRadius="6px" /></td>
-                  <td style={{ padding: "14px 20px" }}><Skeleton width="32px" height="32px" borderRadius="8px" /></td>
+        <div className="admin-table-wrap">
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.86rem" }}>
+            <thead>
+              <tr style={{ background: C.bg, borderBottom: `2px solid ${C.border}` }}>
+                {[t("المستخدم"), t("الدور"), t("النقاط"), t("الموارد"), t("الاشتراك"), t("الحالة"), t("إجراءات")].map(h => (
+                  <th key={h} style={{ padding: "14px 20px", textAlign: "start", fontWeight: 700, color: C.muted, fontSize: '0.8rem' }}>{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                Array(5).fill(0).map((_, i) => (
+                  <tr key={i} style={{ borderBottom: `1px solid ${C.bg}` }}>
+                    <td style={{ padding: "14px 20px" }}><Skeleton width="36px" height="36px" borderRadius="10px" /></td>
+                    <td><Skeleton width="120px" height="15px" /><br /><Skeleton width="80px" height="10px" margin="4px 0 0" /></td>
+                    <td><Skeleton width="80px" height="20px" /></td>
+                    <td><Skeleton width="50px" height="15px" /></td>
+                    <td><Skeleton width="100px" height="15px" /></td>
+                    <td><Skeleton width="60px" height="22px" borderRadius="6px" /></td>
+                    <td style={{ padding: "14px 20px" }}><Skeleton width="32px" height="32px" borderRadius="8px" /></td>
+                  </tr>
+                ))
+              ) : filtered.length === 0 ? (
+                <tr>
+                  <td colSpan="7" style={{ padding: 60, textAlign: 'center', color: C.muted }}>{t("لم يتم العثور على مستخدمين يطابقون البحث")}</td>
                 </tr>
-              ))
-            ) : filtered.length === 0 ? (
-              <tr>
-                <td colSpan="7" style={{ padding: 60, textAlign: 'center', color: C.muted }}>{t("لم يتم العثور على مستخدمين يطابقون البحث")}</td>
-              </tr>
-            ) : filtered.map(u => (
-              <tr key={u.id} style={{ borderBottom: `1px solid ${C.border}`, transition: "all .2s", opacity: u.status === "banned" ? 0.6 : 1 }} onMouseEnter={e => e.currentTarget.style.background = C.bg} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                <td style={{ padding: "14px 20px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ width: 36, height: 36, borderRadius: 10, background: `${roleColors[u.role] || C.muted}15`, color: roleColors[u.role] || C.muted, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "0.9rem", position: 'relative' }}>
-                      {(u.name || "?")[0]}
-                      {u.is_super_admin && <div style={{ position: 'absolute', bottom: -4, right: -4, background: C.white, borderRadius: '50%', color: C.gold, fontSize: '0.65rem', border: `1px solid ${C.border}`, padding: 1 }}><PiShieldCheckDuotone/></div>}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 700, color: C.dark, display: 'flex', alignItems: 'center', gap: 6 }}>
-                        {u.name || t("مستخدم")}
-                        {u.is_super_admin && <Badge color={C.gold} style={{ fontSize: '0.6rem', padding: '1px 6px' }}>{t("مؤسس")}</Badge>}
+              ) : filtered.map(u => (
+                <tr key={u.id} style={{ borderBottom: `1px solid ${C.border}`, transition: "all .2s", opacity: u.status === "banned" ? 0.6 : 1 }} onMouseEnter={e => e.currentTarget.style.background = C.bg} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                  <td style={{ padding: "14px 20px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <div style={{ width: 36, height: 36, borderRadius: 10, background: `${roleColors[u.role] || C.muted}15`, color: roleColors[u.role] || C.muted, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: "0.9rem", position: 'relative' }}>
+                        {(u.name || "?")[0]}
+                        {u.is_super_admin && <div style={{ position: 'absolute', bottom: -4, right: -4, background: C.white, borderRadius: '50%', color: C.gold, fontSize: '0.65rem', border: `1px solid ${C.border}`, padding: 1 }}><PiShieldCheckDuotone/></div>}
                       </div>
-                      <div style={{ fontSize: '0.74rem', color: C.muted }}>{u.email}</div>
+                      <div>
+                        <div style={{ fontWeight: 700, color: C.dark, display: 'flex', alignItems: 'center', gap: 6 }}>
+                          {u.name || t("مستخدم")}
+                          {u.is_super_admin && <Badge color={C.gold} style={{ fontSize: '0.6rem', padding: '1px 6px' }}>{t("مؤسس")}</Badge>}
+                        </div>
+                        <div style={{ fontSize: '0.74rem', color: C.muted }}>{u.email}</div>
+                      </div>
                     </div>
-                  </div>
-                </td>
-                <td><Badge color={roleColors[u.role] || C.blue}>{u.role}</Badge></td>
-                <td style={{ fontWeight: 700, color: C.dark }}>{(u.points || 0).toLocaleString()}</td>
-                <td style={{ color: C.muted }}>{u.resources || 0} {t("مورد")}</td>
-                <td><span style={{ fontSize: '0.8rem', color: C.body }}>{u.sub}</span></td>
-                <td><Badge color={u.status === "active" ? C.green : C.red}>{u.status === "active" ? t("نشط") : t("محظور")}</Badge></td>
-                <td style={{ padding: "14px 20px" }}>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <button 
-                      onClick={() => !u.is_super_admin && setSelectedUser(u)} 
-                      style={{ background: 'none', border: `1px solid ${C.border}`, borderRadius: 8, padding: '6px', cursor: u.is_super_admin ? 'not-allowed' : 'pointer', color: C.muted, opacity: u.is_super_admin ? 0.4 : 1 }}
-                      title={u.is_super_admin ? t("حساب محمي") : ""}
-                    >
-                      <PiDotsThreeVerticalDuotone/>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </td>
+                  <td><Badge color={roleColors[u.role] || C.blue}>{u.role}</Badge></td>
+                  <td style={{ fontWeight: 700, color: C.dark }}>{(u.points || 0).toLocaleString()}</td>
+                  <td style={{ color: C.muted }}>{u.resources || 0} {t("مورد")}</td>
+                  <td><span style={{ fontSize: '0.8rem', color: C.body }}>{u.sub}</span></td>
+                  <td><Badge color={u.status === "active" ? C.green : C.red}>{u.status === "active" ? t("نشط") : t("محظور")}</Badge></td>
+                  <td style={{ padding: "14px 20px" }}>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                      <button 
+                        onClick={() => !u.is_super_admin && setSelectedUser(u)} 
+                        style={{ background: 'none', border: `1px solid ${C.border}`, borderRadius: 8, padding: '6px', cursor: u.is_super_admin ? 'not-allowed' : 'pointer', color: C.muted, opacity: u.is_super_admin ? 0.4 : 1 }}
+                        title={u.is_super_admin ? t("حساب محمي") : ""}
+                      >
+                        <PiDotsThreeVerticalDuotone/>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </Card>
 
       {selectedUser && (

@@ -1,0 +1,419 @@
+/* ═══════════════════════════════════════════════════════════════
+   Admin Mobile Responsive Styles
+   يغطي جميع صفحات الأدمن للعرض على الهواتف المحمولة
+   لا يؤثر على أي منطق Backend - CSS فقط
+═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. AdminLayout – Header & Sidebar ─────────────────────── */
+@media (max-width: 900px) {
+  /* إظهار زر القائمة */
+  .admin-hamburger {
+    display: flex !important;
+  }
+  /* إخفاء نصوص الهيدر الجانبية */
+  .admin-brand-text,
+  .admin-role-text {
+    display: none !important;
+  }
+  /* السايدبار يصبح قائمة منسدلة */
+  .admin-sidebar {
+    position: fixed !important;
+    top: 60px !important;
+    height: calc(100vh - 60px) !important;
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    z-index: 149 !important;
+    box-shadow: none;
+  }
+  /* main content – حشو أقل في الهاتف */
+  .admin-main-content {
+    padding: 16px 14px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-main-content {
+    padding: 12px 10px !important;
+  }
+}
+
+/* ── 2. صندوق العنوان (Page Header) ────────────────────────── */
+@media (max-width: 768px) {
+  .admin-page-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    margin-bottom: 20px !important;
+  }
+  .admin-page-header h1 {
+    font-size: 1.2rem !important;
+    margin-bottom: 4px !important;
+  }
+  .admin-page-header p {
+    font-size: 0.82rem !important;
+  }
+  .admin-page-header > div:last-child {
+    width: 100% !important;
+    display: flex !important;
+    gap: 8px !important;
+    flex-wrap: wrap !important;
+  }
+  .admin-page-header > div:last-child button,
+  .admin-page-header > div:last-child a {
+    flex: 1 !important;
+    min-width: 120px !important;
+    font-size: 0.82rem !important;
+  }
+}
+
+/* ── 3. بطاقات KPI / الإحصائيات (4 أعمدة → 2 → 1) ──────── */
+@media (max-width: 900px) {
+  .admin-kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+@media (max-width: 480px) {
+  .admin-kpi-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+  .admin-kpi-grid .kpi-value {
+    font-size: 1.3rem !important;
+  }
+  .admin-kpi-grid .kpi-label {
+    font-size: 0.7rem !important;
+  }
+}
+
+/* ── 4. الشبكة الثنائية الرئيسية (2fr 1fr) ─────────────────── */
+@media (max-width: 900px) {
+  .admin-two-col {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* ── 5. الجداول – تمرير أفقي ────────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    border-radius: 12px !important;
+  }
+  .admin-table-wrap table {
+    min-width: 560px !important;
+  }
+  /* تقليل padding الجدول في الهاتف */
+  .admin-table-wrap th,
+  .admin-table-wrap td {
+    padding: 10px 12px !important;
+    font-size: 0.8rem !important;
+  }
+}
+
+/* ── 6. شريط الفلاتر والبحث ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-filter-bar {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .admin-filter-bar input,
+  .admin-filter-bar select {
+    width: 100% !important;
+  }
+}
+
+/* ── 7. تابز الأقسام الأكاديمية / الإعدادات ─────────────────── */
+@media (max-width: 768px) {
+  .admin-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    gap: 0 !important;
+    padding-bottom: 2px !important;
+  }
+  .admin-tabs > div,
+  .admin-tabs > button {
+    white-space: nowrap !important;
+    padding: 10px 14px !important;
+    font-size: 0.82rem !important;
+    flex-shrink: 0 !important;
+  }
+  /* إخفاء الأرقام في التابز بالهاتف */
+  .admin-tabs .tab-count {
+    display: none !important;
+  }
+}
+
+/* ── 8. شبكة المجالات (3 أعمدة → 2 → 1) ───────────────────── */
+@media (max-width: 768px) {
+  .admin-fields-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+@media (max-width: 420px) {
+  .admin-fields-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 9. الـ Modal / النافذة المنبثقة ───────────────────────── */
+@media (max-width: 600px) {
+  .admin-modal-box {
+    width: 95% !important;
+    max-width: 95% !important;
+    padding: 20px 16px !important;
+    border-radius: 16px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+  .admin-modal-box h2,
+  .admin-modal-box h3 {
+    font-size: 1.05rem !important;
+  }
+}
+
+/* ── 10. بطاقات الاشتراكات والخطط ─────────────────────────── */
+@media (max-width: 600px) {
+  .admin-plans-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 11. إعدادات النظام – SettingRow ─────────────────────────── */
+@media (max-width: 640px) {
+  .admin-setting-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .admin-setting-row > div:last-child {
+    align-self: flex-start !important;
+  }
+}
+
+/* ── 12. شبكة الرتب والنقاط ─────────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-ranks-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+  }
+}
+@media (max-width: 480px) {
+  .admin-ranks-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── 13. شبكة هوية المنصة (صورة + حقول) ──────────────────── */
+@media (max-width: 640px) {
+  .admin-identity-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 16px !important;
+  }
+  .admin-identity-row > div:first-child {
+    align-self: center !important;
+  }
+  .admin-form-grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+}
+
+/* ── 14. Dashboard – قائمة المستخدمين الأخيرة ──────────────── */
+@media (max-width: 768px) {
+  .admin-recent-users-table {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .admin-recent-users-table table {
+    min-width: 480px !important;
+  }
+  /* إخفاء أعمدة ثانوية في الهاتف */
+  .admin-recent-users-table .col-date {
+    display: none !important;
+  }
+}
+
+/* ── 15. صفحة التقارير والبلاغات ────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-report-card {
+    padding: 14px !important;
+  }
+  .admin-report-actions {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .admin-report-actions button {
+    flex: 1 !important;
+    min-width: 80px !important;
+    font-size: 0.78rem !important;
+  }
+}
+
+/* ── 16. صفحة الموارد والملفات ──────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-resources-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+/* ── 17. صف إجراءات الجدول (أزرار تعديل/حذف) ──────────────── */
+@media (max-width: 600px) {
+  .admin-row-actions {
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+  .admin-row-actions button,
+  .admin-row-actions a {
+    width: 100% !important;
+    text-align: center !important;
+    font-size: 0.76rem !important;
+  }
+}
+
+/* ── 18. User Card في صفحة المستخدمين ───────────────────────── */
+@media (max-width: 600px) {
+  .admin-user-modal-header {
+    padding: 20px !important;
+  }
+  .admin-user-modal-header .user-avatar {
+    width: 52px !important;
+    height: 52px !important;
+    font-size: 1.4rem !important;
+  }
+  .admin-user-modal-header h2 {
+    font-size: 1.1rem !important;
+  }
+  .admin-user-modal-body {
+    padding: 18px 14px !important;
+  }
+  .admin-user-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+}
+
+/* ── 19. نافذة إضافة المستخدم – Toast ──────────────────────── */
+@media (max-width: 480px) {
+  .admin-toast {
+    width: calc(100% - 32px) !important;
+    left: 16px !important;
+    transform: none !important;
+    text-align: center !important;
+    font-size: 0.84rem !important;
+    padding: 10px 16px !important;
+  }
+}
+
+/* ── 20. شريط Pagination ──────────────────────────────────────── */
+@media (max-width: 480px) {
+  .admin-pagination {
+    gap: 4px !important;
+    padding: 12px 10px !important;
+  }
+  .admin-pagination button {
+    min-width: 32px !important;
+    height: 32px !important;
+    font-size: 0.8rem !important;
+    padding: 4px 8px !important;
+  }
+}
+
+/* ── 21. بطاقات التحديات ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-challenges-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+/* ── 22. صفحة تفاصيل التخصص ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-major-details-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* ── 23. صفحة سجل النشاطات ───────────────────────────────────── */
+@media (max-width: 600px) {
+  .admin-activity-item {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    padding: 12px !important;
+  }
+}
+
+/* ── 24. صفحة اختبار الميول ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .admin-aptitude-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .admin-aptitude-actions {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* ── 25. AI Settings Card ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  .admin-ai-card {
+    padding: 16px !important;
+  }
+  .admin-ai-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+}
+
+/* ── 26. SystemSettings – تابز أفقية قابلة للتمرير ──────────── */
+@media (max-width: 768px) {
+  .admin-settings-tabs {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex-wrap: nowrap !important;
+    padding-bottom: 4px !important;
+    border-bottom: none !important;
+    gap: 0 !important;
+  }
+  .admin-settings-tabs > div {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    font-size: 0.8rem !important;
+    padding: 8px 12px !important;
+  }
+}
+
+/* ── 27. DateRow في الإعدادات الأكاديمية ─────────────────────── */
+@media (max-width: 480px) {
+  .admin-date-row {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+}
+
+/* ── 28. العناصر المشتركة العامة ─────────────────────────────── */
+@media (max-width: 768px) {
+  /* الكروت */
+  .admin-card {
+    border-radius: 14px !important;
+  }
+
+  /* جميع الأزرار الكبيرة */
+  .admin-btn-full-mobile {
+    width: 100% !important;
+  }
+
+  /* كل flex rows أصبحت column */
+  .admin-flex-mobile-col {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+}

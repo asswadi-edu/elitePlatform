@@ -96,7 +96,7 @@ export default function AdminDashboard({ setPage }) {
     <>
       {toast && <div style={{ position: "fixed", top: 72, left: "50%", transform: "translateX(-50%)", background: C.dark, color: C.white, padding: "12px 24px", borderRadius: 12, fontSize: "0.9rem", fontWeight: 600, zIndex: 1001, borderRight: `4px solid ${toast.color}`, boxShadow: "0 8px 32px rgba(0,0,0,0.18)" }}>{toast.msg}</div>}
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
+      <div className="admin-page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 28 }}>
         <div>
           <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: C.dark, margin: "0 0 6px" }}>{t("لوحة الإحصائيات")}</h1>
           <p style={{ color: C.muted, fontSize: "0.88rem" }}>{t("نظرة شاملة وموحدة لكل جوانب المنصة الإدارية والأكاديمية")}</p>
@@ -109,7 +109,7 @@ export default function AdminDashboard({ setPage }) {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
+      <div className="admin-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
         {kpis.map((k, i) => (
           <Card key={i} onClick={() => setPage(k.id)} style={{ padding: "20px 22px", position: 'relative', cursor: 'pointer', transition: 'transform .2s' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'} onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
@@ -126,7 +126,7 @@ export default function AdminDashboard({ setPage }) {
         ))}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 24, marginBottom: 28 }}>
+      <div className="admin-two-col" style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 24, marginBottom: 28 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <Card style={{ padding: 24 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
@@ -193,7 +193,7 @@ export default function AdminDashboard({ setPage }) {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 24 }}>
+      <div className="admin-two-col admin-recent-users-table" style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 24 }}>
          <Card style={{ padding: 0 }}>
             <div style={{ padding: "18px 22px", display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${C.border}` }}>
               <h3 style={{ fontWeight: 800, color: C.dark, margin: 0, fontSize: '0.94rem' }}>{t("أحدث الأعضاء")}</h3>

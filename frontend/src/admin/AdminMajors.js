@@ -380,15 +380,15 @@ export default function AdminMajors({ setPage, tab: initialTab = "universities" 
         </div>
       )}
 
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
+      <div className="admin-page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 28 }}>
         <div><h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: C.dark, margin: "0 0 6px" }}>{t("إدارة التخصصات")}</h1><p style={{ color: C.muted, fontSize: "0.88rem" }}>{t("إدارة الجامعات والكليات والمجالات والتخصصات والمواد")}</p></div>
         <Btn onClick={() => openAdd(tab)}>{t("+ إضافة ")}{tabs.find(t => t.id === tab)?.singular}</Btn>
       </div>
 
-      <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${C.border}`, marginBottom: 24 }}>
+      <div className="admin-tabs" style={{ display: "flex", gap: 0, borderBottom: `1px solid ${C.border}`, marginBottom: 24, overflowX: 'auto' }}>
         {tabs.map(({ id, label, icon, count }) => (
-          <div key={id} onClick={() => setTab(id)} style={{ padding: "10px 22px", cursor: "pointer", fontWeight: tab === id ? 700 : 400, color: tab === id ? C.blue : C.muted, borderBottom: `2px solid ${tab === id ? C.blue : "transparent"}`, marginBottom: -1, fontSize: "0.9rem", transition: "all .2s", display: "flex", alignItems: "center", gap: 7 }}>
-            <span>{icon}</span>{label}<span style={{ background: tab === id ? C.blue : C.border, color: tab === id ? C.white : C.muted, borderRadius: 10, padding: "1px 8px", fontSize: "0.72rem", fontWeight: 700 }}>{count}</span>
+          <div key={id} onClick={() => setTab(id)} style={{ padding: "10px 22px", cursor: "pointer", fontWeight: tab === id ? 700 : 400, color: tab === id ? C.blue : C.muted, borderBottom: `2px solid ${tab === id ? C.blue : "transparent"}`, marginBottom: -1, fontSize: "0.9rem", transition: "all .2s", display: "flex", alignItems: "center", gap: 7, flexShrink: 0, whiteSpace: 'nowrap' }}>
+            <span>{icon}</span>{label}<span className="tab-count" style={{ background: tab === id ? C.blue : C.border, color: tab === id ? C.white : C.muted, borderRadius: 10, padding: "1px 8px", fontSize: "0.72rem", fontWeight: 700 }}>{count}</span>
           </div>
         ))}
       </div>
@@ -497,7 +497,7 @@ export default function AdminMajors({ setPage, tab: initialTab = "universities" 
             </div>
           ) : (
             <>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18 }}>
+              <div className="admin-fields-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 18 }}>
                 {fields.map(f => (
                   <Card key={f.id} style={{ padding: "22px 24px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>

@@ -38,7 +38,7 @@ const Toggle = ({on, setOn}) => (
 );
 
 const SettingRow = ({label, desc, children}) => (
-  <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 0", borderBottom:`1px solid ${C.border}60` }}>
+  <div className="admin-setting-row" style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"16px 0", borderBottom:`1px solid ${C.border}60` }}>
     <div style={{ flex:1 }}>
       <div style={{ fontWeight:700, color:C.dark, fontSize:"0.9rem" }}>{label}</div>
       <div style={{ color:C.muted, fontSize:"0.78rem", marginTop:3, maxWidth:'85%' }}>{desc}</div>
@@ -270,7 +270,7 @@ export default function SystemSettings({ setPage, isAdmin=false, initialTab }) {
           <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
              <Card style={{ padding:24 }}>
                 <h3 style={{ fontWeight:800, color:C.dark, margin:"0 0 20px", fontSize:"1rem" }}>{t("تعريف المنصة والبراند")}</h3>
-                <div style={{ display:'flex', alignItems:'flex-start', gap:24, marginBottom:20 }}>
+                <div className="admin-identity-row" style={{ display:'flex', alignItems:'flex-start', gap:24, marginBottom:20 }}>
                    <div style={{ flexShrink:0 }}>
                       <label style={{ display:'block', fontSize:'0.85rem', fontWeight:600, color:C.muted, marginBottom:8 }}>{t("شعار المنصة")}</label>
                       <input 
@@ -995,7 +995,7 @@ export default function SystemSettings({ setPage, isAdmin=false, initialTab }) {
   };
 
   const nav = tabs.length > 1 && (
-    <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(130px, 1fr))', gap:10, marginBottom:24 }}>
+    <div className="admin-settings-tabs" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(120px, 1fr))', gap:10, marginBottom:24 }}>
        {tabs.map(t => (
           <button 
             key={t.id} 
@@ -1014,7 +1014,7 @@ export default function SystemSettings({ setPage, isAdmin=false, initialTab }) {
 
   const mainView = (
     <div style={{ maxWidth: 840, margin:'0 auto' }}>
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:28 }}>
+      <div className="admin-page-header" style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:28 }}>
          <div>
             <h1 style={{ fontSize:"1.6rem", fontWeight:800, color:C.dark, margin:"0 0 4px" }}>{isAdmin ? t("مركز إدارة المنصة") : t("إعدادات المحتوى")}</h1>
             <p style={{ color:C.muted, fontSize:"0.9rem" }}>{isAdmin ? t("تحكم كامل في كافة ميزات وإعدادات منصة النخبة") : t("إدارة حدود الرفع وأنواع الملفات المسموح بها")}</p>
