@@ -163,7 +163,7 @@ export default function AdminActivityLog({ setPage }) {
                   onChange={e => setSearch(e.target.value)}
                />
             </div>
-            <div style={{ display: 'flex', gap: 6 }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                {types.map(t => (
                   <button 
                     key={t.id}

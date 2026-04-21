@@ -295,7 +295,7 @@ export default function AdminAI({ setPage }) {
           <Card style={{ padding: 24 }}>
             <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: C.dark, marginBottom: 20 }}>{t("حالة الخدمة")}</h3>
             
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, padding: 16, borderRadius: 12, background: settings.ai_test_enabled === 'true' ? C.green + '10' : C.red + '10', border: `1px solid ${settings.ai_test_enabled === 'true' ? C.green + '30' : C.red + '30'}` }}>
+            <div className="admin-flex-mobile-col" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, padding: 16, borderRadius: 12, background: settings.ai_test_enabled === 'true' ? C.green + '10' : C.red + '10', border: `1px solid ${settings.ai_test_enabled === 'true' ? C.green + '30' : C.red + '30'}` }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 {settings.ai_test_enabled === 'true' ? <PiCheckCircleDuotone size={20} color={C.green}/> : <PiXCircleDuotone size={20} color={C.red}/>}
                 <span style={{ fontWeight: 700, color: settings.ai_test_enabled === 'true' ? C.green : C.red }}>

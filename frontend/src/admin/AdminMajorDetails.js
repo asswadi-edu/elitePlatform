@@ -206,7 +206,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
           {selectedMajor ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
               <Card>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+                <div className="admin-flex-mobile-col" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{ width: 54, height: 54, borderRadius: 12, background: C.blueLight, color: C.blue, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem", overflow: "hidden" }}>
                       {formData.image_url ? <img src={formData.image_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <PiInfoDuotone />}
@@ -236,7 +236,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
                   {/* Image Upload */}
                   <div style={{ gridColumn: "span 2", background: C.bg, padding: 20, borderRadius: 16, border: `1px solid ${C.border}` }}>
                     <label style={{ display: "block", fontWeight: 800, fontSize: "0.9rem", color: C.dark, marginBottom: 16 }}>{t("صورة أو أيقونة التخصص")}</label>
-                    <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                    <div className="admin-flex-mobile-col" style={{ display: "flex", alignItems: "center", gap: 20 }}>
                        <div style={{ width: 80, height: 80, borderRadius: 16, background: C.white, border: `2px dashed ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                          {formData.image_url ? (
                            <img src={formData.image_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -246,7 +246,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
                        </div>
                        <div style={{ flex: 1 }}>
                          <p style={{ fontSize: "0.84rem", color: C.muted, marginBottom: 12 }}>{t("يمكنك رفع صورة مباشرة من جهازك أو وضع رابط خارجي.")}</p>
-                         <div style={{ display: "flex", gap: 10 }}>
+                         <div className="admin-flex-mobile-col" style={{ display: "flex", gap: 10 }}>
                            <label style={{ padding: "8px 16px", borderRadius: 8, background: C.blue, color: C.white, fontSize: "0.85rem", fontWeight: 700, cursor: "pointer", display: "inline-block" }}>
                              {uploading ? t("جاري الرفع...") : t("رفع صورة من الجهاز")}
                              <input type="file" hidden accept="image/*" onChange={handleImageUpload} disabled={uploading} />
