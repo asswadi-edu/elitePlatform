@@ -29,13 +29,25 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
     study_nature: "",
     core_subjects: [],
     required_skills: [],
-    careers: []
+    careers: [],
+    acquired_skills: [],
+    workplaces: [],
+    in_demand_jobs: [],
+    sustaining_skills: [],
+    future_of_major: "",
+    why_choose_major: "",
+    when_not_suitable: "",
+    global_opportunities: ""
   });
 
   const [newSubject, setNewSubject] = useState("");
   const [newSkill, setNewSkill] = useState("");
   const [newCareer, setNewCareer] = useState("");
   const [newTitle, setNewTitle] = useState("");
+  const [newAcquiredSkill, setNewAcquiredSkill] = useState("");
+  const [newWorkplace, setNewWorkplace] = useState("");
+  const [newInDemandJob, setNewInDemandJob] = useState("");
+  const [newSustainingSkill, setNewSustainingSkill] = useState("");
   const [uploading, setUploading] = useState(false);
 
   const token = localStorage.getItem('elite_token');
@@ -77,7 +89,15 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
       study_nature: m.study_nature || "",
       core_subjects: m.core_subjects || [],
       required_skills: m.required_skills || [],
-      careers: m.careers || []
+      careers: m.careers || [],
+      acquired_skills: m.acquired_skills || [],
+      workplaces: m.workplaces || [],
+      in_demand_jobs: m.in_demand_jobs || [],
+      sustaining_skills: m.sustaining_skills || [],
+      future_of_major: m.future_of_major || "",
+      why_choose_major: m.why_choose_major || "",
+      when_not_suitable: m.when_not_suitable || "",
+      global_opportunities: m.global_opportunities || ""
     });
   }
 
@@ -358,7 +378,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
 
                 <Card>
                   <h3 style={{ fontSize: "1rem", fontWeight: 800, color: C.dark, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-                    <PiTargetDuotone color={C.green} /> {t("المهارات المطلوبة")}
+                    <PiTargetDuotone color={C.green} /> {t("المهارات المطلوبة قبل دخول التخصص")}
                   </h3>
                   <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
                     <input 
@@ -401,6 +421,144 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
                       </div>
                     ))}
                     {formData.careers.length === 0 && <span style={{ color: C.muted, fontSize: "0.8rem" }}>{t("لا توجد مجالات مضافة")}</span>}
+                  </div>
+                </Card>
+
+                {/* Acquired Skills */}
+                <Card>
+                  <h3 style={{ fontSize: "1rem", fontWeight: 800, color: C.dark, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+                    <PiTargetDuotone color={C.blue} /> {t("مواصفات الخريج (المهارات المكتسبة)")}
+                  </h3>
+                  <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                    <input 
+                      value={newAcquiredSkill} 
+                      onChange={e => setNewAcquiredSkill(e.target.value)}
+                      onKeyDown={e => e.key === "Enter" && addItem("acquired_skills", newAcquiredSkill, setNewAcquiredSkill)}
+                      placeholder={t("أضف مهارة مكتسبة...")}
+                      style={{ flex: 1, padding: "9px 12px", borderRadius: 8, border: `1.5px solid ${C.border}`, fontSize: "0.85rem", outline: "none" }}
+                    />
+                    <button onClick={() => addItem("acquired_skills", newAcquiredSkill, setNewAcquiredSkill)} style={{ width: 38, height: 38, borderRadius: 8, border: "none", background: C.blue, color: C.white, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><PiPlusBold /></button>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {formData.acquired_skills.map((s, idx) => (
+                      <div key={idx} style={{ background: C.blueLight, padding: "6px 12px", borderRadius: 8, fontSize: "0.82rem", fontWeight: 600, color: C.blue, display: "flex", alignItems: "center", gap: 8 }}>
+                        {s} <PiTrashBold onClick={() => removeItem("acquired_skills", idx)} style={{ cursor: "pointer", color: C.red }} size={14} />
+                      </div>
+                    ))}
+                    {formData.acquired_skills.length === 0 && <span style={{ color: C.muted, fontSize: "0.8rem" }}>{t("لا توجد مهارات مضافة")}</span>}
+                  </div>
+                </Card>
+
+                {/* Workplaces */}
+                <Card>
+                  <h3 style={{ fontSize: "1rem", fontWeight: 800, color: C.dark, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+                    <PiBriefcaseDuotone color={C.blue} /> {t("أين سيعمل الخريجون")}
+                  </h3>
+                  <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                    <input 
+                      value={newWorkplace} 
+                      onChange={e => setNewWorkplace(e.target.value)}
+                      onKeyDown={e => e.key === "Enter" && addItem("workplaces", newWorkplace, setNewWorkplace)}
+                      placeholder={t("أضف مكان عمل...")}
+                      style={{ flex: 1, padding: "9px 12px", borderRadius: 8, border: `1.5px solid ${C.border}`, fontSize: "0.85rem", outline: "none" }}
+                    />
+                    <button onClick={() => addItem("workplaces", newWorkplace, setNewWorkplace)} style={{ width: 38, height: 38, borderRadius: 8, border: "none", background: C.blue, color: C.white, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><PiPlusBold /></button>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {formData.workplaces.map((w, idx) => (
+                      <div key={idx} style={{ background: C.blueLight, padding: "6px 12px", borderRadius: 8, fontSize: "0.82rem", fontWeight: 600, color: C.blue, display: "flex", alignItems: "center", gap: 8 }}>
+                        {w} <PiTrashBold onClick={() => removeItem("workplaces", idx)} style={{ cursor: "pointer", color: C.red }} size={14} />
+                      </div>
+                    ))}
+                    {formData.workplaces.length === 0 && <span style={{ color: C.muted, fontSize: "0.8rem" }}>{t("لا توجد أماكن مضافة")}</span>}
+                  </div>
+                </Card>
+
+                {/* In Demand Jobs */}
+                <Card>
+                  <h3 style={{ fontSize: "1rem", fontWeight: 800, color: C.dark, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+                    <PiUserFocusDuotone color={C.green} /> {t("أكثر الوظائف طلباً محلياً وإقليمياً")}
+                  </h3>
+                  <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                    <input 
+                      value={newInDemandJob} 
+                      onChange={e => setNewInDemandJob(e.target.value)}
+                      onKeyDown={e => e.key === "Enter" && addItem("in_demand_jobs", newInDemandJob, setNewInDemandJob)}
+                      placeholder={t("أضف وظيفة...")}
+                      style={{ flex: 1, padding: "9px 12px", borderRadius: 8, border: `1.5px solid ${C.border}`, fontSize: "0.85rem", outline: "none" }}
+                    />
+                    <button onClick={() => addItem("in_demand_jobs", newInDemandJob, setNewInDemandJob)} style={{ width: 38, height: 38, borderRadius: 8, border: "none", background: C.green, color: C.white, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><PiPlusBold /></button>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {formData.in_demand_jobs.map((j, idx) => (
+                      <div key={idx} style={{ background: C.greenBg, padding: "6px 12px", borderRadius: 8, fontSize: "0.82rem", fontWeight: 600, color: C.green, display: "flex", alignItems: "center", gap: 8 }}>
+                        {j} <PiTrashBold onClick={() => removeItem("in_demand_jobs", idx)} style={{ cursor: "pointer", color: C.red }} size={14} />
+                      </div>
+                    ))}
+                    {formData.in_demand_jobs.length === 0 && <span style={{ color: C.muted, fontSize: "0.8rem" }}>{t("لا توجد وظائف مضافة")}</span>}
+                  </div>
+                </Card>
+
+                {/* Sustaining Skills */}
+                <Card>
+                  <h3 style={{ fontSize: "1rem", fontWeight: 800, color: C.dark, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+                    <PiTargetDuotone color={C.gold} /> {t("المهارات التي تبقيك مطلوباً")}
+                  </h3>
+                  <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                    <input 
+                      value={newSustainingSkill} 
+                      onChange={e => setNewSustainingSkill(e.target.value)}
+                      onKeyDown={e => e.key === "Enter" && addItem("sustaining_skills", newSustainingSkill, setNewSustainingSkill)}
+                      placeholder={t("أضف مهارة...")}
+                      style={{ flex: 1, padding: "9px 12px", borderRadius: 8, border: `1.5px solid ${C.border}`, fontSize: "0.85rem", outline: "none" }}
+                    />
+                    <button onClick={() => addItem("sustaining_skills", newSustainingSkill, setNewSustainingSkill)} style={{ width: 38, height: 38, borderRadius: 8, border: "none", background: C.gold, color: C.white, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><PiPlusBold /></button>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {formData.sustaining_skills.map((s, idx) => (
+                      <div key={idx} style={{ background: C.goldBg, padding: "6px 12px", borderRadius: 8, fontSize: "0.82rem", fontWeight: 600, color: C.gold, display: "flex", alignItems: "center", gap: 8 }}>
+                        {s} <PiTrashBold onClick={() => removeItem("sustaining_skills", idx)} style={{ cursor: "pointer", color: C.red }} size={14} />
+                      </div>
+                    ))}
+                    {formData.sustaining_skills.length === 0 && <span style={{ color: C.muted, fontSize: "0.8rem" }}>{t("لا توجد مهارات مضافة")}</span>}
+                  </div>
+                </Card>
+
+                {/* Text Fields: Future, Why, When, Global */}
+                <Card style={{ gridColumn: "span 2" }}>
+                  <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
+                    <div>
+                      <label style={{ display: "block", fontWeight: 700, fontSize: "0.88rem", color: C.dark, marginBottom: 8 }}>{t("مستقبل التخصص")}</label>
+                      <textarea 
+                        value={formData.future_of_major} 
+                        onChange={e => setFormData({ ...formData, future_of_major: e.target.value })}
+                        style={{ width: "100%", padding: 14, borderRadius: 12, border: `1.5px solid ${C.border}`, fontSize: "0.92rem", fontFamily: "inherit", minHeight: 120, outline: "none", resize: "vertical" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontWeight: 700, fontSize: "0.88rem", color: C.dark, marginBottom: 8 }}>{t("لماذا تختار هذا التخصص")}</label>
+                      <textarea 
+                        value={formData.why_choose_major} 
+                        onChange={e => setFormData({ ...formData, why_choose_major: e.target.value })}
+                        style={{ width: "100%", padding: 14, borderRadius: 12, border: `1.5px solid ${C.border}`, fontSize: "0.92rem", fontFamily: "inherit", minHeight: 120, outline: "none", resize: "vertical" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontWeight: 700, fontSize: "0.88rem", color: C.dark, marginBottom: 8 }}>{t("متى لا يكون مناسباً لك")}</label>
+                      <textarea 
+                        value={formData.when_not_suitable} 
+                        onChange={e => setFormData({ ...formData, when_not_suitable: e.target.value })}
+                        style={{ width: "100%", padding: 14, borderRadius: 12, border: `1.5px solid ${C.border}`, fontSize: "0.92rem", fontFamily: "inherit", minHeight: 120, outline: "none", resize: "vertical" }}
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: "block", fontWeight: 700, fontSize: "0.88rem", color: C.dark, marginBottom: 8 }}>{t("فرص العمل عالمياً")}</label>
+                      <textarea 
+                        value={formData.global_opportunities} 
+                        onChange={e => setFormData({ ...formData, global_opportunities: e.target.value })}
+                        style={{ width: "100%", padding: 14, borderRadius: 12, border: `1.5px solid ${C.border}`, fontSize: "0.92rem", fontFamily: "inherit", minHeight: 120, outline: "none", resize: "vertical" }}
+                      />
+                    </div>
                   </div>
                 </Card>
               </div>
