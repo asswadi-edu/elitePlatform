@@ -167,7 +167,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
           <Btn onClick={() => setPage("admin-majors")} variant="secondary">{t("العودة للتخصصات")}</Btn>
         </div>
 
-        <div className="admin-major-details-grid" style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 24, alignItems: "start" }}>
+        <div className="admin-major-details-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, alignItems: "start" }}>
           {/* Sidebar: Major List */}
           <Card style={{ padding: 0 }}>
             <div style={{ padding: "16px 20px", borderBottom: `1px solid ${C.border}`, fontWeight: 800, color: C.dark, fontSize: "0.95rem", display: "flex", alignItems: "center", gap: 10 }}>
@@ -206,7 +206,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
           {selectedMajor ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
               <Card>
-                <div className="admin-flex-mobile-col" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", marginBottom: 24, gap: 14 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                     <div style={{ width: 54, height: 54, borderRadius: 12, background: C.blueLight, color: C.blue, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem", overflow: "hidden" }}>
                       {formData.image_url ? <img src={formData.image_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <PiInfoDuotone />}
@@ -221,7 +221,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
                   </Btn>
                 </div>
 
-                <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+                <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
                   {/* Definition */}
                   <div style={{ gridColumn: "span 2" }}>
                     <label style={{ display: "block", fontWeight: 700, fontSize: "0.88rem", color: C.dark, marginBottom: 8 }}>{t("تعريف التخصص")}</label>
@@ -236,7 +236,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
                   {/* Image Upload */}
                   <div style={{ gridColumn: "span 2", background: C.bg, padding: 20, borderRadius: 16, border: `1px solid ${C.border}` }}>
                     <label style={{ display: "block", fontWeight: 800, fontSize: "0.9rem", color: C.dark, marginBottom: 16 }}>{t("صورة أو أيقونة التخصص")}</label>
-                    <div className="admin-flex-mobile-col" style={{ display: "flex", alignItems: "center", gap: 20 }}>
+                    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20 }}>
                        <div style={{ width: 80, height: 80, borderRadius: 16, background: C.white, border: `2px dashed ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
                          {formData.image_url ? (
                            <img src={formData.image_url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -246,7 +246,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
                        </div>
                        <div style={{ flex: 1 }}>
                          <p style={{ fontSize: "0.84rem", color: C.muted, marginBottom: 12 }}>{t("يمكنك رفع صورة مباشرة من جهازك أو وضع رابط خارجي.")}</p>
-                         <div className="admin-flex-mobile-col" style={{ display: "flex", gap: 10 }}>
+                         <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
                            <label style={{ padding: "8px 16px", borderRadius: 8, background: C.blue, color: C.white, fontSize: "0.85rem", fontWeight: 700, cursor: "pointer", display: "inline-block" }}>
                              {uploading ? t("جاري الرفع...") : t("رفع صورة من الجهاز")}
                              <input type="file" hidden accept="image/*" onChange={handleImageUpload} disabled={uploading} />
@@ -306,7 +306,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
               </Card>
 
               {/* Lists: Job Titles, Subjects, Skills, Careers */}
-              <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+              <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
                 <Card style={{ gridColumn: "span 2" }}>
                   <h3 style={{ fontSize: "1rem", fontWeight: 800, color: C.dark, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
                     <PiBriefcaseDuotone color={C.blue} /> {t("المسميات الوظيفية")}

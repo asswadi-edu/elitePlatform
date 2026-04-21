@@ -107,7 +107,7 @@ export default function AdminAI({ setPage }) {
         <Skeleton width="180px" height="42px" borderRadius="10px" />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* Main AI Configuration Skeleton */}
           <Card style={{ padding: 28 }}>
@@ -115,7 +115,7 @@ export default function AdminAI({ setPage }) {
               <Skeleton width="40px" height="40px" borderRadius="10px" />
               <Skeleton width="180px" height="24px" />
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20, marginBottom: 24 }}>
               <div>
                 <Skeleton width="150px" height="14px" margin="0 0 8px 0" />
                 <Skeleton width="100%" height="42px" borderRadius="10px" />
@@ -179,7 +179,7 @@ export default function AdminAI({ setPage }) {
         </Btn>
       </div>
 
-      <div className="admin-two-col" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
+      <div className="admin-two-col" style={{ display: 'grid', gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* Main AI Configuration */}
           <Card style={{ padding: 28 }}>
@@ -190,7 +190,7 @@ export default function AdminAI({ setPage }) {
               <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: C.dark, margin: 0 }}>{t("تكوين المحرك الذكي")}</h2>
             </div>
 
-            <div className="admin-form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
+            <div className="admin-form-grid-2" style={{ display: 'grid', gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20, marginBottom: 24 }}>
               <Field label={t("مفتاح API الخاص بالمنصة")}>
                 <div style={{ position: 'relative' }}>
                   <input 
@@ -295,7 +295,7 @@ export default function AdminAI({ setPage }) {
           <Card style={{ padding: 24 }}>
             <h3 style={{ fontSize: '0.95rem', fontWeight: 800, color: C.dark, marginBottom: 20 }}>{t("حالة الخدمة")}</h3>
             
-            <div className="admin-flex-mobile-col" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, padding: 16, borderRadius: 12, background: settings.ai_test_enabled === 'true' ? C.green + '10' : C.red + '10', border: `1px solid ${settings.ai_test_enabled === 'true' ? C.green + '30' : C.red + '30'}` }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, padding: 16, borderRadius: 12, background: settings.ai_test_enabled === 'true' ? C.green + '10' : C.red + '10', border: `1px solid ${settings.ai_test_enabled === 'true' ? C.green + '30' : C.red + '30'}`, gap: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 {settings.ai_test_enabled === 'true' ? <PiCheckCircleDuotone size={20} color={C.green}/> : <PiXCircleDuotone size={20} color={C.red}/>}
                 <span style={{ fontWeight: 700, color: settings.ai_test_enabled === 'true' ? C.green : C.red }}>

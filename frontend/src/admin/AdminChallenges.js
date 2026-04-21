@@ -111,7 +111,7 @@ export default function AdminChallenges({ setPage }) {
       </div>
 
       {/* Grid Cards Skeleton */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, marginBottom: 24 }}>
         <Card style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
             <Skeleton width="40px" height="40px" borderRadius="10px" />
@@ -143,7 +143,7 @@ export default function AdminChallenges({ setPage }) {
         </Card>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 24, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, marginBottom: 24 }}>
         {/* Levels Area Skeleton */}
         <Card style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
@@ -205,7 +205,7 @@ export default function AdminChallenges({ setPage }) {
         <p style={{ color: C.muted }}>{t("إدارة اقتصاد النجوم ومكافآت التحديات ولوحات الشرف")}</p>
       </div>
 
-      <div className="admin-challenges-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginBottom: 24 }}>
+      <div className="admin-challenges-grid" style={{ display: 'grid', gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, marginBottom: 24 }}>
         <Card style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
             <div style={{ width: 40, height: 40, borderRadius: 10, background: C.blueLight, color: C.blue, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -234,7 +234,7 @@ export default function AdminChallenges({ setPage }) {
           </div>
           
           <form style={{ display: 'flex', flexDirection: 'column', gap: 16 }} onSubmit={handleSaveSettings}>
-            <div className="admin-flex-mobile-col" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', border: `1px solid ${C.border}`, borderRadius: 12, background: C.bg }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', padding: '12px', border: `1px solid ${C.border}`, borderRadius: 12, background: C.bg, gap: 12 }}>
                <div>
                   <div style={{ fontWeight: 700, fontSize: '0.88rem', color: C.dark }}>{t("مكافأة السرعة (< 10 ثواني)")}</div>
                   <div style={{ fontSize: '0.72rem', color: C.muted }}>{t("كم نجمة برونزية تُضاف كحد أقصى؟")}</div>
@@ -242,7 +242,7 @@ export default function AdminChallenges({ setPage }) {
                <input type="number" value={settings.speed_bonus_bronze} onChange={e => setSettings({...settings, speed_bonus_bronze: e.target.value})} style={{...inputStyle, width:80}} />
             </div>
             
-            <div className="admin-flex-mobile-col" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', border: `1px solid ${C.border}`, borderRadius: 12, background: C.bg }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', padding: '12px', border: `1px solid ${C.border}`, borderRadius: 12, background: C.bg, gap: 12 }}>
                <div>
                   <div style={{ fontWeight: 700, fontSize: '0.88rem', color: C.dark }}>{t("مكافأة التوالي (Combo)")}</div>
                   <div style={{ fontSize: '0.72rem', color: C.muted }}>{t("كم نجمة برونزية عن كل إجابة متتالية؟")}</div>
@@ -255,7 +255,7 @@ export default function AdminChallenges({ setPage }) {
         </Card>
       </div>
 
-      <div className="admin-challenges-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 24, marginBottom: 24 }}>
+      <div className="admin-challenges-grid" style={{ display: 'grid', gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, marginBottom: 24 }}>
         {/* Levels Area */}
         <Card style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
@@ -267,7 +267,7 @@ export default function AdminChallenges({ setPage }) {
 
           <div style={{ display:'flex', flexDirection:'column', gap:8, marginBottom: 24 }}>
             {levels.map(lvl => (
-                <div className="admin-flex-mobile-col" key={lvl.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', background: C.bg, padding: '10px 14px', borderRadius: 8, border: `1px solid ${C.border}` }}>
+                <div key={lvl.id} style={{ display:'flex', flexWrap: 'wrap', justifyContent:'space-between', alignItems:'center', background: C.bg, padding: '10px 14px', borderRadius: 8, border: `1px solid ${C.border}`, gap: 12 }}>
                    <div>
                      <span style={{ fontWeight:800, color:C.dark, display:'block' }}>{t("مستوى")} {lvl.level_number}: {lvl.name}</span>
                      <span style={{ fontSize:'0.75rem', color: C.orange }}>⭐ {lvl.required_gold_stars} {t("ذهبية")}</span>
@@ -296,7 +296,7 @@ export default function AdminChallenges({ setPage }) {
 
         {/* Global Leaderboard Area */}
         <Card style={{ padding: '24px' }}>
-           <div className="admin-flex-mobile-col" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, gap: 14 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                  <div style={{ width: 40, height: 40, borderRadius: 10, background: C.blueLight, color: C.blue, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                    <PiTrophyDuotone size={20} />
