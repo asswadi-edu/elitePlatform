@@ -1,28 +1,66 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <style>
-        body { font-family: 'Tahoma', 'Arial', sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f7f6; }
-        .container { max-width: 600px; margin: 20px auto; background: #ffffff; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
-        .logo { font-size: 24px; font-weight: bold; color: #3b5bdb; margin-bottom: 20px; }
-        .header { font-size: 20px; color: #2d3436; margin-bottom: 15px; font-weight: bold; }
-        .code { font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #3b5bdb; background: #f0f3ff; padding: 15px 25px; border-radius: 8px; display: inline-block; margin: 20px 0; border: 2px dashed #3b5bdb; }
-        .footer { font-size: 13px; color: #636e72; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px; }
-        .btn { display: inline-block; padding: 12px 24px; background-color: #3b5bdb; color: #ffffff !important; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تحقق من بريدك - منصة النخبة</title>
 </head>
-<body>
-    <div class="container">
-        <div class="logo">منصة النخبة | Elite Platform</div>
-        <div class="header">رمز تفعيل الحساب</div>
-        <p>مرحباً بك في منصة النخبة! لتفعيل حسابك والبدء في رحلتك التعليمية، يرجى استخدام رمز التحقق التالي:</p>
-        <div class="code">{{ $code }}</div>
-        <p>هذا الرمز صالح لمدة 15 دقيقة فقط.</p>
-        <p>إذا لم تكن قد أنشأت حساباً، يرجى تجاهل هذا البريد.</p>
-        <div class="footer">
-            جميع الحقوق محفوظة &copy; {{ date('Y') }} منصة النخبة
-        </div>
-    </div>
+<body style="margin:0;padding:0;background:#F0F4FF;font-family:'Segoe UI',Arial,sans-serif;direction:rtl;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#F0F4FF;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(59,91,219,0.10);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#3B5BDB,#1a2a6c);padding:36px 40px;text-align:center;">
+              <div style="display:inline-block;background:rgba(255,255,255,0.15);border-radius:16px;padding:14px 22px;margin-bottom:16px;">
+                <span style="font-size:2rem;">🎓</span>
+              </div>
+              <h1 style="margin:0;color:#ffffff;font-size:1.7rem;font-weight:800;letter-spacing:-0.5px;">منصة النخبة</h1>
+              <p style="margin:6px 0 0;color:rgba(255,255,255,0.75);font-size:0.9rem;">Elite Platform</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px 48px 32px;">
+              <h2 style="margin:0 0 12px;color:#1a2a6c;font-size:1.3rem;font-weight:800;">مرحباً بك! 👋</h2>
+              <p style="color:#555;font-size:0.97rem;line-height:1.8;margin:0 0 28px;">
+                شكراً لتسجيلك في منصة النخبة. لإكمال إنشاء حسابك والوصول إلى جميع الميزات، يرجى استخدام رمز التحقق التالي:
+              </p>
+
+              <!-- OTP Box -->
+              <div style="background:linear-gradient(135deg,#EEF2FF,#E8F0FE);border:2px solid #C5D3FF;border-radius:16px;padding:28px;text-align:center;margin-bottom:28px;">
+                <p style="margin:0 0 10px;color:#3B5BDB;font-size:0.82rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;">رمز التحقق</p>
+                <div style="font-size:2.8rem;font-weight:900;letter-spacing:12px;color:#1a2a6c;font-family:monospace;">{{ $code }}</div>
+                <p style="margin:12px 0 0;color:#888;font-size:0.8rem;">⏱️ الرمز صالح لمدة 15 دقيقة فقط</p>
+              </div>
+
+              <p style="color:#777;font-size:0.875rem;line-height:1.7;margin:0 0 8px;">
+                إذا لم تقم بإنشاء هذا الحساب، يمكنك تجاهل هذا البريد بأمان. لن يتم إنشاء أي حساب دون إدخال هذا الرمز.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Divider -->
+          <tr>
+            <td style="padding:0 48px;">
+              <div style="border-top:1px solid #EEF2FF;"></div>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:24px 48px 36px;text-align:center;">
+              <p style="margin:0 0 6px;color:#3B5BDB;font-weight:700;font-size:0.9rem;">منصة النخبة 🎓</p>
+              <p style="margin:0;color:#aaa;font-size:0.78rem;">هذا البريد أُرسل تلقائياً، يرجى عدم الرد عليه.</p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
