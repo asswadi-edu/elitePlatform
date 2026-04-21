@@ -20,6 +20,14 @@ export default function TestPage({ setPage, inDashboard = false, isUniversity, u
   const [submitting, setSubmitting] = useState(false);
   const [isTimeUp, setIsTimeUp] = useState(false);
 
+  // Warm up Python API in the background so it's ready when student submits
+  useEffect(() => {
+    const pythonUrl = process.env.REACT_APP_PYTHON_API_URL || '';
+    if (pythonUrl) {
+      fetch(`${pythonUrl}/docs`).catch(() => {}); // silent ping - just to wake up Render service
+    }
+  }, []);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchQuestions();

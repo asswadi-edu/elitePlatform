@@ -51,7 +51,7 @@ export const dictionaries = {
     "انضم لأكثر من 2000 طالب وطالبة": "Join over 2000 students",
     "طلاب يدرسون معًا": "Students studying together",
     "تم تحديد التخصص": "Major Identified",
-    "تقنية معلومات  — 98% توافق": "Computer Science — 98% Match",
+    "تقنية معلومات  — 98% توافق": "Information Technology — 98% Match",
     "ماذا تقدم لك منصة النخبة؟": "What does the Elite Platform offer you?",
     "نقدم لك مجموعة متكاملة من الأدوات لمساعدتك في كل خطوة من رحلتك الأكاديمية": "We offer a complete suite of tools to help you every step of your academic journey",
     "اكتشف تخصصك المناسب": "Discover Your Perfect Major",

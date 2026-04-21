@@ -87,7 +87,10 @@ class AptitudeController extends Controller
         try {
             // Use PYTHON_API_URL env variable (falls back to localhost for development)
             $pythonApiUrl = rtrim(env('PYTHON_API_URL', 'http://127.0.0.1:8001'), '/');
-            $response = \Illuminate\Support\Facades\Http::timeout(30)
+
+            // Timeout is 120s to handle Render free tier cold start (can take up to 7 min on first request)
+            $response = \Illuminate\Support\Facades\Http::timeout(120)
+                ->retry(2, 5000) // retry twice with 5 second delay
                 ->post("{$pythonApiUrl}/predict", $validatedData);
 
             if (!$response->successful()) {
