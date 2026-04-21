@@ -159,7 +159,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
       <div style={{ direction: "rtl", paddingBottom: 60 }}>
         {toast && <div style={{ position: "fixed", top: 80, left: "50%", transform: "translateX(-50%)", background: C.dark, color: C.white, padding: "12px 24px", borderRadius: 12, fontSize: "0.9rem", fontWeight: 600, zIndex: 999, borderRight: `4px solid ${toast.color}` }}>{toast.msg}</div>}
         
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+        <div className="admin-page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
           <div>
             <h1 style={{ fontSize: "1.75rem", fontWeight: 900, color: C.dark, marginBottom: 8 }}>{t("نبذة عن التخصصات")}</h1>
             <p style={{ color: C.muted, fontSize: "0.92rem" }}>{t("إدارة المعلومات التفصيلية لكل تخصص ليطلع عليها الطلاب.")}</p>
@@ -167,7 +167,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
           <Btn onClick={() => setPage("admin-majors")} variant="secondary">{t("العودة للتخصصات")}</Btn>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 24, alignItems: "start" }}>
+        <div className="admin-major-details-grid" style={{ display: "grid", gridTemplateColumns: "300px 1fr", gap: 24, alignItems: "start" }}>
           {/* Sidebar: Major List */}
           <Card style={{ padding: 0 }}>
             <div style={{ padding: "16px 20px", borderBottom: `1px solid ${C.border}`, fontWeight: 800, color: C.dark, fontSize: "0.95rem", display: "flex", alignItems: "center", gap: 10 }}>
@@ -221,7 +221,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
                   </Btn>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+                <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
                   {/* Definition */}
                   <div style={{ gridColumn: "span 2" }}>
                     <label style={{ display: "block", fontWeight: 700, fontSize: "0.88rem", color: C.dark, marginBottom: 8 }}>{t("تعريف التخصص")}</label>
@@ -306,7 +306,7 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
               </Card>
 
               {/* Lists: Job Titles, Subjects, Skills, Careers */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+              <div className="admin-form-grid-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
                 <Card style={{ gridColumn: "span 2" }}>
                   <h3 style={{ fontSize: "1rem", fontWeight: 800, color: C.dark, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
                     <PiBriefcaseDuotone color={C.blue} /> {t("المسميات الوظيفية")}

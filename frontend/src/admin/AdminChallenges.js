@@ -200,12 +200,12 @@ export default function AdminChallenges({ setPage }) {
 
   return (
     <>
-      <div style={{ marginBottom: 32 }}>
+      <div className="admin-page-header" style={{ marginBottom: 32 }}>
         <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: C.dark, marginBottom: 8 }}>{t("إدارة نظام الجوائز والترتيب")}</h1>
         <p style={{ color: C.muted }}>{t("إدارة اقتصاد النجوم ومكافآت التحديات ولوحات الشرف")}</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginBottom: 24 }}>
+      <div className="admin-challenges-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginBottom: 24 }}>
         <Card style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
             <div style={{ width: 40, height: 40, borderRadius: 10, background: C.blueLight, color: C.blue, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -255,7 +255,7 @@ export default function AdminChallenges({ setPage }) {
         </Card>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 24, marginBottom: 24 }}>
+      <div className="admin-challenges-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 24, marginBottom: 24 }}>
         {/* Levels Area */}
         <Card style={{ padding: '24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
@@ -306,33 +306,35 @@ export default function AdminChallenges({ setPage }) {
               <Badge color={C.green}>{t("مباشر")}</Badge>
            </div>
            
-           <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
-             <thead>
-                <tr style={{ background: C.bg }}>
-                   <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.muted, fontSize: '0.8rem' }}>#</th>
-                   <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.muted, fontSize: '0.8rem', textAlign: 'right' }}>{t("اسم الطالب")}</th>
-                   <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.muted, fontSize: '0.8rem' }}>{t("المستوى الحالي")}</th>
-                   <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.gold, fontSize: '0.8rem' }}>🥇 {t("الذهبية")}</th>
-                   <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.muted, fontSize: '0.8rem' }}>🥈 {t("الفضية")}</th>
-                   <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: '#cd7f32', fontSize: '0.8rem' }}>🥉 {t("البرونزية")}</th>
-                </tr>
-             </thead>
-             <tbody>
-                {leaderboard.map((u, i) => (
-                  <tr key={u.id} style={{ borderBottom: `1px solid ${C.border}` }}>
-                     <td style={{ padding: '12px 14px', fontWeight: 800, color: i < 3 ? C.blue : C.dark }}>{i + 1}</td>
-                     <td style={{ padding: '12px 14px', fontWeight: 700, textAlign: 'right' }}>{u.name}</td>
-                     <td style={{ padding: '12px 14px' }}><Badge color={C.orange}>{u.level_name}</Badge></td>
-                     <td style={{ padding: '12px 14px', fontWeight: 800 }}>{u.stars_gold || 0}</td>
-                     <td style={{ padding: '12px 14px', color: C.muted }}>{u.stars_silver || 0}</td>
-                     <td style={{ padding: '12px 14px', color: C.muted }}>{u.stars_bronze || 0}</td>
+           <div className="admin-table-wrap">
+             <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
+               <thead>
+                  <tr style={{ background: C.bg }}>
+                     <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.muted, fontSize: '0.8rem' }}>#</th>
+                     <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.muted, fontSize: '0.8rem', textAlign: 'right' }}>{t("اسم الطالب")}</th>
+                     <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.muted, fontSize: '0.8rem' }}>{t("المستوى الحالي")}</th>
+                     <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.gold, fontSize: '0.8rem' }}>🥇 {t("الذهبية")}</th>
+                     <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: C.muted, fontSize: '0.8rem' }}>🥈 {t("الفضية")}</th>
+                     <th style={{ padding: '12px 14px', borderBottom: `2px solid ${C.border}`, color: '#cd7f32', fontSize: '0.8rem' }}>🥉 {t("البرونزية")}</th>
                   </tr>
-                ))}
-                {leaderboard.length === 0 && (
-                   <tr><td colSpan="6" style={{ padding: 20, textAlign: 'center', color: C.muted }}>{t("لا يوجد طلاب متصدرين في المنصة حتى الآن.")}</td></tr>
-                )}
-             </tbody>
-           </table>
+               </thead>
+               <tbody>
+                  {leaderboard.map((u, i) => (
+                    <tr key={u.id} style={{ borderBottom: `1px solid ${C.border}` }}>
+                       <td style={{ padding: '12px 14px', fontWeight: 800, color: i < 3 ? C.blue : C.dark }}>{i + 1}</td>
+                       <td style={{ padding: '12px 14px', fontWeight: 700, textAlign: 'right' }}>{u.name}</td>
+                       <td style={{ padding: '12px 14px' }}><Badge color={C.orange}>{u.level_name}</Badge></td>
+                       <td style={{ padding: '12px 14px', fontWeight: 800 }}>{u.stars_gold || 0}</td>
+                       <td style={{ padding: '12px 14px', color: C.muted }}>{u.stars_silver || 0}</td>
+                       <td style={{ padding: '12px 14px', color: C.muted }}>{u.stars_bronze || 0}</td>
+                    </tr>
+                  ))}
+                  {leaderboard.length === 0 && (
+                     <tr><td colSpan="6" style={{ padding: 20, textAlign: 'center', color: C.muted }}>{t("لا يوجد طلاب متصدرين في المنصة حتى الآن.")}</td></tr>
+                  )}
+               </tbody>
+             </table>
+           </div>
         </Card>
       </div>
 
@@ -345,7 +347,7 @@ export default function AdminChallenges({ setPage }) {
             <h3 style={{ fontWeight: 700, margin: 0 }}>{t("إحصائيات النظام العام (حية)")}</h3>
          </div>
          
-         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+         <div className="admin-kpi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
             <div style={{ textAlign: 'center' }}>
                <div style={{ fontSize: '1.5rem', fontWeight: 900, color: C.dark }}>{stats.totalChallenges || 0}</div>
                <div style={{ fontSize: '0.8rem', color: C.muted }}>{t("إجمالي التحديات")}</div>

@@ -212,16 +212,16 @@ export default function AdminCardsV2({ setPage }) {
     <>
       {toast && <div style={{ position: "fixed", top: 70, left: "50%", transform: "translateX(-50%)", background: C.dark, color: C.white, padding: "12px 24px", borderRadius: 12, fontSize: "0.9rem", fontWeight: 600, zIndex: 999, borderRight: `4px solid ${toast.color}` }}>{toast.msg}</div>}
       
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
+      <div className="admin-page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
         <div><h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: C.dark, margin: "0 0 6px" }}>{t("بطاقات الاشتراك")}</h1><p style={{ color: C.muted, fontSize: "0.88rem" }}>{t("إنشاء وإدارة أكواد تفعيل الاشتراكات")}</p></div>
-        <div style={{ display: 'flex', gap: 12 }}>
+        <div className="admin-flex-mobile-col" style={{ display: 'flex', gap: 12 }}>
           <Btn variant="secondary" onClick={() => setShowExport(true)} style={{ display: "flex", alignItems:"center", gap:8, background:C.bg, color:C.dark, border:`1px solid ${C.border}` }}><PiCopyDuotone size={18} /> {t("تصدير للطباعة")}</Btn>
           <Btn variant="secondary" onClick={() => setPage("admin-settings", { tab: "monetization" })} style={{ display: "flex", alignItems: "center", gap: 8 }}><PiShieldCheckDuotone size={18} /> {t("إدارة الخطط")}</Btn>
           <Btn onClick={() => setShowForm(!showForm)} style={{ display: "flex", alignItems: "center", gap: 8 }}><PiTicketDuotone size={18} /> {t("إنشاء بطاقات")}</Btn>
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, marginBottom: 22 }}>
+      <div className="admin-kpi-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, marginBottom: 22 }}>
         {[[t("إجمالي البطاقات"), summary.total, C.blue], [t("غير مستخدمة"), summary.unused, C.green], [t("مستخدمة"), summary.used, C.gold], [t("تم تصديرها"), summary.exported, C.blueDark]].map(([l, v, col]) => (
           <Card key={l} style={{ padding: "16px 20px", display: "flex", alignItems: "center", gap: 16 }}>
             <div style={{ flex: 1 }}>
@@ -236,7 +236,7 @@ export default function AdminCardsV2({ setPage }) {
       {showForm && (
         <Card style={{ padding: 26, marginBottom: 20, border: `2px solid ${C.blue}20`, background: `${C.blueLight}20` }}>
           <h3 style={{ fontWeight: 700, color: C.dark, margin: "0 0 18px", fontSize: "0.98rem", display: "flex", alignItems: "center", gap: 8 }}><PiTicketDuotone size={20} color={C.blue} /> {t("توليد بطاقات اشتراك جديدة")}</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 0.8fr 1fr auto", gap: 18, alignItems: "flex-end" }}>
+          <div className="admin-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 0.8fr 1fr auto", gap: 18, alignItems: "flex-end" }}>
             <div>
               <label style={{ display: "block", fontWeight: 600, fontSize: "0.86rem", color: C.dark, marginBottom: 8 }}>{t("الخطة")}</label>
               {plans.length > 0 ? (
@@ -269,7 +269,7 @@ export default function AdminCardsV2({ setPage }) {
         </Card>
       )}
 
-      <div style={{ display: "flex", gap: 12, marginBottom: 18 }}>
+      <div className="admin-filter-bar" style={{ display: "flex", gap: 12, marginBottom: 18 }}>
         <div style={{ position: "relative", flex: 1 }}>
           <input value={search} onChange={e => setSearch(e.target.value)} placeholder={t("ابحث بكود البطاقة أو اسم المستخدم...")} style={{ ...inputStyle, width: "100%", paddingRight: 40 }} />
           <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", color: C.muted }}><PiMagnifyingGlassDuotone /></span>
@@ -281,53 +281,55 @@ export default function AdminCardsV2({ setPage }) {
       </div>
 
       <Card style={{ padding: 0, overflow: "hidden" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.86rem" }}>
-          <thead>
-            <tr style={{ background: C.bg, borderBottom: `2px solid ${C.border}` }}>
-              {[t("كود البطاقة"), t("الخطة"), t("السعر"), t("تاريخ الإنشاء"), t("الحالة"), t("المستخدم"), t("إجراءات")].map(h => (
-                <th key={h} style={{ padding: "12px 16px", textAlign: "start", fontWeight: 700, color: C.muted }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              Array(8).fill(0).map((_, i) => (
-                <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
-                  <td style={{ padding: "13px 16px" }}><Skeleton width="120px" height="24px" /></td>
-                  <td style={{ padding: "13px 16px" }}><Skeleton width="80px" height="24px" /></td>
-                  <td style={{ padding: "13px 16px" }}><Skeleton width="60px" height="24px" /></td>
-                  <td style={{ padding: "13px 16px" }}><Skeleton width="90px" height="24px" /></td>
-                  <td style={{ padding: "13px 16px" }}><Skeleton width="100px" height="24px" /></td>
-                  <td style={{ padding: "13px 16px" }}><Skeleton width="120px" height="24px" /></td>
-                  <td style={{ padding: "13px 16px" }}><Skeleton width="30px" height="24px" /></td>
-                </tr>
-              ))
-            ) : cards.length === 0 ? (
-              <tr>
-                <td colSpan="7" style={{ padding: "40px", textAlign: "center", color: C.muted }}>
-                  {t("لا توجد بطاقات تطابق بحثك")}
-                </td>
+        <div className="admin-table-wrap">
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.86rem" }}>
+            <thead>
+              <tr style={{ background: C.bg, borderBottom: `2px solid ${C.border}` }}>
+                {[t("كود البطاقة"), t("الخطة"), t("السعر"), t("تاريخ الإنشاء"), t("الحالة"), t("المستخدم"), t("إجراءات")].map(h => (
+                  <th key={h} style={{ padding: "12px 16px", textAlign: "start", fontWeight: 700, color: C.muted }}>{h}</th>
+                ))}
               </tr>
-            ) : (
-              cards.map(card => (
-                <tr key={card.id} style={{ borderBottom: `1px solid ${C.border}`, opacity: card.is_used ? 0.7 : 1 }}>
-                  <td style={{ padding: "13px 16px" }}><div style={{ display: "flex", alignItems: "center", gap: 8 }}><code style={{ background: C.bg, borderRadius: 6, padding: "4px 8px", fontWeight: 600 }}>{card.display_code || card.code}</code><PiCopyDuotone style={{ cursor: 'pointer', opacity: 0.5 }} onClick={() => copyCode(card.display_code || card.code)} /></div></td>
-                  <td style={{ padding: "13px 16px" }}><Badge color={card.plan?.color_hex || C.blue}>{card.plan?.name || "—"}</Badge></td>
-                  <td style={{ padding: "13px 16px", fontWeight: 700, color: C.dark }}>{formatPrice(card.price)}</td>
-                  <td style={{ padding: "13px 16px", color: C.muted }}>{new Date(card.created_at).toLocaleDateString("ar-SA")}</td>
-                  <td style={{ padding: "13px 16px" }}>
-                    <div style={{ display:'flex', gap:6 }}>
-                      <Badge color={!card.is_used ? C.green : C.gold}>{!card.is_used ? t("غير مستخدمة") : t("مستخدمة")}</Badge>
-                      {card.exported_at && <Badge color={C.blue}>{t("تم تصديرها")}</Badge>}
-                    </div>
+            </thead>
+            <tbody>
+              {loading ? (
+                Array(8).fill(0).map((_, i) => (
+                  <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
+                    <td style={{ padding: "13px 16px" }}><Skeleton width="120px" height="24px" /></td>
+                    <td style={{ padding: "13px 16px" }}><Skeleton width="80px" height="24px" /></td>
+                    <td style={{ padding: "13px 16px" }}><Skeleton width="60px" height="24px" /></td>
+                    <td style={{ padding: "13px 16px" }}><Skeleton width="90px" height="24px" /></td>
+                    <td style={{ padding: "13px 16px" }}><Skeleton width="100px" height="24px" /></td>
+                    <td style={{ padding: "13px 16px" }}><Skeleton width="120px" height="24px" /></td>
+                    <td style={{ padding: "13px 16px" }}><Skeleton width="30px" height="24px" /></td>
+                  </tr>
+                ))
+              ) : cards.length === 0 ? (
+                <tr>
+                  <td colSpan="7" style={{ padding: "40px", textAlign: "center", color: C.muted }}>
+                    {t("لا توجد بطاقات تطابق بحثك")}
                   </td>
-                  <td style={{ padding: "13px 16px", color: C.muted }}>{card.user?.name || "—"}</td>
-                  <td style={{ padding: "13px 16px" }}>{!card.is_used && <button onClick={() => deleteCard(card.id)} style={{ background: 'none', border: 'none', color: C.red, cursor: 'pointer' }}><PiTrashDuotone size={18} /></button>}</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                cards.map(card => (
+                  <tr key={card.id} style={{ borderBottom: `1px solid ${C.border}`, opacity: card.is_used ? 0.7 : 1 }}>
+                    <td style={{ padding: "13px 16px" }}><div style={{ display: "flex", alignItems: "center", gap: 8 }}><code style={{ background: C.bg, borderRadius: 6, padding: "4px 8px", fontWeight: 600 }}>{card.display_code || card.code}</code><PiCopyDuotone style={{ cursor: 'pointer', opacity: 0.5 }} onClick={() => copyCode(card.display_code || card.code)} /></div></td>
+                    <td style={{ padding: "13px 16px" }}><Badge color={card.plan?.color_hex || C.blue}>{card.plan?.name || "—"}</Badge></td>
+                    <td style={{ padding: "13px 16px", fontWeight: 700, color: C.dark }}>{formatPrice(card.price)}</td>
+                    <td style={{ padding: "13px 16px", color: C.muted }}>{new Date(card.created_at).toLocaleDateString("ar-SA")}</td>
+                    <td style={{ padding: "13px 16px" }}>
+                      <div style={{ display:'flex', gap:6 }}>
+                        <Badge color={!card.is_used ? C.green : C.gold}>{!card.is_used ? t("غير مستخدمة") : t("مستخدمة")}</Badge>
+                        {card.exported_at && <Badge color={C.blue}>{t("تم تصديرها")}</Badge>}
+                      </div>
+                    </td>
+                    <td style={{ padding: "13px 16px", color: C.muted }}>{card.user?.name || "—"}</td>
+                    <td style={{ padding: "13px 16px" }}>{!card.is_used && <button onClick={() => deleteCard(card.id)} style={{ background: 'none', border: 'none', color: C.red, cursor: 'pointer' }}><PiTrashDuotone size={18} /></button>}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
         <div style={{ padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${C.border}` }}>
           <div style={{ fontSize: '0.78rem', color: C.muted }}>
             {t("عرض")} {cards.length} {t("من إجمالي")} {summary.total} {t("بطاقة")}

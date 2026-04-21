@@ -169,7 +169,7 @@ export default function AdminAI({ setPage }) {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
+      <div className="admin-page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
         <div>
           <h1 style={{ fontSize: '1.5rem', fontWeight: 900, color: C.dark, margin: '0 0 6px' }}>{t("إعدادات الذكاء الاصطناعي")}</h1>
           <p style={{ color: C.muted, fontSize: '0.88rem' }}>{t("التحكم بمنظومة توليد الاختبارات الذكية وإعدادات الـ API")}</p>
@@ -179,7 +179,7 @@ export default function AdminAI({ setPage }) {
         </Btn>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
+      <div className="admin-two-col" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 24 }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           {/* Main AI Configuration */}
           <Card style={{ padding: 28 }}>
@@ -190,7 +190,7 @@ export default function AdminAI({ setPage }) {
               <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: C.dark, margin: 0 }}>{t("تكوين المحرك الذكي")}</h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
+            <div className="admin-form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 24 }}>
               <Field label={t("مفتاح API الخاص بالمنصة")}>
                 <div style={{ position: 'relative' }}>
                   <input 
@@ -253,38 +253,40 @@ export default function AdminAI({ setPage }) {
               <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: C.dark, margin: 0 }}>{t("حدود الباقات (عدد الاختبارات)")}</h2>
             </div>
 
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ textAlign: 'start', borderBottom: `2px solid ${C.bg}` }}>
-                  <th style={{ padding: '12px 8px', fontSize: '0.85rem', color: C.muted }}>{t("اسم الباقة")}</th>
-                  <th style={{ padding: '12px 8px', fontSize: '0.85rem', color: C.muted }}>{t("الحد الشهري للاختبارات")}</th>
-                  <th style={{ padding: '12px 8px', fontSize: '0.85rem', color: C.muted }}>{t("الحالة")}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {plans.map(plan => (
-                  <tr key={plan.id} style={{ borderBottom: `1px solid ${C.bg}` }}>
-                    <td style={{ padding: '16px 8px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                        <div style={{ width: 12, height: 12, borderRadius: '50%', background: plan.color_hex }} />
-                        <span style={{ fontWeight: 700, color: C.dark }}>{plan.name}</span>
-                      </div>
-                    </td>
-                    <td style={{ padding: '16px 8px' }}>
-                      <input 
-                        type="number" 
-                        value={plan.max_ai_tests} 
-                        onChange={e => handleUpdatePlanLimit(plan.id, e.target.value)}
-                        style={{ ...inputStyle, width: 120, height: 38, textAlign: 'center' }}
-                      />
-                    </td>
-                    <td style={{ padding: '16px 8px' }}>
-                      {plan.is_active ? <Badge color={C.green}>{t("نشطة")}</Badge> : <Badge color={C.red}>{t("غير نشطة")}</Badge>}
-                    </td>
+            <div className="admin-table-wrap">
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ textAlign: 'start', borderBottom: `2px solid ${C.bg}` }}>
+                    <th style={{ padding: '12px 8px', fontSize: '0.85rem', color: C.muted }}>{t("اسم الباقة")}</th>
+                    <th style={{ padding: '12px 8px', fontSize: '0.85rem', color: C.muted }}>{t("الحد الشهري للاختبارات")}</th>
+                    <th style={{ padding: '12px 8px', fontSize: '0.85rem', color: C.muted }}>{t("الحالة")}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {plans.map(plan => (
+                    <tr key={plan.id} style={{ borderBottom: `1px solid ${C.bg}` }}>
+                      <td style={{ padding: '16px 8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                          <div style={{ width: 12, height: 12, borderRadius: '50%', background: plan.color_hex }} />
+                          <span style={{ fontWeight: 700, color: C.dark }}>{plan.name}</span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '16px 8px' }}>
+                        <input 
+                          type="number" 
+                          value={plan.max_ai_tests} 
+                          onChange={e => handleUpdatePlanLimit(plan.id, e.target.value)}
+                          style={{ ...inputStyle, width: 120, height: 38, textAlign: 'center' }}
+                        />
+                      </td>
+                      <td style={{ padding: '16px 8px' }}>
+                        {plan.is_active ? <Badge color={C.green}>{t("نشطة")}</Badge> : <Badge color={C.red}>{t("غير نشطة")}</Badge>}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </Card>
         </div>
 

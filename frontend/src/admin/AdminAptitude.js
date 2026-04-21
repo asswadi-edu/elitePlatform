@@ -137,12 +137,12 @@ export default function AdminAptitude() {
 
   return (
     <div style={{ direction: "rtl" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
+      <div className="admin-page-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 }}>
         <div>
           <h1 style={{ fontSize: "1.75rem", fontWeight: 900, color: C.dark, marginBottom: 8 }}>{t("إدارة اختبار الميول")}</h1>
           <p style={{ color: C.muted, fontSize: "0.92rem" }}>{t("هنا يمكنك التحكم في أسئلة اختبار تحديد الميول والاهتمامات.")}</p>
         </div>
-        <div style={{ display: "flex", gap: 12 }}>
+        <div className="admin-aptitude-actions" style={{ display: "flex", gap: 12 }}>
           {test && (
             <div style={{ display: "flex", alignItems: "center", gap: 10, background: C.white, padding: "4px 8px 4px 14px", borderRadius: 12, border: `1px solid ${C.border}` }}>
               <span style={{ fontSize: "0.82rem", fontWeight: 700, color: C.muted }}>{t("مدة الاختبار (دقائق):")}</span>
@@ -192,52 +192,54 @@ export default function AdminAptitude() {
       </div>
 
       <Card style={{ padding: 0, overflow: "hidden" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "right" }}>
-          <thead>
-            <tr style={{ background: C.bg, borderBottom: `1px solid ${C.border}` }}>
-              <th style={{ padding: "16px 24px", color: C.muted, fontSize: "0.82rem", fontWeight: 700 }}>{t("الترتيب")}</th>
-              <th style={{ padding: "16px 24px", color: C.muted, fontSize: "0.82rem", fontWeight: 700 }}>{t("نص السؤال")}</th>
-              <th style={{ padding: "16px 24px", color: C.muted, fontSize: "0.82rem", fontWeight: 700, textAlign: "center" }}>{t("الإجراءات")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              Array(5).fill(0).map((_, i) => (
-                <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
-                  <td style={{ padding: "18px 24px" }}><Skeleton width="40px" height="24px" borderRadius="12px" /></td>
-                  <td style={{ padding: "18px 24px" }}><Skeleton width="70%" height="18px" /></td>
-                  <td style={{ padding: "18px 24px" }}>
-                    <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-                      <Skeleton width="34px" height="34px" borderRadius="8px" />
-                      <Skeleton width="34px" height="34px" borderRadius="8px" />
-                    </div>
-                  </td>
-                </tr>
-              ))
-            ) : questions.length === 0 ? (
-              <tr><td colSpan="3" style={{ padding: 40, textAlign: "center", color: C.muted }}>{t("لا توجد أسئلة مضافة حالياً")}</td></tr>
-            ) : (
-              questions.map((q, idx) => (
-                <tr key={q.id} style={{ borderBottom: `1px solid ${C.border}`, transition: "all .2s" }} onMouseEnter={e => e.currentTarget.style.background = "#F8FAFC"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                  <td style={{ padding: "18px 24px" }}>
-                    <Badge color={C.blueLight} style={{ color: C.blue, fontWeight: 800 }}>{q.display_order}</Badge>
-                  </td>
-                  <td style={{ padding: "18px 24px", fontWeight: 500, color: C.dark }}>{q.question_text}</td>
-                  <td style={{ padding: "18px 24px" }}>
-                    <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
-                      <button onClick={() => openEdit(q)} style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: C.bg, color: C.blue, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all .2s" }} onMouseEnter={e => e.currentTarget.style.background = C.blueLight} onMouseLeave={e => e.currentTarget.style.background = C.bg} title={t("تعديل")}>
-                        <PiPencilDuotone size={18} />
-                      </button>
-                      <button onClick={() => handleDelete(q.id)} style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: C.bg, color: C.red, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all .2s" }} onMouseEnter={e => e.currentTarget.style.background = "#FEF2F2"} onMouseLeave={e => e.currentTarget.style.background = C.bg} title={t("حذف")}>
-                        <PiTrashDuotone size={18} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+        <div className="admin-table-wrap">
+          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "right" }}>
+            <thead>
+              <tr style={{ background: C.bg, borderBottom: `1px solid ${C.border}` }}>
+                <th style={{ padding: "16px 24px", color: C.muted, fontSize: "0.82rem", fontWeight: 700 }}>{t("الترتيب")}</th>
+                <th style={{ padding: "16px 24px", color: C.muted, fontSize: "0.82rem", fontWeight: 700 }}>{t("نص السؤال")}</th>
+                <th style={{ padding: "16px 24px", color: C.muted, fontSize: "0.82rem", fontWeight: 700, textAlign: "center" }}>{t("الإجراءات")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                Array(5).fill(0).map((_, i) => (
+                  <tr key={i} style={{ borderBottom: `1px solid ${C.border}` }}>
+                    <td style={{ padding: "18px 24px" }}><Skeleton width="40px" height="24px" borderRadius="12px" /></td>
+                    <td style={{ padding: "18px 24px" }}><Skeleton width="70%" height="18px" /></td>
+                    <td style={{ padding: "18px 24px" }}>
+                      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+                        <Skeleton width="34px" height="34px" borderRadius="8px" />
+                        <Skeleton width="34px" height="34px" borderRadius="8px" />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : questions.length === 0 ? (
+                <tr><td colSpan="3" style={{ padding: 40, textAlign: "center", color: C.muted }}>{t("لا توجد أسئلة مضافة حالياً")}</td></tr>
+              ) : (
+                questions.map((q, idx) => (
+                  <tr key={q.id} style={{ borderBottom: `1px solid ${C.border}`, transition: "all .2s" }} onMouseEnter={e => e.currentTarget.style.background = "#F8FAFC"} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                    <td style={{ padding: "18px 24px" }}>
+                      <Badge color={C.blueLight} style={{ color: C.blue, fontWeight: 800 }}>{q.display_order}</Badge>
+                    </td>
+                    <td style={{ padding: "18px 24px", fontWeight: 500, color: C.dark }}>{q.question_text}</td>
+                    <td style={{ padding: "18px 24px" }}>
+                      <div style={{ display: "flex", gap: 10, justifyContent: "center" }}>
+                        <button onClick={() => openEdit(q)} style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: C.bg, color: C.blue, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all .2s" }} onMouseEnter={e => e.currentTarget.style.background = C.blueLight} onMouseLeave={e => e.currentTarget.style.background = C.bg} title={t("تعديل")}>
+                          <PiPencilDuotone size={18} />
+                        </button>
+                        <button onClick={() => handleDelete(q.id)} style={{ width: 34, height: 34, borderRadius: 8, border: "none", background: C.bg, color: C.red, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", transition: "all .2s" }} onMouseEnter={e => e.currentTarget.style.background = "#FEF2F2"} onMouseLeave={e => e.currentTarget.style.background = C.bg} title={t("حذف")}>
+                          <PiTrashDuotone size={18} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </Card>
 
       {!loading && questions.length > 0 && (
