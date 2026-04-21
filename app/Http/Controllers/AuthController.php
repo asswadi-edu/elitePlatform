@@ -116,6 +116,9 @@ class AuthController extends Controller
 
             $token = $user->createToken('auth_token')->plainTextToken;
 
+            // Fire-and-forget: wake up Python AI service after registration
+            $this->warmupPythonApi();
+
             return response()->json([
                 'message' => 'تم إنشاء الحساب بنجاح.',
                 'access_token' => $token,
@@ -169,6 +172,9 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        // Fire-and-forget: wake up Python AI service in background (no await, no timeout impact)
+        $this->warmupPythonApi();
 
         return response()->json([
             'access_token' => $token,
@@ -329,6 +335,23 @@ class AuthController extends Controller
         Mail::to($user->email)->send(new EmailVerificationCode($otp->code));
 
         return response()->json(['message' => 'تم إرسال رمز التحقق مجدداً.']);
+    }
+
+    /**
+     * Fire-and-forget ping to wake up the Python API on Render.
+     * Uses a short timeout and ignores any errors — does not affect login speed.
+     */
+    private function warmupPythonApi(): void
+    {
+        $pythonUrl = rtrim(env('PYTHON_API_URL', ''), '/');
+        if (!$pythonUrl) return;
+
+        try {
+            \Illuminate\Support\Facades\Http::timeout(2)
+                ->get("{$pythonUrl}/docs");
+        } catch (\Exception $e) {
+            // Silent — warmup failure should never affect login
+        }
     }
 
     private function syncSubscriberRole($user)

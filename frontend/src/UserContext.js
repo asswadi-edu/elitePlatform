@@ -39,6 +39,15 @@ export function UserProvider({ children }) {
     }
   };
 
+  // Warm up Python API once when the app loads (silent background ping)
+  useEffect(() => {
+    const pythonUrl = process.env.REACT_APP_PYTHON_API_URL || '';
+    if (pythonUrl) {
+      // Just ping /docs which is a lightweight endpoint — wakes up Render's sleeping service
+      fetch(`${pythonUrl}/docs`, { mode: 'no-cors' }).catch(() => {});
+    }
+  }, []); // runs only once on app startup
+
   useEffect(() => {
     // Initial sync from token if needed, but App.js handles it.
     // This effect is now mostly for safety or logging.
