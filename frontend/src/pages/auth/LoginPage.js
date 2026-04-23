@@ -3,8 +3,7 @@ import { C, inputStyle } from "../../tokens";
 import { Btn, Card, Field } from "../../components/Common";
 import { FadeIn } from "../../utils";
 import { 
-  PiGraduationCapDuotone, PiShieldCheckDuotone, 
-  PiGearDuotone, PiFlaskDuotone, PiXCircleDuotone, PiSpinnerGapDuotone,
+  PiGraduationCapDuotone, PiXCircleDuotone, PiSpinnerGapDuotone,
   PiEyeDuotone, PiEyeSlashDuotone
 } from "react-icons/pi";
 import { LanguageContext } from "../../LanguageContext";
@@ -21,15 +20,7 @@ export default function LoginPage({ setPage, onLogin }) {
   const [error,    setError]    = useState("");
   const [showPass, setShowPass] = useState(false);
 
-  const DEMO_ACCOUNTS = {
-    "student@elite.com": { pass: "student123", role: "student", dest: "dashboard", name: "طالب تجريبي", badge: t("طالب"), uni: false },
-    "uni_student@elite.com": { pass: "student123", role: "student", dest: "dashboard", name: "طالب جامعي", badge: t("جامعي"), uni: true },
-    "mod@elite.com":     { pass: "mod123",     role: "moderator", dest: "mod-resources", name: "مشرف المحتوى", badge: t("مشرف"), uni: false },
-    "admin@elite.com":   { pass: "admin123",   role: "admin", dest: "admin", name: t("مدير النظام"), badge: t("أدمن"), uni: false },
-  };
 
-  const roleIcons = { student: <PiGraduationCapDuotone />, moderator: <PiShieldCheckDuotone />, admin: <PiGearDuotone /> };
-  const roleColors = { student: C.blue, moderator: C.green, admin: C.red };
 
   async function handleLogin() {
     setError("");
@@ -84,25 +75,7 @@ export default function LoginPage({ setPage, onLogin }) {
               <p style={{ color:C.muted, fontSize:"0.88rem" }}>{t("أهلًا بعودتك إلى النخبة")}</p>
             </div>
 
-            {/* Demo accounts hint */}
-            <div style={{ background:C.blueLight, border:`1px solid ${C.blueMid}`, borderRadius:12, padding:"14px 16px", marginBottom:22 }}>
-              <div style={{ fontWeight:700, color:C.blue, fontSize:"0.82rem", marginBottom:10, display:"flex", alignItems:"center", gap:6 }}><PiFlaskDuotone size={16}/> {t("حسابات تجريبية")}</div>
-              <div style={{ display:"flex", flexDirection:"column", gap:6 }}>
-                {Object.entries(DEMO_ACCOUNTS).map(([em, acc]) => (
-                  <div key={em} onClick={() => { setEmail(em); setPass(acc.pass); setError(""); }}
-                    style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 12px", borderRadius:9, cursor:"pointer", background:"rgba(255,255,255,0.7)", border:`1px solid ${roleColors[acc.role]}25`, transition:"all .15s" }}
-                    onMouseEnter={e => e.currentTarget.style.background=C.white}
-                    onMouseLeave={e => e.currentTarget.style.background="rgba(255,255,255,0.7)"}>
-                    <span style={{ fontSize:"1.1rem" }}>{roleIcons[acc.role]}</span>
-                    <div style={{ flex:1 }}>
-                      <div style={{ fontWeight:700, fontSize:"0.82rem", color:C.dark }}>{acc.name}</div>
-                      <div style={{ fontSize:"0.73rem", color:C.muted }}>{em}</div>
-                    </div>
-                    <span style={{ background:roleColors[acc.role]+"18", color:roleColors[acc.role], border:`1px solid ${roleColors[acc.role]}30`, borderRadius:12, padding:"2px 10px", fontSize:"0.72rem", fontWeight:700 }}>{acc.badge}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+
 
             <Field label={t("البريد الإلكتروني")}>
               <input value={email} onChange={e=>{setEmail(e.target.value);setError("");}} placeholder={t("أدخل بريدك الإلكتروني")} style={{ ...inputStyle, borderColor: error?C.red:C.border }}

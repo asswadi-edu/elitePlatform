@@ -121,7 +121,7 @@ elitePlatform/
 │   │   ├── components/   # Reusable UI Components
 │   │   └── dashboard/    # Student Dashboard Interfaces
 │   └── package.json      # Frontend Dependencies
-├── python-api/           # 🐍 Python ML Microservice
+├── python-api/           # Python ML Microservice
 │   ├── app.py            # Main API entry
 │   └── requirements.txt  # Python Dependencies
 ├── routes/               # Laravel API & Web routes
