@@ -64,7 +64,11 @@ export default function Navbar({ setPage, loggedIn, userRole = "guest", onLogout
           {/* Logo */}
           <div style={{ display: "flex", alignItems: "center", gap: 9, cursor: "pointer", flexShrink: 0 }} onClick={() => setPage("/")}>
             <div style={{ width: 36, height: 36, borderRadius: 9, background: settings.primary_color || C.blue, display: "flex", alignItems: "center", justifyContent: "center", color: C.white, fontSize: "1.2rem", overflow: 'hidden', flexShrink: 0 }}>
-              {settings.site_logo ? <img src={settings.site_logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="logo" /> : <PiGraduationCapDuotone />}
+              {settings.site_logo ? (
+                <img src={settings.site_logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="logo" />
+              ) : (
+                <img src="/logo192.png" style={{ width: '80%', height: '80%', objectFit: 'contain' }} alt="logo" onError={(e) => { e.target.style.display = 'none'; }} />
+              )}
             </div>
             <span style={{ fontWeight: 800, fontSize: "1.1rem", color: C.dark, whiteSpace: 'nowrap' }}>{settings.site_name || t("النخبة")}</span>
           </div>

@@ -7,12 +7,14 @@ import {
   PiEyeDuotone, PiEyeSlashDuotone, PiEnvelopeOpenDuotone, PiSpinnerGapDuotone
 } from "react-icons/pi";
 import { LanguageContext } from "../../LanguageContext";
+import { SettingsContext } from "../../SettingsContext";
 import { getApiUrl } from "../../api";
 
 
 
 export default function RegisterPage({ setPage, onLogin }) {
   const { t } = useContext(LanguageContext);
+  const { settings } = useContext(SettingsContext);
   const [step, setStep] = useState(1); // 1: Form, 2: OTP
   const [isUniversity, setIsUniversity] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -133,7 +135,13 @@ export default function RegisterPage({ setPage, onLogin }) {
             {step === 1 ? (
               <>
                 <div style={{ textAlign: "center", marginBottom: 32 }}>
-                  <div style={{ width: 52, height: 52, borderRadius: 13, background: C.blue, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", color:C.white, fontSize:"1.8rem" }}><PiGraduationCapDuotone/></div>
+                  <div style={{ width: 52, height: 52, borderRadius: 13, background: C.blue, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", color:C.white, overflow: 'hidden' }}>
+                    {settings.site_logo ? (
+                      <img src={settings.site_logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="logo" />
+                    ) : (
+                      <img src="/logo192.png" style={{ width: '80%', height: '80%', objectFit: 'contain' }} alt="logo" onError={(e) => { e.target.style.display = 'none'; }} />
+                    )}
+                  </div>
                   <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: C.dark, margin: "0 0 6px" }}>{t("إنشاء حساب جديد")}</h1>
                   <p style={{ color: C.muted, fontSize: "0.88rem" }}>{t("انضم إلى مجتمع النخبة الأكاديمي")}</p>
                 </div>

@@ -117,8 +117,11 @@ export default function DashboardLayout({ activeSub, setPage, children, isUniver
         <div style={{ padding:"0 16px 16px", borderBottom:`1px solid ${C.border}`, marginBottom:12 }}>
           <div style={{ display:"flex", alignItems:"center", gap:10 }}>
             <div style={{ width:40, height:40, borderRadius:10, background: settings.primary_color || C.blue, display:"flex", alignItems:"center", justifyContent:"center", color:C.white, fontSize:"1.3rem", overflow:'hidden', flexShrink:0 }}>
-              {settings.site_logo ? <img src={settings.site_logo} style={{ width:'100%', height:'100%', objectFit:'cover' }} onError={(e) => {e.target.style.display='none';}} alt="logo" /> : null}
-              <PiGraduationCapDuotone style={{ display: settings.site_logo ? 'none' : 'block' }} />
+              {settings.site_logo ? (
+                <img src={settings.site_logo} style={{ width:'100%', height:'100%', objectFit:'cover' }} onError={(e) => {e.target.style.display='none';}} alt="logo" />
+              ) : (
+                <img src="/logo192.png" style={{ width: '80%', height: '80%', objectFit: 'contain' }} alt="logo" onError={(e) => { e.target.style.display = 'none'; }} />
+              )}
             </div>
             <div style={{ display:'flex', flexDirection:'column', overflow:'hidden' }}>
               <span style={{ fontWeight:900, color:C.dark, fontSize:'0.95rem', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{settings.site_name || t("النخبة")}</span>

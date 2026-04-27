@@ -73,8 +73,11 @@ export default function ModeratorLayout({ activeSub, setPage, onLogout: propsLog
         {/* Logo */}
         <div style={{ display:"flex", alignItems:"center", gap:10, flexShrink:0 }}>
           <div style={{ width:36, height:36, borderRadius:9, background:"rgba(255,255,255,0.18)", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontSize:"1.2rem", overflow:'hidden', flexShrink:0 }}>
-            {settings.site_logo ? <img src={settings.site_logo} style={{ width:'100%', height:'100%', objectFit:'cover' }} onError={e => e.target.style.display='none'} alt="logo" /> : null}
-            <PiGraduationCapDuotone style={{ display: settings.site_logo ? 'none' : 'block' }} />
+            {settings.site_logo ? (
+              <img src={settings.site_logo} style={{ width:'100%', height:'100%', objectFit:'cover' }} onError={e => e.target.style.display='none'} alt="logo" />
+            ) : (
+              <img src="/logo192.png" style={{ width: '80%', height: '80%', objectFit: 'contain' }} alt="logo" onError={(e) => { e.target.style.display = 'none'; }} />
+            )}
           </div>
           <div className="mod-brand-text">
             <div style={{ color:"#fff", fontWeight:900, fontSize:"0.95rem", lineHeight:1 }}>{settings.site_name || t("النخبة")}</div>

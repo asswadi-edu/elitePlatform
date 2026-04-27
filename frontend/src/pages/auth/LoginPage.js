@@ -7,12 +7,14 @@ import {
   PiEyeDuotone, PiEyeSlashDuotone
 } from "react-icons/pi";
 import { LanguageContext } from "../../LanguageContext";
+import { SettingsContext } from "../../SettingsContext";
 import { getApiUrl } from "../../api";
 
 
 
 export default function LoginPage({ setPage, onLogin }) {
   const { t } = useContext(LanguageContext);
+  const { settings } = useContext(SettingsContext);
   const [remember, setRemember] = useState(false);
   const [email,    setEmail]    = useState("");
   const [pass,     setPass]     = useState("");
@@ -70,7 +72,13 @@ export default function LoginPage({ setPage, onLogin }) {
         <FadeIn>
           <Card style={{ padding:"44px 40px" }}>
             <div style={{ textAlign:"center", marginBottom:28 }}>
-              <div style={{ width:52, height:52, borderRadius:13, background:C.blue, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", color:C.white }}><span style={{ fontSize:"1.8rem" }}><PiGraduationCapDuotone/></span></div>
+              <div style={{ width:52, height:52, borderRadius:13, background:C.blue, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", color:C.white, overflow:'hidden' }}>
+                {settings.site_logo ? (
+                  <img src={settings.site_logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="logo" />
+                ) : (
+                  <img src="/logo192.png" style={{ width: '80%', height: '80%', objectFit: 'contain' }} alt="logo" onError={(e) => { e.target.style.display = 'none'; }} />
+                )}
+              </div>
               <h1 style={{ fontSize:"1.5rem", fontWeight:800, color:C.dark, margin:"0 0 6px" }}>{t("تسجيل الدخول")}</h1>
               <p style={{ color:C.muted, fontSize:"0.88rem" }}>{t("أهلًا بعودتك إلى النخبة")}</p>
             </div>
