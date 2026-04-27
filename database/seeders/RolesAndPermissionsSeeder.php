@@ -84,6 +84,16 @@ class RolesAndPermissionsSeeder extends Seeder
             'view_announcements',
         ]);
 
+        // Subscriber (Premium access)
+        $subscriberRole = Role::firstOrCreate(['name' => 'subscriber', 'guard_name' => 'web']);
+        $subscriberRole->givePermissionTo([
+            'take_aptitude_test',
+            'view_resources',
+            'view_majors',
+            'view_challenges',
+            'view_announcements',
+        ]);
+
         $this->command->info('Roles and permissions wiped and re-seeded successfully.');
     }
 }

@@ -362,6 +362,9 @@ class AuthController extends Controller
         $activeSub = $user->activeSubscription;
 
         if ($activeSub && !$user->hasRole('subscriber')) {
+            if (!\Spatie\Permission\Models\Role::where('name', 'subscriber')->exists()) {
+                \Spatie\Permission\Models\Role::create(['name' => 'subscriber', 'guard_name' => 'web']);
+            }
             $user->assignRole('subscriber');
             $user->unsetRelation('roles');
         } elseif (!$activeSub && $user->hasRole('subscriber')) {
