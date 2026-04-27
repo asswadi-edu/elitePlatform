@@ -82,6 +82,9 @@ export default function DashActivate({ setPage, onActivated, user }) {
     setCardInfo(null);
   }
 
+  const full = code.join("-");
+  const isComplete = code.every(p=>p.length===4);
+
   useEffect(() => {
     if (isComplete && status === "idle") {
       checkCode();
@@ -151,9 +154,6 @@ export default function DashActivate({ setPage, onActivated, user }) {
       setErrorMsg(t("تعذر الاتصال بالسيرفر، يرجى المحاولة لاحقاً"));
     }
   }
-
-  const full = code.join("-");
-  const isComplete = code.every(p=>p.length===4);
 
   return (
     <DashboardLayout activeSub="activate" setPage={setPage} user={user}>
