@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { C } from "../tokens";
 import { Btn } from "./Common";
-import { PiGraduationCapDuotone, PiMoonDuotone, PiSunDuotone, PiListDuotone, PiXDuotone } from "react-icons/pi";
+import { PiMoonDuotone, PiSunDuotone, PiListDuotone, PiXDuotone } from "react-icons/pi";
 import { ThemeContext } from "../ThemeContext";
 import { LanguageContext } from "../LanguageContext";
 import { SettingsContext } from "../SettingsContext";

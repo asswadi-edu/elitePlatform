@@ -3,7 +3,7 @@ import { C, inputStyle } from "../../tokens";
 import { Btn, Card, Field } from "../../components/Common";
 import { FadeIn } from "../../utils";
 import { 
-  PiGraduationCapDuotone, PiXCircleDuotone, PiSpinnerGapDuotone,
+  PiXCircleDuotone, PiSpinnerGapDuotone,
   PiEyeDuotone, PiEyeSlashDuotone
 } from "react-icons/pi";
 import { LanguageContext } from "../../LanguageContext";
