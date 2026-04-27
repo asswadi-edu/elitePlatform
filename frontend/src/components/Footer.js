@@ -30,8 +30,12 @@ export default function Footer({ setPage }) {
           {/* Brand column */}
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-              <div style={{ width: 34, height: 34, borderRadius: 9, background: settings.primary_color || C.blue, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: 15 }}>🎓</span>
+              <div style={{ width: 34, height: 34, borderRadius: 9, background: settings.primary_color || C.blue, display: "flex", alignItems: "center", justifyContent: "center", overflow: 'hidden' }}>
+                {settings.site_logo ? (
+                  <img src={settings.site_logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="logo" />
+                ) : (
+                  <img src="/logo192.png" style={{ width: '80%', height: '80%', objectFit: 'contain' }} alt="logo" onError={(e) => { e.target.style.display = 'none'; }} />
+                )}
               </div>
               <span style={{ fontWeight: 800, color: C.white, fontSize: "1.05rem" }}>{settings.site_name || t("النخبة")}</span>
             </div>

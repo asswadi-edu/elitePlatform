@@ -135,7 +135,7 @@ export default function RegisterPage({ setPage, onLogin }) {
             {step === 1 ? (
               <>
                 <div style={{ textAlign: "center", marginBottom: 32 }}>
-                  <div style={{ width: 52, height: 52, borderRadius: 13, background: C.blue, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", color:C.white, overflow: 'hidden' }}>
+                  <div style={{ width: 52, height: 52, borderRadius: 13, background: settings.primary_color || C.blue, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", color:C.white, overflow: 'hidden' }}>
                     {settings.site_logo ? (
                       <img src={settings.site_logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="logo" />
                     ) : (
@@ -252,7 +252,7 @@ export default function RegisterPage({ setPage, onLogin }) {
               /* Step 2: OTP Verification */
               <div style={{ direction: "rtl" }}>
                 <div style={{ textAlign: "center", marginBottom: 32 }}>
-                  <div style={{ width: 60, height: 60, borderRadius: 15, background: C.blue, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", color: C.white, fontSize: "2rem" }}><PiEnvelopeOpenDuotone/></div>
+                  <div style={{ width: 60, height: 60, borderRadius: 15, background: settings.primary_color || C.blue, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 18px", color: C.white, fontSize: "2rem" }}><PiEnvelopeOpenDuotone/></div>
                   <h2 style={{ fontSize: "1.4rem", fontWeight: 800, color: C.dark, marginBottom: 8 }}>{t("تفعيل الحساب")}</h2>
                   <p style={{ color: C.muted, fontSize: "0.9rem" }}>{t("أدخل رمز التحقق (OTP) المكون من 6 أرقام المرسل إلى بريدك الإلكتروني")}</p>
                    <b style={{ color: C.dark, fontSize: "0.9rem" }}>{formData.email}</b>

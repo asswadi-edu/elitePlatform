@@ -72,7 +72,7 @@ export default function LoginPage({ setPage, onLogin }) {
         <FadeIn>
           <Card style={{ padding:"44px 40px" }}>
             <div style={{ textAlign:"center", marginBottom:28 }}>
-              <div style={{ width:52, height:52, borderRadius:13, background:C.blue, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", color:C.white, overflow:'hidden' }}>
+              <div style={{ width:52, height:52, borderRadius:13, background:settings.primary_color || C.blue, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 16px", color:C.white, overflow:'hidden' }}>
                 {settings.site_logo ? (
                   <img src={settings.site_logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="logo" />
                 ) : (
