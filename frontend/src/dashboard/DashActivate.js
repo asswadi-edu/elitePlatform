@@ -11,7 +11,7 @@ export default function DashActivate({ setPage, onActivated, user }) {
   const activeSubscription = user?.active_subscription;
   const { t } = useContext(LanguageContext);
   const { formatPrice } = useContext(CurrencyContext);
-  const [code, setCode] = useState(["","","",""]);
+  const [code, setCode] = useState(["NKBH","","",""]);
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [plans, setPlans] = useState([]);
@@ -43,11 +43,22 @@ export default function DashActivate({ setPage, onActivated, user }) {
   }
   function handleKeyDown(i, e) { if (e.key==="Backspace" && code[i]==="" && i>0) inputRefs[i-1].current?.focus(); }
   function handlePaste(e) {
-    const pasted = e.clipboardData.getData("text").toUpperCase().replace(/[^A-Z0-9-]/g,"");
-    const parts = pasted.split("-").filter(p=>p.length>0).slice(0,4);
-    const next = ["","","",""];
-    parts.forEach((p,i) => { if(i<4) next[i] = p.slice(0,4); });
-    setCode(next); e.preventDefault();
+    let pasted = e.clipboardData.getData("text").toUpperCase().replace(/[^A-Z0-9-]/g,"");
+    let parts = pasted.split("-").filter(p=>p.length>0);
+    
+    // If first part is NKBH, remove it as it's already in code[0]
+    if (parts[0] === "NKBH") {
+      parts.shift();
+    } else if (pasted.startsWith("NKBH") && pasted.length >= 4) {
+      // Handle case where hyphen might be missing after NKBH
+      pasted = pasted.substring(4).replace(/^-/, "");
+      parts = pasted.split("-").filter(p=>p.length>0);
+    }
+
+    const next = ["NKBH","","",""];
+    parts.forEach((p,i) => { if(i < 3) next[i+1] = p.slice(0,4); });
+    setCode(next); 
+    e.preventDefault();
   }
 
   async function activate() {
@@ -145,10 +156,34 @@ export default function DashActivate({ setPage, onActivated, user }) {
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 28, direction: 'ltr' }} onPaste={handlePaste}>
               {code.map((seg, i) => (
                 <React.Fragment key={i}>
-                  <input ref={inputRefs[i]} value={seg} onChange={e => handleInput(i, e.target.value)} onKeyDown={e => handleKeyDown(i, e)} maxLength={4} placeholder="XXXX"
-                    style={{ width: 80, height: 56, textAlign: 'center', fontSize: '1.1rem', fontFamily: 'monospace', fontWeight: 700, letterSpacing: '0.12em', borderRadius: 10, border: `2px solid ${status === "error" ? C.red : seg.length === 4 ? C.blue : C.border}`, outline: 'none', background: seg.length === 4 ? C.blueLight : C.white, color: C.dark, transition: 'all .2s', textTransform: 'uppercase' }}
-                    onFocus={e => { if (status !== "error") e.target.style.borderColor = C.blue; }}
-                    onBlur={e => { if (e.target.value.length !== 4) e.target.style.borderColor = C.border; }} />
+                  <input 
+                    ref={inputRefs[i]} 
+                    value={seg} 
+                    onChange={e => i > 0 && handleInput(i, e.target.value)} 
+                    onKeyDown={e => handleKeyDown(i, e)} 
+                    maxLength={4} 
+                    placeholder={i === 0 ? "NKBH" : "XXXX"}
+                    readOnly={i === 0}
+                    style={{ 
+                      width: 80, 
+                      height: 56, 
+                      textAlign: 'center', 
+                      fontSize: '1.1rem', 
+                      fontFamily: 'monospace', 
+                      fontWeight: 700, 
+                      letterSpacing: '0.12em', 
+                      borderRadius: 10, 
+                      border: `2px solid ${status === "error" ? C.red : seg.length === 4 ? C.blue : C.border}`, 
+                      outline: 'none', 
+                      background: i === 0 ? C.bg : (seg.length === 4 ? C.blueLight : C.white), 
+                      color: i === 0 ? C.muted : C.dark, 
+                      transition: 'all .2s', 
+                      textTransform: 'uppercase',
+                      cursor: i === 0 ? 'default' : 'text'
+                    }}
+                    onFocus={e => { if (status !== "error" && i > 0) e.target.style.borderColor = C.blue; }}
+                    onBlur={e => { if (i > 0 && e.target.value.length !== 4) e.target.style.borderColor = C.border; }} 
+                  />
                   {i < 3 && <span style={{ color: C.muted, fontWeight: 700, fontSize: '1.1rem' }}>—</span>}
                 </React.Fragment>
               ))}
@@ -161,7 +196,7 @@ export default function DashActivate({ setPage, onActivated, user }) {
             {isComplete && status !== "error" && (
               <div style={{ background: C.goldBg, border: `1px solid color-mix(in srgb, ${C.gold} 19%, transparent)`, borderRadius: 10, padding: '12px 16px', marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
                 <span style={{ fontSize: '1.4rem', color: C.gold, display: "flex" }}><PiTicketDuotone /></span>
-                <div><div style={{ fontWeight: 700, color: C.dark, fontSize: '0.88rem' }}>{t("الكود: NKBH-")}{full}</div><div style={{ color: C.muted, fontSize: '0.78rem', marginTop: 2 }}>{t("جاهز للتفعيل — اضغط تفعيل الاشتراك")}</div></div>
+                <div><div style={{ fontWeight: 700, color: C.dark, fontSize: '0.88rem' }}>{t("الكود: ")}{full}</div><div style={{ color: C.muted, fontSize: '0.78rem', marginTop: 2 }}>{t("جاهز للتفعيل — اضغط تفعيل الاشتراك")}</div></div>
               </div>
             )}
             <button onClick={activate} disabled={!isComplete || status === "loading"}
