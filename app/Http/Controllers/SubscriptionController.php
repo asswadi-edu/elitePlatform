@@ -17,6 +17,14 @@ class SubscriptionController extends Controller
      */
     public function activateCard(Request $request)
     {
+        $key = 'sub_activate_' . $request->user()->id;
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($key, 3)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($key);
+            return response()->json([
+                'message' => "لقد تجاوزت عدد المحاولات المسموحة. يرجى الانتظار {$seconds} ثانية."
+            ], 429);
+        }
+
         $validator = Validator::make($request->all(), [
             'code' => 'required|string',
         ]);
@@ -40,7 +48,8 @@ class SubscriptionController extends Controller
             ->first();
 
         if (!$card) {
-            return response()->json(['message' => 'Invalid or already used activation code'], 422);
+            \Illuminate\Support\Facades\RateLimiter::hit($key, 1800); // Ban for 30 mins
+            return response()->json(['message' => 'الكود غير صحيح أو مستخدم مسبقاً'], 422);
         }
 
         if ($card->expires_at && $card->expires_at->isPast()) {
@@ -85,6 +94,8 @@ class SubscriptionController extends Controller
 
             DB::commit();
 
+            \Illuminate\Support\Facades\RateLimiter::clear($key);
+
             return response()->json([
                 'message' => 'Subscription activated successfully',
                 'plan_name' => $plan->name,
@@ -95,6 +106,56 @@ class SubscriptionController extends Controller
             DB::rollBack();
             return response()->json(['message' => 'Failed to activate subscription', 'error' => $e->getMessage()], 500);
         }
+    }
+
+    /**
+     * Check card validity without activating.
+     */
+    public function checkCard(Request $request)
+    {
+        $key = 'sub_check_' . $request->user()->id;
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($key, 3)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($key);
+            return response()->json([
+                'message' => "لقد تجاوزت عدد المحاولات المسموحة. يرجى الانتظار {$seconds} ثانية."
+            ], 429);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'code' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => 'Invalid code format'], 422);
+        }
+
+        $codeRaw = strtoupper($request->code);
+        $codeNoHyphens = str_replace('-', '', $codeRaw);
+        $hashNoHyphens = hash('sha256', $codeNoHyphens);
+        $hashWithHyphens = hash('sha256', $codeRaw);
+
+        $card = ActivationCard::where(function($q) use ($hashNoHyphens, $hashWithHyphens) {
+                $q->where('code_hash', $hashNoHyphens)
+                  ->orWhere('code_hash', $hashWithHyphens);
+            })
+            ->where('is_used', false)
+            ->with('plan')
+            ->first();
+
+        if (!$card) {
+            \Illuminate\Support\Facades\RateLimiter::hit($key, 1800); // Ban for 30 mins
+            return response()->json(['message' => 'هذا الكود غير موجود أو تم استخدامه مسبقاً.'], 422);
+        }
+
+        if ($card->expires_at && $card->expires_at->isPast()) {
+            return response()->json(['message' => 'هذا الكود انتهت صلاحيته.'], 422);
+        }
+
+        return response()->json([
+            'valid' => true,
+            'plan' => $card->plan,
+            'price' => $card->price
+        ]);
     }
 
     /**

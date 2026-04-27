@@ -9,17 +9,17 @@ export default function Footer({ setPage }) {
   const { settings } = useContext(SettingsContext);
 
   const quickLinks = [
-    { label: t("الرئيسية"),       path: "/" },
-    { label: t("عن المنصة"),      path: "/about" },
-    { label: t("اختبار الميول"),  path: "/test-intro" },
-    { label: t("تواصل معنا"),     path: "/contact" },
+    { label: t("الرئيسية"), path: "/" },
+    { label: t("عن المنصة"), path: "/about" },
+    { label: t("اختبار الميول"), path: "/test-intro" },
+    { label: t("تواصل معنا"), path: "/contact" },
   ];
 
   const supportLinks = [
-    { label: t("تواصل معنا"),         path: "/contact" },
-    { label: t("الأسئلة الشائعة"),    path: "/" },
-    { label: t("سياسة الخصوصية"),    path: "/" },
-    { label: t("شروط الاستخدام"),     path: "/" },
+    { label: t("تواصل معنا"), path: "/contact" },
+    { label: t("الأسئلة الشائعة"), path: "/" },
+    { label: t("سياسة الخصوصية"), path: "/" },
+    { label: t("شروط الاستخدام"), path: "/" },
   ];
 
   return (
@@ -90,7 +90,7 @@ export default function Footer({ setPage }) {
         <Divider />
         <div style={{ textAlign: "center", padding: "18px 0" }}>
           <span style={{ color: "rgba(255,255,255,0.3)", fontSize: "0.8rem" }}>
-            {t("© 2024")} {settings.site_name || t("منصة النخبة")}. {t("جميع الحقوق محفوظة.")}
+            {t("© 2026")} {settings.site_name || t("منصة النخبة")}. {t("جميع الحقوق محفوظة.")}
           </span>
         </div>
       </div>

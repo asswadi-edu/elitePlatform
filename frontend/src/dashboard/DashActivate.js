@@ -16,6 +16,8 @@ export default function DashActivate({ setPage, onActivated, user }) {
   const [errorMsg, setErrorMsg] = useState("");
   const [plans, setPlans] = useState([]);
   const [forceShowForm, setForceShowForm] = useState(false);
+  const [cardInfo, setCardInfo] = useState(null);
+  const [verifying, setVerifying] = useState(false);
   const inputRefs = [useRef(),useRef(),useRef(),useRef()];
 
   const token = localStorage.getItem('elite_token');
@@ -43,14 +45,32 @@ export default function DashActivate({ setPage, onActivated, user }) {
   }
   function handleKeyDown(i, e) { if (e.key==="Backspace" && code[i]==="" && i>0) inputRefs[i-1].current?.focus(); }
   function handlePaste(e) {
-    let pasted = e.clipboardData.getData("text").toUpperCase().replace(/[^A-Z0-9-]/g,"");
+    let pasted = "";
+    if (e && e.clipboardData) {
+      pasted = e.clipboardData.getData("text").toUpperCase().replace(/[^A-Z0-9-]/g,"");
+    } else {
+      // Fallback for manual button click if navigator.clipboard is used
+      return; 
+    }
+    processPaste(pasted);
+    if (e) e.preventDefault();
+  }
+
+  async function handlePasteBtn() {
+    try {
+      const text = await navigator.clipboard.readText();
+      const pasted = text.toUpperCase().replace(/[^A-Z0-9-]/g,"");
+      processPaste(pasted);
+    } catch (err) {
+      setErrorMsg(t("يرجى منح صلاحية الوصول للملصق أو اللصق يدوياً"));
+    }
+  }
+
+  function processPaste(pasted) {
     let parts = pasted.split("-").filter(p=>p.length>0);
-    
-    // If first part is NKBH, remove it as it's already in code[0]
     if (parts[0] === "NKBH") {
       parts.shift();
     } else if (pasted.startsWith("NKBH") && pasted.length >= 4) {
-      // Handle case where hyphen might be missing after NKBH
       pasted = pasted.substring(4).replace(/^-/, "");
       parts = pasted.split("-").filter(p=>p.length>0);
     }
@@ -58,7 +78,46 @@ export default function DashActivate({ setPage, onActivated, user }) {
     const next = ["NKBH","","",""];
     parts.forEach((p,i) => { if(i < 3) next[i+1] = p.slice(0,4); });
     setCode(next); 
-    e.preventDefault();
+    setStatus("idle");
+    setCardInfo(null);
+  }
+
+  useEffect(() => {
+    if (isComplete && status === "idle") {
+      checkCode();
+    } else if (!isComplete) {
+      setCardInfo(null);
+    }
+  }, [isComplete]);
+
+  async function checkCode() {
+    const fullCode = code.join("-");
+    setVerifying(true);
+    setErrorMsg("");
+    try {
+      const res = await fetch(`${apiUrl}/api/subscriptions/check`, {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ code: fullCode })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setStatus("error");
+        setErrorMsg(data.message || t("الكود غير صحيح"));
+        setCardInfo(null);
+      } else {
+        setCardInfo(data);
+        setStatus("idle");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setVerifying(false);
+    }
   }
 
   async function activate() {
@@ -153,7 +212,10 @@ export default function DashActivate({ setPage, onActivated, user }) {
               <span style={{ color: C.muted, fontSize: '0.8rem' }}>{t("صيغة الكود: ")}</span>
               <code style={{ color: C.blue, fontWeight: 700, fontSize: '0.88rem', fontFamily: 'monospace' }}>NKBH-XXXX-XXXX-XXXX</code>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 28, direction: 'ltr' }} onPaste={handlePaste}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 28, direction: 'ltr', position:'relative' }} onPaste={handlePaste}>
+               <button onClick={handlePasteBtn} title={t("لصق الكود")} style={{ position:'absolute', right:-50, top:12, background:C.bg, border:`1px solid ${C.border}`, borderRadius:8, width:32, height:32, display:'flex', alignItems:'center', justifyContent:'center', color:C.muted, cursor:'pointer' }}>
+                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+               </button>
               {code.map((seg, i) => (
                 <React.Fragment key={i}>
                   <input 
@@ -194,9 +256,23 @@ export default function DashActivate({ setPage, onActivated, user }) {
               </div>
             )}
             {isComplete && status !== "error" && (
-              <div style={{ background: C.goldBg, border: `1px solid color-mix(in srgb, ${C.gold} 19%, transparent)`, borderRadius: 10, padding: '12px 16px', marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: '1.4rem', color: C.gold, display: "flex" }}><PiTicketDuotone /></span>
-                <div><div style={{ fontWeight: 700, color: C.dark, fontSize: '0.88rem' }}>{t("الكود: ")}{full}</div><div style={{ color: C.muted, fontSize: '0.78rem', marginTop: 2 }}>{t("جاهز للتفعيل — اضغط تفعيل الاشتراك")}</div></div>
+              <div style={{ background: cardInfo ? `${cardInfo.plan.color_hex}12` : C.goldBg, border: `1px solid ${cardInfo ? cardInfo.plan.color_hex+'30' : 'color-mix(in srgb, '+C.gold+' 19%, transparent)'}`, borderRadius: 10, padding: '12px 16px', marginBottom: 18, display: 'flex', alignItems: 'center', gap: 12 }}>
+                {verifying ? (
+                   <span style={{ display:'flex', animation: 'spin 1s linear infinite', color:C.blue }}><PiSpinnerGapDuotone size={22}/></span>
+                ) : (
+                   <span style={{ fontSize: '1.4rem', color: cardInfo ? cardInfo.plan.color_hex : C.gold, display: "flex" }}><PiTicketDuotone /></span>
+                )}
+                <div style={{ flex:1 }}>
+                  <div style={{ fontWeight: 700, color: C.dark, fontSize: '0.88rem' }}>{t("الكود: ")}{full}</div>
+                  {cardInfo ? (
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginTop:4 }}>
+                       <span style={{ color: cardInfo.plan.color_hex, fontWeight:800, fontSize:'0.76rem' }}>{cardInfo.plan.name} — {cardInfo.plan.duration_days} {t("يوم")}</span>
+                       <span style={{ color: C.dark, fontWeight:900, fontSize:'0.82rem' }}>{formatPrice(cardInfo.price)}</span>
+                    </div>
+                  ) : (
+                    <div style={{ color: C.muted, fontSize: '0.78rem', marginTop: 2 }}>{verifying ? t("جاري التحقق من الكود...") : t("جاهز للتفعيل — اضغط تفعيل الاشتراك")}</div>
+                  )}
+                </div>
               </div>
             )}
             <button onClick={activate} disabled={!isComplete || status === "loading"}

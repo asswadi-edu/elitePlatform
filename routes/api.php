@@ -169,6 +169,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Student Subscriptions
     Route::post('/subscriptions/activate', [SubscriptionController::class, 'activateCard']);
+    Route::post('/subscriptions/check', [SubscriptionController::class, 'checkCard']);
     Route::get('/subscriptions/status', [SubscriptionController::class, 'status']);
     Route::get('/subscriptions/plans', [SubscriptionController::class, 'plans']);
 
