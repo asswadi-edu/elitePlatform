@@ -97,6 +97,9 @@ export default function TestResultPage({ setPage, elapsed = 0, uuid = null, requ
         try {
            const errObj = JSON.parse(errorText);
            setErrorMsg(errObj.message || "فشل التحليل بسبب خطأ في الخادم.");
+           if (errObj.hint) {
+             setErrorMsg(prev => prev + "\n\n💡 نصيحة: " + errObj.hint);
+           }
         } catch(e) {
            setErrorMsg("تعذر إكمال التحليل. قد يكون محرك الذكاء الاصطناعي غير متصل.");
         }
@@ -181,8 +184,8 @@ export default function TestResultPage({ setPage, elapsed = 0, uuid = null, requ
       <div style={{ textAlign: 'center', padding: "80px 20px" }}>
          <div style={{ fontSize: "4rem", marginBottom: 16 }}>⚠️</div>
          <h2 style={{ fontSize: "1.5rem", color: C.dark, marginBottom: 12 }}>{errorMsg || t("لم يتم العثور على النتيجة")}</h2>
-         <p style={{ color: C.muted, marginBottom: 24, maxWidth: "400px", margin: "0 auto 24px" }}>
-           {errorMsg ? t("لم نتمكن من تحليل إجاباتك بسبب المشكلة التقنية الموضحة أعلاه. يرجى إبلاغ الإدارة أو إعادة النقر لتجربة الاختبار مرة أخرى لاحقاً.") : t("عذراً، لم نتمكن من معالجة نتيجتك. تأكد من أن جميع الإجابات تم إرسالها بشكل صحيح.")}
+         <p style={{ color: C.muted, marginBottom: 24, maxWidth: "500px", margin: "0 auto 24px", whiteSpace: "pre-line", lineHeight: 1.6 }}>
+           {errorMsg ? errorMsg : t("عذراً، لم نتمكن من معالجة نتيجتك. تأكد من أن جميع الإجابات تم إرسالها بشكل صحيح.")}
          </p>
          <Btn onClick={() => setPage(inDashboard ? "dash-test-intro" : "test-intro")}>{t("العودة للاختبار")}</Btn>
       </div>

@@ -101,6 +101,17 @@ class AptitudeController extends Controller
             }
 
             $mlResult = $response->json();
+            $status = $mlResult['status'] ?? 'success';
+
+            // إذا كانت هناك مشكلة في البيانات المدخلة (نفس الإجابة لكل الأسئلة أو تشتت كبير)
+            if ($status !== 'success') {
+                return response()->json([
+                    'status' => $status,
+                    'message' => $mlResult['message'] ?? 'الرجاء التأكد من إجاباتك والمحاولة مرة أخرى.',
+                    'hint' => $mlResult['hint'] ?? null
+                ], 422);
+            }
+
             $predictedField = $mlResult['predicted_field'] ?? '';
             $confidence = $mlResult['confidence_score'] ?? '0';
             
@@ -131,7 +142,22 @@ class AptitudeController extends Controller
             }
 
             // ربط النتيجة بمجالات المنصة لاستخراج التخصصات المرتبطة
+            // استخدام تطابق مرن للبحث عن المجال في قاعدة البيانات
             $field = \App\Models\Field::where('name', $predictedField)->first();
+            
+            if (!$field) {
+                // محاولة البحث باستخدام جزء من الاسم أو اسم مقارب (Normalization)
+                $normalizedPredicted = $this->normalizeArabic($predictedField);
+                $allFields = \App\Models\Field::all();
+                foreach ($allFields as $f) {
+                    if (str_contains($this->normalizeArabic($f->name), $normalizedPredicted) || 
+                        str_contains($normalizedPredicted, $this->normalizeArabic($f->name))) {
+                        $field = $f;
+                        break;
+                    }
+                }
+            }
+
             $fieldId = $field ? $field->id : null;
             
             $suggestedMajors = [];
@@ -157,6 +183,7 @@ class AptitudeController extends Controller
             ]);
 
             return response()->json([
+                'status' => 'success',
                 'uuid' => $attempt->uuid,
                 'result' => $resultRecord,
                 'ml_response' => $mlResult
@@ -212,5 +239,24 @@ class AptitudeController extends Controller
         $attempt->delete();
 
         return response()->json(['message' => 'تم حذف النتيجة بنجاح. يمكنك الآن إعادة إجراء الاختبار.']);
+    }
+
+    /**
+     * Helper to normalize Arabic text for better matching.
+     */
+    private function normalizeArabic($str)
+    {
+        if (!$str) return "";
+        $str = trim($str);
+        // Replace Alef variants with plain Alef
+        $str = preg_replace('/[أإآ]/u', 'ا', $str);
+        // Replace Teh Marbuta with Heh
+        $str = preg_replace('/ة/u', 'ه', $str);
+        // Remove 'Al' prefix
+        $str = preg_replace('/^ال/u', '', $str);
+        // Remove spaces
+        $str = preg_replace('/\s+/u', '', $str);
+        
+        return $str;
     }
 }

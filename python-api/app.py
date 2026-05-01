@@ -7,7 +7,7 @@ import numpy as np
 app = FastAPI(title="Elite Platform - Smart Career Engine")
 
 # تحميل الموديل
-MODEL_PATH = 'elite_career_model.pkl'
+MODEL_PATH = 'career_model.pkl'
 try:
     model = joblib.load(MODEL_PATH)
 except:
@@ -68,4 +68,4 @@ def predict_career(answers: StudentAnswers):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
