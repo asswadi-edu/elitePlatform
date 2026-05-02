@@ -46,6 +46,7 @@ Route::get('/resources/view/{uuid}', [ResourceController::class, 'viewFile']);
 Route::get('/settings', [SystemSettingController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/student-dashboard-stats', [\App\Http\Controllers\StudentDashboardController::class, 'stats']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/change-password', [AuthController::class, 'changePassword']);

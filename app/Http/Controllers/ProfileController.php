@@ -66,7 +66,7 @@ class ProfileController extends Controller
 
             return response()->json([
                 'message' => 'Profile updated successfully',
-                'user' => $user->load('profile', 'universityInfo', 'activeSubscription.plan')
+                'user' => $user->load('profile', 'universityInfo.major', 'universityInfo.university', 'universityInfo.college', 'activeSubscription.plan')
             ]);
         });
     }
@@ -165,7 +165,7 @@ class ProfileController extends Controller
 
             return response()->json([
                 'message' => 'University information updated successfully',
-                'user' => $user->load('profile', 'universityInfo', 'activeSubscription.plan')
+                'user' => $user->load('profile', 'universityInfo.major', 'universityInfo.university', 'universityInfo.college', 'activeSubscription.plan')
             ]);
         });
     }

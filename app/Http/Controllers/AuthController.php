@@ -123,7 +123,7 @@ class AuthController extends Controller
                 'message' => 'تم إنشاء الحساب بنجاح.',
                 'access_token' => $token,
                 'token_type' => 'Bearer',
-                'user' => $this->syncSubscriberRole($user->load(['profile', 'universityInfo', 'activeSubscription.plan', 'activeSubscription.activationCard', 'roles'])),
+                'user' => $this->syncSubscriberRole($user->load(['profile', 'universityInfo.major', 'universityInfo.university', 'universityInfo.college', 'activeSubscription.plan', 'activeSubscription.activationCard', 'roles'])),
             ], 201);
         });
     }
@@ -179,7 +179,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
-            'user' => $this->syncSubscriberRole($user->load(['profile', 'universityInfo', 'activeSubscription.plan', 'roles'])),
+            'user' => $this->syncSubscriberRole($user->load(['profile', 'universityInfo.major', 'universityInfo.university', 'universityInfo.college', 'activeSubscription.plan', 'roles'])),
         ]);
     }
 
@@ -203,7 +203,7 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return response()->json([
-            'user' => $this->syncSubscriberRole($request->user()->load(['profile', 'universityInfo', 'activeSubscription.plan', 'activeSubscription.activationCard', 'roles'])),
+            'user' => $this->syncSubscriberRole($request->user()->load(['profile', 'universityInfo.major', 'universityInfo.university', 'universityInfo.college', 'activeSubscription.plan', 'activeSubscription.activationCard', 'roles'])),
         ]);
     }
 

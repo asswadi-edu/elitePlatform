@@ -17,10 +17,13 @@ export default function DashboardHome({ setPage, isUniversity: propIsUniversity,
   const { t, lang } = useContext(LanguageContext);
   const userName = user?.profile?.first_name || t("المستخدم");
   const [testInfo, setTestInfo] = React.useState(null);
+  const [dashData, setDashData] = React.useState(null);
 
   React.useEffect(() => {
+    const token = localStorage.getItem("elite_token");
+    if (!token) return;
+
     if (!isUniversity) {
-      const token = localStorage.getItem("elite_token");
       fetch(`${getApiUrl()}/api/aptitude-test`, {
         headers: { "Authorization": `Bearer ${token}` }
       })
@@ -28,24 +31,49 @@ export default function DashboardHome({ setPage, isUniversity: propIsUniversity,
       .then(d => setTestInfo(d))
       .catch(e => console.error(e));
     }
-  }, [isUniversity]);
+
+    if (hasFullAccess) {
+      fetch(`${getApiUrl()}/api/student-dashboard-stats`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      })
+      .then(r => r.json())
+      .then(d => setDashData(d))
+      .catch(e => console.error(e));
+    }
+  }, [isUniversity, hasFullAccess]);
+
   const stats = [
-    { label:t("عدد الاختبارات"), val: isUniversity ? "12" : "0", icon:<PiNotePencilDuotone size={20}/>, color:C.blue, bg:C.blueLight },
-    { label:t("متوسط النتائج"), val: isUniversity ? "78%" : "—", icon:<PiChartLineUpDuotone size={20}/>, color:C.green, bg:C.greenBg },
-    { label:t("ملخصاتي المرفوعة"), val: isUniversity ? "5" : "0", icon:<PiFilePdfDuotone size={20}/>, color:C.orange, bg:C.orangeBg },
-    { label:t("الروابط المشتركة"), val: isUniversity ? "3" : "0", icon:<PiLinkDuotone size={20}/>, color:C.blue, bg:C.blueLight },
+    { label:t("عدد الاختبارات"), val: dashData?.stats?.quizzes_count || "0", icon:<PiNotePencilDuotone size={20}/>, color:C.blue, bg:C.blueLight },
+    { label:t("متوسط النتائج"), val: dashData?.stats?.avg_score ? `${dashData.stats.avg_score}%` : "—", icon:<PiChartLineUpDuotone size={20}/>, color:C.green, bg:C.greenBg },
+    { label:t("ملخصاتي المرفوعة"), val: dashData?.stats?.resources_count || "0", icon:<PiFilePdfDuotone size={20}/>, color:C.orange, bg:C.orangeBg },
+    { label:t("النقاط"), val: dashData?.stats?.points || "0", icon:<PiStarDuotone size={20}/>, color:C.gold, bg:C.gold + "15" },
   ];
-  const recentTests = [
-    { subject:t("رياضيات متقدمة"), score:85, date:"12 مارس" },
-    { subject:t("فيزياء 2"), score:72, date:"10 مارس" },
-    { subject:t("خوارزميات"), score:91, date:"8 مارس" },
-  ];
-  const mySubjects = [
-    { title: t("رياضيات متقدمة"), code: "MATH301" },
-    { title: t("خوارزميات"), code: "CS310" },
-    { title: t("فيزياء 2"), code: "PHYS202" },
-    { title: t("تطبيقات الويب"), code: "CS320" }
-  ];
+
+  const recentTests = dashData?.recent_attempts?.map(att => ({
+    subject: att.ai_quiz?.title || t("اختبار غير معروف"),
+    score: att.score,
+    date: new Date(att.created_at).toLocaleDateString(lang === 'ar' ? 'ar-EG' : 'en-US', { day: 'numeric', month: 'short' })
+  })) || [];
+
+  const mySubjects = dashData?.my_subjects?.map(s => ({
+    title: s.name,
+    code: s.code,
+    id: s.id
+  })) || [];
+
+  const getLevelLabel = (level) => {
+    const levels = {
+        1: t("المستوى الأول"),
+        2: t("المستوى الثاني"),
+        3: t("المستوى الثالث"),
+        4: t("المستوى الرابع"),
+        5: t("المستوى الخامس"),
+        6: t("المستوى السادس"),
+        7: t("المستوى السابع"),
+        8: t("المستوى الثامن"),
+    };
+    return levels[level] || t("غير محدد");
+  };
 
   return (
     <DashboardLayout activeSub="dashboard" setPage={setPage} isUniversity={isUniversity} user={user} onLogout={onLogout}>
@@ -86,14 +114,14 @@ export default function DashboardHome({ setPage, isUniversity: propIsUniversity,
                   <PiGraduationCapDuotone size={20} color={C.blue}/>
                   <div style={{ display:'flex', flexDirection:'column' }}>
                       <span style={{ fontSize:'0.7rem', color:C.muted, fontWeight:600, textTransform:'uppercase' }}>{t("التخصص")}</span>
-                      <span style={{ fontSize:'0.88rem', fontWeight:700, color:C.dark }}>{t("علوم حاسوب")}</span>
+                      <span style={{ fontSize:'0.88rem', fontWeight:700, color:C.dark }}>{user?.universityInfo?.major?.name || t("غير محدد")}</span>
                   </div>
               </div>
               <div style={{ display:'flex', alignItems:'center', gap:10, background:C.white, padding:'10px 18px', borderRadius:50, border:`1px solid ${C.border}`, boxShadow:'0 2px 5px rgba(0,0,0,0.02)' }}>
                   <PiUserCircleDuotone size={20} color={C.green}/>
                   <div style={{ display:'flex', flexDirection:'column' }}>
                       <span style={{ fontSize:'0.7rem', color:C.muted, fontWeight:600, textTransform:'uppercase' }}>{t("المستوى")}</span>
-                      <span style={{ fontSize:'0.88rem', fontWeight:700, color:C.dark }}>{t("المستوى الثالث")}</span>
+                      <span style={{ fontSize:'0.88rem', fontWeight:700, color:C.dark }}>{getLevelLabel(user?.universityInfo?.study_level)}</span>
                   </div>
               </div>
           </div>
