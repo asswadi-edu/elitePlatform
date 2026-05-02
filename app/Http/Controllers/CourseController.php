@@ -85,28 +85,44 @@ class CourseController extends Controller
         }
 
         $maxSubjects = (int)SystemSetting::where('key', 'max_semester_subjects')->first()->value ?? 12;
-        if (count($subjectIds) > $maxSubjects) {
-            return response()->json(['message' => "لا يمكنك اختيار أكثر من {$maxSubjects} مادة للترم الواحد."], 400);
+        $currentCount = StudentSubject::where('user_id', $user->id)
+            ->where('study_level', $currLevel)
+            ->where('semester', $currSemester)
+            ->count();
+
+        if (($currentCount + count($subjectIds)) > $maxSubjects) {
+            return response()->json(['message' => "لا يمكنك اختيار أكثر من {$maxSubjects} مادة للترم الواحد. لديك حالياً {$currentCount} مواد."], 400);
         }
 
         return DB::transaction(function () use ($user, $subjectIds, $currLevel, $currSemester, $currYear) {
-            // Remove old enrollments for the SAME term if they want to override
-            StudentSubject::where('user_id', $user->id)
-                ->where('study_level', $currLevel)
-                ->where('semester', $currSemester)
-                ->delete();
+            $addedCount = 0;
+            $skippedCount = 0;
 
             foreach ($subjectIds as $id) {
-                StudentSubject::create([
-                    'user_id' => $user->id,
-                    'subject_id' => $id,
-                    'study_level' => $currLevel,
-                    'semester' => $currSemester,
-                    'academic_year' => $currYear
-                ]);
+                // Check if subject was ALREADY added in ANY term (as per user request: "لا تنضاف مرة اخرى")
+                $exists = StudentSubject::where('user_id', $user->id)
+                    ->where('subject_id', $id)
+                    ->exists();
+
+                if (!$exists) {
+                    StudentSubject::create([
+                        'user_id' => $user->id,
+                        'subject_id' => $id,
+                        'study_level' => $currLevel,
+                        'semester' => $currSemester,
+                        'academic_year' => $currYear
+                    ]);
+                    $addedCount++;
+                } else {
+                    $skippedCount++;
+                }
             }
 
-            return response()->json(['message' => 'Enrolled successfully']);
+            return response()->json([
+                'message' => 'تمت عملية إضافة المواد بنجاح',
+                'added' => $addedCount,
+                'skipped' => $skippedCount
+            ]);
         });
     }
 }
