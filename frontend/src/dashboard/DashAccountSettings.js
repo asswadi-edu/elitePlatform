@@ -310,13 +310,13 @@ export default function DashAccountSettings({ setPage, isUniversity: propIsUnive
           birth_date: u.profile?.birth_date || ''
         });
 
-        if (u.universityInfo) {
+        if (u.university_info) {
           setUniData({
-            university_id: u.universityInfo.university_id || '',
-            college_id: u.universityInfo.college_id || '',
-            major_id: u.universityInfo.major_id || '',
-            study_level: u.universityInfo.study_level || 1,
-            academic_number: u.universityInfo.academic_number || '',
+            university_id: u.university_info.university_id || '',
+            college_id: u.university_info.college_id || '',
+            major_id: u.university_info.major_id || '',
+            study_level: u.university_info.study_level || 1,
+            academic_number: u.university_info.academic_number || '',
           });
         }
       }

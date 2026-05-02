@@ -360,14 +360,15 @@ class AuthController extends Controller
         if (isset($user->permissions_synced)) return $user;
 
         $activeSub = $user->activeSubscription;
+        $hasUniversityData = $user->is_university && $user->universityInfo;
 
-        if ($activeSub && !$user->hasRole('subscriber')) {
+        if ($activeSub && $hasUniversityData && !$user->hasRole('subscriber')) {
             if (!\Spatie\Permission\Models\Role::where('name', 'subscriber')->exists()) {
                 \Spatie\Permission\Models\Role::create(['name' => 'subscriber', 'guard_name' => 'web']);
             }
             $user->assignRole('subscriber');
             $user->unsetRelation('roles');
-        } elseif (!$activeSub && $user->hasRole('subscriber')) {
+        } elseif ((!$activeSub || !$hasUniversityData) && $user->hasRole('subscriber')) {
             $user->removeRole('subscriber');
             $user->unsetRelation('roles');
             
