@@ -101,7 +101,7 @@ class AiQuizController extends Controller
                 $text = "ملف باسم " . $file->getClientOriginalName();
             }
 
-            $text = mb_substr(trim($text), 0, 30000); // Limit to ~30,000 chars (~10 pages)
+            $text = mb_substr(trim($text), 0, 5000); // Limit to ~5,000 chars to safely avoid Groq TPM limits
         }
 
         // Log extraction result for debugging
@@ -185,7 +185,20 @@ class AiQuizController extends Controller
 
             if (!$response->successful()) {
                 Log::error('AI API Error: ' . $response->body());
-                return response()->json(['message' => 'فشل الاتصال بمزود الذكاء الاصطناعي.', 'error' => $response->json()], 502);
+                $errorData = $response->json();
+                
+                // Check if the error is related to rate limits or token limits
+                $errorCode = $errorData['error']['code'] ?? '';
+                $errorType = $errorData['error']['type'] ?? '';
+                
+                if ($errorCode === 'rate_limit_exceeded' || str_contains($errorType, 'tokens')) {
+                    return response()->json([
+                        'message' => 'النص المستخرج طويل جداً، يرجى اختيار ملف أصغر أو نص أقصر لتجنب تجاوز الحد المسموح.', 
+                        'error' => $errorData
+                    ], 429);
+                }
+                
+                return response()->json(['message' => 'فشل الاتصال بمزود الذكاء الاصطناعي. يرجى المحاولة لاحقاً.', 'error' => $errorData], 502);
             }
 
             $aiResult = $response->json();
