@@ -160,8 +160,13 @@ class ProfileController extends Controller
                 $validated
             );
 
-            // Mark user as university student
+            // Mark user as university student and update role
             $user->update(['is_university' => true]);
+            if ($user->hasRole('student') || $user->hasRole('student_school')) {
+                $user->removeRole('student');
+                $user->removeRole('student_school');
+                $user->assignRole('student_university');
+            }
 
             return response()->json([
                 'message' => 'University information updated successfully',

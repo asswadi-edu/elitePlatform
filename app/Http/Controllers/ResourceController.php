@@ -68,7 +68,7 @@ class ResourceController extends Controller
 
         $user = $request->user();
 
-        if (!$user->can('upload_resources')) {
+        if (!$user->can('upload_resources') && !$user->is_university) {
             return response()->json(['message' => 'غير مصرح لك برفع الموارد.'], 403);
         }
 
@@ -81,7 +81,7 @@ class ResourceController extends Controller
             'subject_id' => $request->subject_id,
             'user_id' => $user->id,
             'resource_type' => $request->resource_type,
-            'is_anonymous' => $request->is_anonymous ?? false,
+            'is_anonymous' => filter_var($request->is_anonymous, FILTER_VALIDATE_BOOLEAN),
             'is_approved' => false,
             'doctor' => $request->doctor,
             'platform' => $request->platform,
