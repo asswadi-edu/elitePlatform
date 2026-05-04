@@ -82,6 +82,9 @@ class ProfileController extends Controller
 
         $user = $request->user();
         $profile = $user->profile;
+        if (!$profile) {
+            $profile = $user->profile()->create([]);
+        }
 
         if ($request->hasFile('avatar')) {
             if (env('CLOUDINARY_URL')) {
@@ -100,14 +103,18 @@ class ProfileController extends Controller
                 $profile->avatar_url           = $result->getSecurePath();
                 $profile->cloudinary_avatar_id = $result->getPublicId();
             } else {
-                // Local Fallback
-                if ($profile->avatar_url && str_contains($profile->avatar_url, '/storage/')) {
-                    $oldPath = str_replace(asset('storage/'), '', $profile->avatar_url);
-                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                try {
+                    // Local Fallback
+                    if ($profile->avatar_url && str_contains($profile->avatar_url, '/storage/')) {
+                        $oldPath = str_replace(asset('storage/'), '', $profile->avatar_url);
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                    }
+                    $path = $request->file('avatar')->store('avatars', 'public');
+                    $profile->avatar_url = asset('storage/' . $path);
+                    $profile->cloudinary_avatar_id = null;
+                } catch (\Exception $e) {
+                    return response()->json(['message' => 'Local storage error: ' . $e->getMessage()], 500);
                 }
-                $path = $request->file('avatar')->store('avatars', 'public');
-                $profile->avatar_url = asset('storage/' . $path);
-                $profile->cloudinary_avatar_id = null;
             }
             $profile->save();
 

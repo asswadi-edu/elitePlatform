@@ -409,14 +409,18 @@ class AdminAcademicController extends Controller
                 $major->image_url            = $result->getSecurePath();
                 $major->cloudinary_image_id  = $result->getPublicId();
             } else {
-                // Local Fallback
-                if ($major->image_url && str_contains($major->image_url, '/storage/')) {
-                    $oldPath = str_replace(asset('storage/'), '', $major->image_url);
-                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                try {
+                    // Local Fallback
+                    if ($major->image_url && str_contains($major->image_url, '/storage/')) {
+                        $oldPath = str_replace(asset('storage/'), '', $major->image_url);
+                        \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                    }
+                    $path = $request->file('image')->store('majors', 'public');
+                    $major->image_url = asset('storage/' . $path);
+                    $major->cloudinary_image_id = null;
+                } catch (\Exception $e) {
+                    return response()->json(['message' => 'Local storage error: ' . $e->getMessage()], 500);
                 }
-                $path = $request->file('image')->store('majors', 'public');
-                $major->image_url = asset('storage/' . $path);
-                $major->cloudinary_image_id = null;
             }
             $major->save();
 

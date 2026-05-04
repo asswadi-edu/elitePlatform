@@ -155,10 +155,15 @@ export default function AdminMajorDetails({ setPage, selectedId = null }) {
         setFormData(prev => ({ ...prev, image_url: result.image_url }));
         showToast(t("تم رفع الصورة بنجاح"));
       } else {
-        showToast(t("فشل رفع الصورة"), C.red);
+        let errMsg = t("فشل رفع الصورة");
+        try {
+          const result = await res.json();
+          errMsg = result.errors?.image?.[0] || result.message || errMsg;
+        } catch (e) {}
+        showToast(errMsg, C.red);
       }
     } catch (err) {
-      showToast(t("خطأ في الاتصال"), C.red);
+      showToast(t("خطأ في الاتصال بالسيرفر، تأكد أن السيرفر يعمل"), C.red);
     } finally {
       setUploading(false);
     }
