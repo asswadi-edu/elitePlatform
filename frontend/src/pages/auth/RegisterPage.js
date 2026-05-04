@@ -42,6 +42,10 @@ export default function RegisterPage({ setPage, onLogin }) {
     fetch(`${getApiUrl()}/api/universities`)
       .then(res => res.json())
       .then(setUniversities);
+      
+    fetch(`${getApiUrl()}/api/colleges`)
+      .then(res => res.json())
+      .then(setColleges);
   }, []);
 
   useEffect(() => {
@@ -53,13 +57,7 @@ export default function RegisterPage({ setPage, onLogin }) {
   }, [timer]);
 
   const handleUniChange = (id) => {
-    setFormData({ ...formData, university_id: id, college_id: "", major_id: "" });
-    setColleges([]); setMajors([]);
-    if (id) {
-      fetch(`${getApiUrl()}/api/colleges?university_id=${id}`)
-        .then(res => res.json())
-        .then(setColleges);
-    }
+    setFormData({ ...formData, university_id: id });
   };
 
   const handleCollegeChange = (id) => {

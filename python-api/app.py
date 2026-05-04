@@ -27,7 +27,7 @@ class StudentAnswers(BaseModel):
 @app.post("/predict")
 def predict_career(answers: StudentAnswers):
     if model is None:
-        raise HTTPException(status_code=500, detail="المحرك الذكي قيد التحديث، يرجى المحاولة لاحقاً.")
+        raise HTTPException(status_code=500, detail="الموديل  قيد التحديث، يرجى المحاولة لاحقاً.")
 
     data_dict = answers.model_dump()
     all_answers = list(data_dict.values())
@@ -68,4 +68,4 @@ def predict_career(answers: StudentAnswers):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
