@@ -84,20 +84,31 @@ class ProfileController extends Controller
         $profile = $user->profile;
 
         if ($request->hasFile('avatar')) {
-            // Delete old avatar from Cloudinary if it exists
-            if ($profile->cloudinary_avatar_id) {
-                cloudinary()->destroy($profile->cloudinary_avatar_id);
+            if (env('CLOUDINARY_URL')) {
+                // Delete old avatar from Cloudinary if it exists
+                if ($profile->cloudinary_avatar_id) {
+                    try { cloudinary()->destroy($profile->cloudinary_avatar_id); } catch (\Exception $e) {}
+                }
+
+                // Upload new avatar to Cloudinary
+                $result = cloudinary()->upload($request->file('avatar')->getRealPath(), [
+                    'folder'         => 'eliteplatform/avatars',
+                    'public_id'      => 'user_' . $user->id . '_' . time(),
+                    'transformation' => [['width' => 300, 'height' => 300, 'crop' => 'fill']],
+                ]);
+
+                $profile->avatar_url           = $result->getSecurePath();
+                $profile->cloudinary_avatar_id = $result->getPublicId();
+            } else {
+                // Local Fallback
+                if ($profile->avatar_url && str_contains($profile->avatar_url, '/storage/')) {
+                    $oldPath = str_replace(asset('storage/'), '', $profile->avatar_url);
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                }
+                $path = $request->file('avatar')->store('avatars', 'public');
+                $profile->avatar_url = asset('storage/' . $path);
+                $profile->cloudinary_avatar_id = null;
             }
-
-            // Upload new avatar to Cloudinary
-            $result = cloudinary()->upload($request->file('avatar')->getRealPath(), [
-                'folder'         => 'eliteplatform/avatars',
-                'public_id'      => 'user_' . $user->id . '_' . time(),
-                'transformation' => [['width' => 300, 'height' => 300, 'crop' => 'fill']],
-            ]);
-
-            $profile->avatar_url           = $result->getSecurePath();
-            $profile->cloudinary_avatar_id = $result->getPublicId();
             $profile->save();
 
             return response()->json([
@@ -116,9 +127,11 @@ class ProfileController extends Controller
         $profile = $user->profile;
 
         if ($profile->avatar_url) {
-            // Delete from Cloudinary if exists
-            if ($profile->cloudinary_avatar_id) {
-                cloudinary()->destroy($profile->cloudinary_avatar_id);
+            if ($profile->cloudinary_avatar_id && env('CLOUDINARY_URL')) {
+                try { cloudinary()->destroy($profile->cloudinary_avatar_id); } catch (\Exception $e) {}
+            } elseif (str_contains($profile->avatar_url, '/storage/')) {
+                $oldPath = str_replace(asset('storage/'), '', $profile->avatar_url);
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
             }
 
             $profile->avatar_url           = null;

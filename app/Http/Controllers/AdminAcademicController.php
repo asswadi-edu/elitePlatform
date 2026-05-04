@@ -398,15 +398,26 @@ class AdminAcademicController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Upload to Cloudinary
-            $result = cloudinary()->upload($request->file('image')->getRealPath(), [
-                'folder'         => 'eliteplatform/majors',
-                'public_id'      => 'major_' . $id . '_' . time(),
-                'transformation' => [['width' => 800, 'height' => 600, 'crop' => 'fill']],
-            ]);
+            if (env('CLOUDINARY_URL')) {
+                // Upload to Cloudinary
+                $result = cloudinary()->upload($request->file('image')->getRealPath(), [
+                    'folder'         => 'eliteplatform/majors',
+                    'public_id'      => 'major_' . $id . '_' . time(),
+                    'transformation' => [['width' => 800, 'height' => 600, 'crop' => 'fill']],
+                ]);
 
-            $major->image_url            = $result->getSecurePath();
-            $major->cloudinary_image_id  = $result->getPublicId();
+                $major->image_url            = $result->getSecurePath();
+                $major->cloudinary_image_id  = $result->getPublicId();
+            } else {
+                // Local Fallback
+                if ($major->image_url && str_contains($major->image_url, '/storage/')) {
+                    $oldPath = str_replace(asset('storage/'), '', $major->image_url);
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                }
+                $path = $request->file('image')->store('majors', 'public');
+                $major->image_url = asset('storage/' . $path);
+                $major->cloudinary_image_id = null;
+            }
             $major->save();
 
             return response()->json([
