@@ -37,7 +37,8 @@ class CourseController extends Controller
     }
 
     /**
-     * Get subjects available for the student's major.
+     * Get subjects available for the student's major,
+     * including flags for already-enrolled and current-semester subjects.
      */
     public function getAvailableCourses(Request $request)
     {
@@ -48,11 +49,39 @@ class CourseController extends Controller
             return response()->json(['message' => 'Please set your major first'], 400);
         }
 
+        // IDs enrolled in ANY previous term (should be disabled – can't re-add)
+        $allEnrolledIds = StudentSubject::where('user_id', $user->id)
+            ->pluck('subject_id')
+            ->toArray();
+
+        // IDs enrolled in the CURRENT semester (already added this term)
+        $currSemester = SystemSetting::where('key', 'current_semester')->value('value') ?? 1;
+        $currLevel    = $user->universityInfo->study_level ?? 1;
+        $currentTermIds = StudentSubject::where('user_id', $user->id)
+            ->where('study_level', $currLevel)
+            ->where('semester', $currSemester)
+            ->pluck('subject_id')
+            ->toArray();
+
         $subjects = Subject::where('major_id', $majorId)
             ->where('is_active', true)
-            ->get();
+            ->get()
+            ->map(function ($s) use ($allEnrolledIds, $currentTermIds) {
+                return [
+                    'id'               => $s->id,
+                    'name'             => $s->name,
+                    'code'             => $s->code,
+                    'is_free'          => $s->is_free,
+                    'credit_hours'     => $s->credit_hours,
+                    'already_enrolled' => in_array($s->id, $allEnrolledIds),   // disable
+                    'in_current_term'  => in_array($s->id, $currentTermIds),   // pre-checked
+                ];
+            });
 
-        return response()->json($subjects);
+        return response()->json([
+            'subjects'        => $subjects,
+            'current_term_ids' => $currentTermIds,
+        ]);
     }
 
     /**
