@@ -49,32 +49,43 @@ class CourseController extends Controller
             return response()->json(['message' => 'Please set your major first'], 400);
         }
 
-        // IDs enrolled in ANY previous term (should be disabled – can't re-add)
-        $allEnrolledIds = StudentSubject::where('user_id', $user->id)
-            ->pluck('subject_id')
-            ->toArray();
-
-        // IDs enrolled in the CURRENT semester (already added this term)
+        // Current term settings
         $currSemester = SystemSetting::where('key', 'current_semester')->value('value') ?? 1;
         $currLevel    = $user->universityInfo->study_level ?? 1;
+
+        // IDs enrolled in the CURRENT semester
         $currentTermIds = StudentSubject::where('user_id', $user->id)
             ->where('study_level', $currLevel)
             ->where('semester', $currSemester)
             ->pluck('subject_id')
             ->toArray();
 
+        // IDs enrolled in PREVIOUS terms/levels (strictly excluding current term)
+        $previousEnrolledIds = StudentSubject::where('user_id', $user->id)
+            ->where(function($q) use ($currLevel, $currSemester) {
+                $q->where('study_level', '<', $currLevel)
+                  ->orWhere(function($sq) use ($currLevel, $currSemester) {
+                      $sq->where('study_level', $currLevel)
+                        ->where('semester', '<', $currSemester);
+                  });
+            })
+            ->pluck('subject_id')
+            ->toArray();
+
         $subjects = Subject::where('major_id', $majorId)
             ->where('is_active', true)
             ->get()
-            ->map(function ($s) use ($allEnrolledIds, $currentTermIds) {
+            ->map(function ($s) use ($previousEnrolledIds, $currentTermIds) {
                 return [
                     'id'               => $s->id,
                     'name'             => $s->name,
                     'code'             => $s->code,
                     'is_free'          => $s->is_free,
                     'credit_hours'     => $s->credit_hours,
-                    'already_enrolled' => in_array($s->id, $allEnrolledIds),   // disable
-                    'in_current_term'  => in_array($s->id, $currentTermIds),   // pre-checked
+                    // If studied in previous term, it's IMMUTABLE
+                    'already_enrolled' => in_array($s->id, $previousEnrolledIds),
+                    // If in current term, it's TOGGLEABLE
+                    'in_current_term'  => in_array($s->id, $currentTermIds),
                 ];
             });
 
@@ -85,26 +96,25 @@ class CourseController extends Controller
     }
 
     /**
-     * Enroll in subjects for the current term.
+     * Enroll in subjects for the current term (Sync logic).
      */
     public function enrollSubjects(Request $request)
     {
         $request->validate([
-            'subject_ids' => 'required|array',
+            'subject_ids' => 'present|array', // present allows empty array to clear term
             'subject_ids.*' => 'exists:subjects,id'
         ]);
 
         $user = $request->user();
         
-        // Fetch Current term settings
         $currSemester = SystemSetting::where('key', 'current_semester')->first()->value ?? 1;
         $currYear = SystemSetting::where('key', 'current_academic_year')->first()->value ?? date('Y') . '/' . (date('Y') + 1);
         $currLevel = $user->universityInfo->study_level ?? 1;
 
-        $subjectIds = $request->subject_ids;
-        $subjects = Subject::whereIn('id', $subjectIds)->get();
+        $incomingIds = $request->subject_ids;
+        $subjects = Subject::whereIn('id', $incomingIds)->get();
 
-        // VALIDATION
+        // 1. Subscription Validation
         if (!$user->can('manage_paid_subjects')) {
             foreach ($subjects as $s) {
                 if (!$s->is_free) {
@@ -113,45 +123,49 @@ class CourseController extends Controller
             }
         }
 
+        // 2. Max Subjects Validation
         $maxSubjects = (int)SystemSetting::where('key', 'max_semester_subjects')->first()->value ?? 12;
-        $currentCount = StudentSubject::where('user_id', $user->id)
-            ->where('study_level', $currLevel)
-            ->where('semester', $currSemester)
-            ->count();
-
-        if (($currentCount + count($subjectIds)) > $maxSubjects) {
-            return response()->json(['message' => "لا يمكنك اختيار أكثر من {$maxSubjects} مادة للترم الواحد. لديك حالياً {$currentCount} مواد."], 400);
+        if (count($incomingIds) > $maxSubjects) {
+            return response()->json(['message' => "لا يمكنك اختيار أكثر من {$maxSubjects} مادة للترم الواحد."], 400);
         }
 
-        return DB::transaction(function () use ($user, $subjectIds, $currLevel, $currSemester, $currYear) {
-            $addedCount = 0;
-            $skippedCount = 0;
+        return DB::transaction(function () use ($user, $incomingIds, $currLevel, $currSemester, $currYear) {
+            // Delete subjects from current term that are NOT in the incoming list
+            StudentSubject::where('user_id', $user->id)
+                ->where('study_level', $currLevel)
+                ->where('semester', $currSemester)
+                ->whereNotIn('subject_id', $incomingIds)
+                ->delete();
 
-            foreach ($subjectIds as $id) {
-                // Check if subject was ALREADY added in ANY term (as per user request: "لا تنضاف مرة اخرى")
-                $exists = StudentSubject::where('user_id', $user->id)
+            $added = 0;
+            foreach ($incomingIds as $id) {
+                // Check if already exists in CURRENT term
+                $inTerm = StudentSubject::where('user_id', $user->id)
+                    ->where('study_level', $currLevel)
+                    ->where('semester', $currSemester)
                     ->where('subject_id', $id)
                     ->exists();
 
-                if (!$exists) {
-                    StudentSubject::create([
-                        'user_id' => $user->id,
-                        'subject_id' => $id,
-                        'study_level' => $currLevel,
-                        'semester' => $currSemester,
-                        'academic_year' => $currYear
-                    ]);
-                    $addedCount++;
-                } else {
-                    $skippedCount++;
+                if (!$inTerm) {
+                    // Check if studied in PREVIOUS terms (prevent re-taking)
+                    $studiedBefore = StudentSubject::where('user_id', $user->id)
+                        ->where('subject_id', $id)
+                        ->exists();
+
+                    if (!$studiedBefore) {
+                        StudentSubject::create([
+                            'user_id' => $user->id,
+                            'subject_id' => $id,
+                            'study_level' => $currLevel,
+                            'semester' => $currSemester,
+                            'academic_year' => $currYear
+                        ]);
+                        $added++;
+                    }
                 }
             }
 
-            return response()->json([
-                'message' => 'تمت عملية إضافة المواد بنجاح',
-                'added' => $addedCount,
-                'skipped' => $skippedCount
-            ]);
+            return response()->json(['message' => 'تم تحديث مواد الترم بنجاح', 'added' => $added]);
         });
     }
 }

@@ -16,7 +16,7 @@ import {
 } from "react-icons/pi";
 
 export default function DashboardHome({ setPage, isUniversity: propIsUni, onLogout }) {
-  const { user, isUniversity: ctxUni, isSubscribed } = useContext(UserContext);
+  const { user, isUniversity: ctxUni, isSubscribed, userRole } = useContext(UserContext);
   const { t, lang } = useContext(LanguageContext);
   const isUniversity = propIsUni !== undefined ? propIsUni : ctxUni;
   const [dashData, setDashData] = useState(null);
@@ -189,35 +189,9 @@ export default function DashboardHome({ setPage, isUniversity: propIsUni, onLogo
 
       <div style={{ marginBottom:20 }}><RankCard likes={st.total_likes??0}/></div>
 
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20, marginBottom:20 }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr", gap:20, marginBottom:20 }}>
 
-        {/* Current Subjects */}
-        <Card style={{ padding:22 }}>
-          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18 }}>
-            <h3 style={{ fontSize:"1rem", fontWeight:800, color:C.dark, margin:0, display:"flex", alignItems:"center", gap:8 }}><PiBookOpenDuotone color={C.blue}/> {t("مواد الترم الحالي")}</h3>
-            <Btn variant="ghost" style={{ fontSize:"0.78rem", padding:"6px 14px", border:`1px solid ${C.border}` }} onClick={() => setPage("/dash-subjects-selection")}>{t("تعديل")}</Btn>
-          </div>
-          {loading ? [1,2,3].map(i => <Skeleton key={i} width="100%" height="52px" margin="0 0 10px" borderRadius="10px"/>) :
-          mySubjects.length === 0 ? (
-            <div style={{ textAlign:"center", padding:"30px 0", color:C.muted }}>
-              <PiBookOpenDuotone size={36} style={{ marginBottom:8, opacity:0.4 }}/>
-              <div style={{ fontSize:"0.85rem" }}>{t("لم تضف مواد بعد")}</div>
-              <Btn style={{ marginTop:12, fontSize:"0.8rem" }} onClick={() => setPage("/dash-subjects-selection")}>{t("إضافة مواد")}</Btn>
-            </div>
-          ) : mySubjects.map(s => (
-            <div key={s.id} onClick={() => setPage("/dash-subject-details", { subject: s })}
-              style={{ display:"flex", alignItems:"center", gap:12, padding:"12px 14px", borderRadius:11, cursor:"pointer", marginBottom:8, border:`1px solid ${C.border}`, transition:"all .2s" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor=C.blue; e.currentTarget.style.background=C.blueLight; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor=C.border; e.currentTarget.style.background="transparent"; }}>
-              <div style={{ width:34, height:34, borderRadius:9, background:C.blueLight, display:"flex", alignItems:"center", justifyContent:"center", color:C.blue, flexShrink:0 }}><PiBookOpenDuotone size={17}/></div>
-              <div style={{ flex:1 }}>
-                <div style={{ fontSize:"0.88rem", fontWeight:700, color:C.dark }}>{s.name}</div>
-                <div style={{ fontSize:"0.72rem", color:C.muted }}>{s.code}</div>
-              </div>
-              <span style={{ color:C.muted, fontSize:"0.85rem" }}>←</span>
-            </div>
-          ))}
-        </Card>
+        
 
         {/* Quick Actions */}
         <Card style={{ padding:22 }}>
@@ -290,3 +264,5 @@ export default function DashboardHome({ setPage, isUniversity: propIsUni, onLogo
     </DashboardLayout>
   );
 }
+
+

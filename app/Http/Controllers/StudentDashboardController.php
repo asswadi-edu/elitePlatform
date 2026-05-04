@@ -60,20 +60,29 @@ class StudentDashboardController extends Controller
             });
 
         // ── Current-semester enrolled subjects ───────────────────────
-        $currentSemester = SystemSetting::where('key', 'current_semester')->value('value') ?? 1;
-        $studyLevel      = $user->universityInfo?->study_level ?? 0;
+        $currentSemesterSetting = SystemSetting::where('key', 'current_semester')->first();
+        $currentSemester = $currentSemesterSetting ? $currentSemesterSetting->value : 1;
+        
+        $studyLevel = $user->universityInfo?->study_level;
 
         $enrolledSubjects = StudentSubject::where('user_id', $user->id)
             ->with('subject')
-            ->where('study_level', $studyLevel)
+            ->when($studyLevel, function($q) use ($studyLevel) {
+                return $q->where('study_level', $studyLevel);
+            })
             ->where('semester', $currentSemester)
-            ->take(6)
             ->get()
-            ->map(fn($ss) => [
-                'id'   => $ss->subject?->id,
-                'name' => $ss->subject?->name,
-                'code' => $ss->subject?->code,
-            ]);
+            ->map(function($ss) {
+                if (!$ss->subject) return null;
+                return [
+                    'id'   => $ss->subject->id,
+                    'name' => $ss->subject->name,
+                    'code' => $ss->subject->code,
+                ];
+            })
+            ->filter()
+            ->values()
+            ->take(6);
 
         // ── Best quiz score ──────────────────────────────────────────
         $bestScore = AiQuizAttempt::where('user_id', $user->id)->max('score') ?? 0;
@@ -112,7 +121,7 @@ class StudentDashboardController extends Controller
                 'used_this_month' => $usedThisMonth,
                 'quizzes_left'    => $maxAiTests > 0
                     ? max(0, $maxAiTests - $usedThisMonth)
-                    : null,           // null = unlimited
+                    : null,
             ],
             'university_info' => [
                 'university'   => $user->universityInfo?->university?->name,

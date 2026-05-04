@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+﻿import React, { useState, useContext } from 'react';`nimport { UserContext } from '../UserContext';
 import { C } from '../tokens';
 import { Btn, Badge, Card, Skeleton } from '../components/Common';
 import DashboardLayout from '../layouts/DashboardLayout';
@@ -6,7 +6,7 @@ import { LanguageContext } from '../LanguageContext';
 import { PiBooksDuotone, PiCalendarDuotone, PiBookOpenDuotone } from 'react-icons/pi';
 import { getApiUrl } from '../api';
 
-export default function DashSubjects({ setPage, user }) {
+export default function DashSubjects({ setPage, user: propUser }) {`n  const { user: ctxUser, userRole } = useContext(UserContext);`n  const user = propUser || ctxUser;
   const { t } = useContext(LanguageContext);
   const [loading, setLoading] = useState(true);
   const [studiedSubjects, setStudiedSubjects] = useState([]);
@@ -64,8 +64,8 @@ export default function DashSubjects({ setPage, user }) {
   return (
     <DashboardLayout activeSub="subjects" setPage={setPage} user={user}>
       <div style={{ marginBottom:32 }}>
-        <h1 style={{ fontSize:'1.4rem', fontWeight:800, color:C.dark, margin:'0 0 6px' }}>{t("موادي الدراسية")}</h1>
-        <p style={{ color:C.muted, fontSize:'0.88rem' }}>{t("المواد التي قمت بدراستها مسبقاً مقسمة حسب الفصول الدراسية")}</p>
+        <h1 style={{ fontSize:'1.4rem', fontWeight:800, color:C.dark, margin:'0 0 6px' }}>{t("ظ…ظˆط§ط¯ظٹ ط§ظ„ط¯ط±ط§ط³ظٹط©")}</h1>
+        <p style={{ color:C.muted, fontSize:'0.88rem' }}>{t("ط§ظ„ظ…ظˆط§ط¯ ط§ظ„طھظٹ ظ‚ظ…طھ ط¨ط¯ط±ط§ط³طھظ‡ط§ ظ…ط³ط¨ظ‚ط§ظ‹ ظ…ظ‚ط³ظ…ط© ط­ط³ط¨ ط§ظ„ظپطµظˆظ„ ط§ظ„ط¯ط±ط§ط³ظٹط©")}</p>
       </div>
 
       <div style={{ background:C.blueLight, borderRadius:16, padding:28, display:'flex', alignItems:'center', justifyContent:'space-between', border:`1px dashed ${C.blue}`, marginBottom:40 }}>
@@ -74,11 +74,11 @@ export default function DashSubjects({ setPage, user }) {
                 <PiBooksDuotone size={28}/>
             </div>
             <div>
-                <h4 style={{ margin:0, fontSize:'1.1rem', fontWeight:800, color:C.dark }}>{t("مواد الترم الحالي")}</h4>
-                <p style={{ margin:'4px 0 0', color:C.muted, fontSize:'0.88rem' }}>{t("إضافة أو تعديل المواد التي تدرسها في هذا الفصل")}</p>
+                <h4 style={{ margin:0, fontSize:'1.1rem', fontWeight:800, color:C.dark }}>{t("ظ…ظˆط§ط¯ ط§ظ„طھط±ظ… ط§ظ„ط­ط§ظ„ظٹ")}</h4>
+                <p style={{ margin:'4px 0 0', color:C.muted, fontSize:'0.88rem' }}>{t("ط¥ط¶ط§ظپط© ط£ظˆ طھط¹ط¯ظٹظ„ ط§ظ„ظ…ظˆط§ط¯ ط§ظ„طھظٹ طھط¯ط±ط³ظ‡ط§ ظپظٹ ظ‡ط°ط§ ط§ظ„ظپطµظ„")}</p>
             </div>
         </div>
-        <Btn onClick={() => setPage('dash-subjects-selection')} style={{ padding:'12px 28px' }}>{t("إضافة مواد الترم الحالي")}</Btn>
+        <Btn onClick={() => setPage('dash-subjects-selection')} style={{ padding:'12px 28px' }}>{t("ط¥ط¶ط§ظپط© ظ…ظˆط§ط¯ ط§ظ„طھط±ظ… ط§ظ„ط­ط§ظ„ظٹ")}</Btn>
       </div>
 
       {studiedSubjects.length === 0 && !loading && (
@@ -87,10 +87,10 @@ export default function DashSubjects({ setPage, user }) {
                 <PiBooksDuotone size={40}/>
             </div>
             <div>
-                <h2 style={{ fontSize:'1.3rem', fontWeight:800, color:C.dark, margin:'0 0 8px' }}>{t("لا يوجد مواد مسجلة")}</h2>
-                <p style={{ color:C.muted, maxWidth:400, margin:'0 auto' }}>{t("أنت لم تقم بإضافة أي مواد لهذا الفصل الدراسي بعد. قم بإضافة موادك الآن للوصول إلى المصادر والمحاضرات.")}</p>
+                <h2 style={{ fontSize:'1.3rem', fontWeight:800, color:C.dark, margin:'0 0 8px' }}>{t("ظ„ط§ ظٹظˆط¬ط¯ ظ…ظˆط§ط¯ ظ…ط³ط¬ظ„ط©")}</h2>
+                <p style={{ color:C.muted, maxWidth:400, margin:'0 auto' }}>{t("ط£ظ†طھ ظ„ظ… طھظ‚ظ… ط¨ط¥ط¶ط§ظپط© ط£ظٹ ظ…ظˆط§ط¯ ظ„ظ‡ط°ط§ ط§ظ„ظپطµظ„ ط§ظ„ط¯ط±ط§ط³ظٹ ط¨ط¹ط¯. ظ‚ظ… ط¨ط¥ط¶ط§ظپط© ظ…ظˆط§ط¯ظƒ ط§ظ„ط¢ظ† ظ„ظ„ظˆطµظˆظ„ ط¥ظ„ظ‰ ط§ظ„ظ…طµط§ط¯ط± ظˆط§ظ„ظ…ط­ط§ط¶ط±ط§طھ.")}</p>
             </div>
-            <Btn onClick={() => setPage('dash-subjects-selection')} style={{ padding:'12px 32px' }}>{t("إضافة مواد الترم الحالي")}</Btn>
+            <Btn onClick={() => setPage('dash-subjects-selection')} style={{ padding:'12px 32px' }}>{t("ط¥ط¶ط§ظپط© ظ…ظˆط§ط¯ ط§ظ„طھط±ظ… ط§ظ„ط­ط§ظ„ظٹ")}</Btn>
         </Card>
       )}
 
@@ -102,7 +102,7 @@ export default function DashSubjects({ setPage, user }) {
                     <PiCalendarDuotone size={18}/>
                 </div>
                 <h3 style={{ fontSize:'1.05rem', fontWeight:700, color:C.dark, margin:0 }}>
-                    {t("المستوى")} {group.level} - {group.semester === 1 ? t("الترم الأول") : t("الترم الثاني")}
+                    {t("ط§ظ„ظ…ط³طھظˆظ‰")} {group.level} - {group.semester === 1 ? t("ط§ظ„طھط±ظ… ط§ظ„ط£ظˆظ„") : t("ط§ظ„طھط±ظ… ط§ظ„ط«ط§ظ†ظٹ")}
                 </h3>
                 <div style={{ flex:1, height:1, background:C.border, marginInlineStart:10 }}></div>
             </div>
@@ -114,13 +114,13 @@ export default function DashSubjects({ setPage, user }) {
                     <div style={{ width:36, height:36, borderRadius:9, background:C.bg, display:'flex', alignItems:'center', justifyContent:'center' }}>
                         <PiBookOpenDuotone size={18} color={C.muted}/>
                     </div>
-                    <Badge color={C.green}>{t("مكتمل")}</Badge>
+                    <Badge color={C.green}>{t("ظ…ظƒطھظ…ظ„")}</Badge>
                   </div>
                   <div>
                     <div style={{ fontWeight:700, fontSize:'0.9rem', color:C.dark, marginBottom:4 }}>{sub.name}</div>
-                    <div style={{ fontSize:'0.75rem', color:C.muted }}>{sub.code}</div>
+                    <div style={{ fontSize:'0.75rem', color:C.muted }}>{userRole === "admin" ? sub.code : ""}</div>
                   </div>
-                  <Btn variant="ghost" style={{ fontSize:'0.75rem', padding:'6px 0' }} onClick={() => setPage('dash-subject-details', { subject: sub })}>{t("عرض المصادر ←")}</Btn>
+                  <Btn variant="ghost" style={{ fontSize:'0.75rem', padding:'6px 0' }} onClick={() => setPage('dash-subject-details', { subject: sub })}>{t("ط¹ط±ط¶ ط§ظ„ظ…طµط§ط¯ط± â†گ")}</Btn>
                 </Card>
               ))}
             </div>
@@ -131,3 +131,4 @@ export default function DashSubjects({ setPage, user }) {
     </DashboardLayout>
   );
 }
+
