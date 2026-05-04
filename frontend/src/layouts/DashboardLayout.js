@@ -96,7 +96,7 @@ export default function DashboardLayout({ activeSub, setPage, children, isUniver
   useEffect(() => { setSidebarOpen(false); }, [activeSub]);
 
   const fullMenu = [
-    { id:"dashboard", icon: <PiChartBarDuotone size={20} />, label: t("لوحة التحكم") },
+    { id:"dashboard", icon: <PiChartBarDuotone size={20} />, label: t("لوحة المعلومات") },
     { id:"majors",    icon: <PiGraduationCapDuotone size={20} />, label: t("التخصصات") },
     { id:"subjects",  icon: <PiBookOpenDuotone size={20} />, label: t("موادي"), academic: true },
     { id:"quizzes",   icon: <PiNotePencilDuotone size={20} />, label: t("اختباراتي"), academic: true },

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import { C } from "../tokens";
 import { Btn, Badge, Card, Pill, Skeleton, MajorCard, MajorDetailsModal } from "../components/Common";
@@ -35,7 +36,8 @@ const AVAILABLE_ICONS = {
 
 export default function MajorsPage({ setPage, inDashboard = false, isUniversity, userName = "محمد العلي", onLogout }) {
   const { t } = useContext(LanguageContext);
-  const [activeFilter, setActiveFilter] = useState("all");
+  const location = useLocation();
+  const [activeFilter, setActiveFilter] = useState(location.state?.selectedField?.toString() || "all");
   const [selectedMajor, setSelectedMajor] = useState(null);
   const [majors, setMajors] = useState([]);
   const [fields, setFields] = useState([]);
