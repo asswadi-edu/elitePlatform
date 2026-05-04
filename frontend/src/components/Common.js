@@ -201,7 +201,7 @@ export const AVAILABLE_ICONS = {
 
 const getMajorIcon = (m, isLarge = false) => {
   if (m.image_url) {
-    return <img src={m.image_url} alt={m.name} style={{ width: isLarge ? 80 : 48, height: isLarge ? 80 : 48, objectFit: "contain" }} />;
+    return <img src={m.image_url} alt={m.name} style={{ width: isLarge ? 80 : 48, height: isLarge ? 80 : 48, objectFit: "cover", borderRadius: 8 }} />;
   }
   const key = m.field?.icon_key || "General";
   return AVAILABLE_ICONS[key] || <PiShapesDuotone />;
@@ -231,10 +231,17 @@ export function MajorCard({ major, onClick, t }) {
         justifyContent: "center", 
         fontSize: "3.2rem", 
         color: fieldColor,
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden'
       }}>
-        <div style={{ position: 'absolute', inset: 0, opacity: 0.1, background: `radial-gradient(circle at center, ${fieldColor} 0%, transparent 70%)` }} />
-        <div style={{ position: 'relative', zIndex: 1 }}>{getMajorIcon(m)}</div>
+        {m.image_url ? (
+            <img src={m.image_url} alt={m.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }} />
+        ) : (
+            <>
+                <div style={{ position: 'absolute', inset: 0, opacity: 0.1, background: `radial-gradient(circle at center, ${fieldColor} 0%, transparent 70%)` }} />
+                <div style={{ position: 'relative', zIndex: 1 }}>{getMajorIcon(m)}</div>
+            </>
+        )}
       </div>
       
       <div style={{ padding: "24px", flex: 1, display: "flex", flexDirection: "column" }}>
@@ -304,9 +311,13 @@ export function MajorDetailsModal({ major, onClose, t }) {
           height: 160, 
           background: `linear-gradient(135deg, ${fieldColor}33, ${fieldColor}10)`, 
           display: "flex", alignItems: "center", justifyContent: "center", 
-          fontSize: "4.5rem", color: fieldColor 
+          fontSize: "4.5rem", color: fieldColor, position: 'relative', overflow: 'hidden'
         }}>
-          {getMajorIcon(m, true)}
+          {m.image_url ? (
+             <img src={m.image_url} alt={m.name} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 1 }} />
+          ) : (
+             <div style={{ position: 'relative', zIndex: 1 }}>{getMajorIcon(m, true)}</div>
+          )}
         </div>
         
         <div style={{ padding: "32px" }}>
