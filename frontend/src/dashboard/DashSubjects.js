@@ -6,7 +6,7 @@ import { LanguageContext } from '../LanguageContext';
 import { PiBooksDuotone, PiCalendarDuotone, PiBookOpenDuotone } from 'react-icons/pi';
 import { getApiUrl } from '../api';
 
-export default function DashSubjects({ setPage, user: propUser }) {`n  const { user: ctxUser, userRole } = useContext(UserContext);`n  const user = propUser || ctxUser;
+export default function DashSubjects({ setPage, user: propUser }) {`n  const { user: ctxUser, userRole } = useContext(UserContext); const isAdmin = userRole === "admin";`n  const user = propUser || ctxUser;
   const { t } = useContext(LanguageContext);
   const [loading, setLoading] = useState(true);
   const [studiedSubjects, setStudiedSubjects] = useState([]);
@@ -118,7 +118,7 @@ export default function DashSubjects({ setPage, user: propUser }) {`n  const { u
                   </div>
                   <div>
                     <div style={{ fontWeight:700, fontSize:'0.9rem', color:C.dark, marginBottom:4 }}>{sub.name}</div>
-                    <div style={{ fontSize:'0.75rem', color:C.muted }}>{userRole === "admin" ? sub.code : ""}</div>
+                    <div style={{ fontSize:'0.75rem', color:C.muted }}>{isAdmin ? sub.code : ""}</div>
                   </div>
                   <Btn variant="ghost" style={{ fontSize:'0.75rem', padding:'6px 0' }} onClick={() => setPage('dash-subject-details', { subject: sub })}>{t("ط¹ط±ط¶ ط§ظ„ظ…طµط§ط¯ط± â†گ")}</Btn>
                 </Card>
@@ -131,4 +131,5 @@ export default function DashSubjects({ setPage, user: propUser }) {`n  const { u
     </DashboardLayout>
   );
 }
+
 

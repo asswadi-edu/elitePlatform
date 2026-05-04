@@ -60,29 +60,30 @@ class StudentDashboardController extends Controller
             });
 
         // ── Current-semester enrolled subjects ───────────────────────
-        $currentSemesterSetting = SystemSetting::where('key', 'current_semester')->first();
-        $currentSemester = $currentSemesterSetting ? $currentSemesterSetting->value : 1;
-        
-        $studyLevel = $user->universityInfo?->study_level;
+        $currentSemester = SystemSetting::where('key', 'current_semester')->value('value') ?? 1;
+        $studyLevel      = $user->universityInfo?->study_level;
 
-        $enrolledSubjects = StudentSubject::where('user_id', $user->id)
-            ->with('subject')
-            ->when($studyLevel, function($q) use ($studyLevel) {
-                return $q->where('study_level', $studyLevel);
-            })
+        $enrolledQuery = StudentSubject::where('user_id', $user->id)->with('subject');
+        
+        // Try to filter by level/semester first
+        $subjects = (clone $enrolledQuery)
             ->where('semester', $currentSemester)
-            ->get()
-            ->map(function($ss) {
-                if (!$ss->subject) return null;
-                return [
-                    'id'   => $ss->subject->id,
-                    'name' => $ss->subject->name,
-                    'code' => $ss->subject->code,
-                ];
-            })
-            ->filter()
-            ->values()
-            ->take(6);
+            ->when($studyLevel, fn($q) => $q->where('study_level', $studyLevel))
+            ->get();
+
+        // If empty, just get the latest 6 subjects the user enrolled in (fallback)
+        if ($subjects->isEmpty()) {
+            $subjects = $enrolledQuery->latest()->take(6)->get();
+        }
+
+        $enrolledSubjects = $subjects->map(function($ss) {
+            if (!$ss->subject) return null;
+            return [
+                'id'   => $ss->subject->id,
+                'name' => $ss->subject->name,
+                'code' => $ss->subject->code,
+            ];
+        })->filter()->values()->take(6);
 
         // ── Best quiz score ──────────────────────────────────────────
         $bestScore = AiQuizAttempt::where('user_id', $user->id)->max('score') ?? 0;

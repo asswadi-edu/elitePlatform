@@ -16,7 +16,7 @@ import {
 } from "react-icons/pi";
 
 export default function DashboardHome({ setPage, isUniversity: propIsUni, onLogout }) {
-  const { user, isUniversity: ctxUni, isSubscribed, userRole } = useContext(UserContext);
+  const { user, isUniversity: ctxUni, isSubscribed, userRole } = useContext(UserContext); const isAdmin = userRole === "admin";
   const { t, lang } = useContext(LanguageContext);
   const isUniversity = propIsUni !== undefined ? propIsUni : ctxUni;
   const [dashData, setDashData] = useState(null);
@@ -264,5 +264,6 @@ export default function DashboardHome({ setPage, isUniversity: propIsUni, onLogo
     </DashboardLayout>
   );
 }
+
 
 

@@ -202,7 +202,7 @@ function ResourceDetailsModal({ item, onClose, t }) {
   );
 }
 
-export default function DashSubjectDetails({ setPage, subject }) {`n  const { userRole } = useContext(UserContext);
+export default function DashSubjectDetails({ setPage, subject }) {`n  const { userRole } = useContext(UserContext); const isAdmin = userRole === "admin";
   const { t } = useContext(LanguageContext);
   const [tab, setTab] = useState('summaries');
   const [selectedResource, setSelectedResource] = useState(null);
@@ -288,7 +288,7 @@ export default function DashSubjectDetails({ setPage, subject }) {`n  const { us
         <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', marginBottom:28, background:`linear-gradient(135deg, ${C.blueBg}, ${C.white})`, padding:"26px 32px", borderRadius:20, border:`1px solid ${C.blueLight}` }}>
           <div>
             <div style={{ display:'flex', gap:10, alignItems:'center', marginBottom:8 }}>
-              {userRole === "admin" && <Badge color={C.blue}>{currentSub.code}</Badge>}
+              {isAdmin && <Badge color={C.blue}>{currentSub.code}</Badge>}
               <h1 style={{ fontSize:'1.8rem', fontWeight:900, color:C.dark, margin:0 }}>{currentSub.title}</h1>
             </div>
             <p style={{ color:C.muted, fontSize:'0.95rem', maxWidth:600, lineHeight:1.6 }}>
@@ -428,4 +428,5 @@ export default function DashSubjectDetails({ setPage, subject }) {`n  const { us
     </DashboardLayout>
   );
 }
+
 
