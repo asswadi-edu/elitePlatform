@@ -587,7 +587,7 @@ export default function AdminUsers({ setPage }) {
 
               <div>
                 <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 700, color: C.muted, marginBottom: 8 }}>{t("كلمة مرور مؤقتة")}</label>
-                <input type="text" value={tempPass} onChange={e => setTempPass(e.target.value)} placeholder="Elite@2024" style={{ ...inputStyle, background: C.bg }} />
+                <input type="password" value={tempPass} onChange={e => setTempPass(e.target.value)} placeholder="Elite@2024" style={{ ...inputStyle, background: C.bg }} />
                 <p style={{ color: C.muted, fontSize: '0.7rem', marginTop: 4 }}>{t("سيُطلب من المستخدم تغييرها عند أول دخول")}</p>
               </div>
 

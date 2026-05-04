@@ -158,12 +158,12 @@ export default function RegisterPage({ setPage, onLogin }) {
                 </div>
 
                 <Field label={t("البريد الإلكتروني")}>
-                  <input value={formData.email} onChange={e=>setFormData({...formData, email:e.target.value})} placeholder="example@email.com" style={inputStyle} />
+                  <input type="email" value={formData.email} onChange={e=>setFormData({...formData, email:e.target.value})} placeholder="example@email.com" style={inputStyle} />
                 </Field>
 
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 14 }}>
                   <Field label={t("رقم الهاتف")}>
-                    <input value={formData.phone} onChange={e=>setFormData({...formData, phone:e.target.value})} placeholder="777 000 000" style={{ ...inputStyle, direction: "ltr", textAlign: "right" }} />
+                    <input type="tel" value={formData.phone} onChange={e=>setFormData({...formData, phone:e.target.value})} placeholder="777 000 000" style={{ ...inputStyle, direction: "ltr", textAlign: "right" }} />
                   </Field>
                   <Field label={t("تاريخ الميلاد")}>
                     <input type="date" value={formData.birth_date} onChange={e=>setFormData({...formData, birth_date:e.target.value})} style={inputStyle} />

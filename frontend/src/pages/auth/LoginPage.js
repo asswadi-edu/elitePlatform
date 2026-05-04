@@ -86,7 +86,7 @@ export default function LoginPage({ setPage, onLogin }) {
 
 
             <Field label={t("البريد الإلكتروني")}>
-              <input value={email} onChange={e=>{setEmail(e.target.value);setError("");}} placeholder={t("أدخل بريدك الإلكتروني")} style={{ ...inputStyle, borderColor: error?C.red:C.border }}
+              <input type="email" value={email} onChange={e=>{setEmail(e.target.value);setError("");}} placeholder={t("أدخل بريدك الإلكتروني")} style={{ ...inputStyle, borderColor: error?C.red:C.border }}
                 onFocus={e => e.target.style.borderColor = error?C.red:C.blue}
                 onBlur={e => e.target.style.borderColor = error?C.red:C.border}
                 onKeyDown={e=>e.key==="Enter"&&handleLogin()} />
