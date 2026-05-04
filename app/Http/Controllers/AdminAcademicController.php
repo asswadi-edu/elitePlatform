@@ -394,7 +394,7 @@ class AdminAcademicController extends Controller
     {
         $major = Major::findOrFail($id);
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
         ]);
 
         if ($request->hasFile('image')) {

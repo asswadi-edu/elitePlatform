@@ -434,7 +434,10 @@ export default function DashAccountSettings({ setPage, isUniversity: propIsUnive
       if (res.ok) {
         setGlobalUser({ ...globalUser, profile: { ...globalUser.profile, avatar_url: result.avatar_url } });
         setSuccess(t("تم رفع الصورة بنجاح"));
-      } else setError(result.message || t("فشل الرفع"));
+      } else {
+        const errMsg = result.errors?.avatar?.[0] || result.message || t("فشل الرفع");
+        setError(errMsg);
+      }
     } catch (e) { setError(t("خطأ أثناء الرفع")); }
     finally { setSaving(false); }
   };

@@ -265,7 +265,8 @@ export default function DashSettings({ setPage, isUniversity: propIsUniversity, 
         setGlobalUser(newUser);
         setSuccess(t("تم رفع الصورة بنجاح"));
       } else {
-        setError(result.message || t("فشل رفع الصورة"));
+        const errMsg = result.errors?.avatar?.[0] || result.message || t("فشل رفع الصورة");
+        setError(errMsg);
       }
     } catch (e) {
       setError(t("خطأ أثناء الرفع"));

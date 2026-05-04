@@ -77,7 +77,7 @@ class ProfileController extends Controller
     public function uploadAvatar(Request $request)
     {
         $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
         ]);
 
         $user = $request->user();
@@ -116,6 +116,8 @@ class ProfileController extends Controller
                 'avatar_url' => $profile->avatar_url
             ]);
         }
+
+        return response()->json(['message' => 'No file was uploaded or file is invalid.'], 400);
     }
 
     /**
