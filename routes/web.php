@@ -7,12 +7,20 @@ Route::get('/', function () {
 });
 
 // Temporary routes for clearing cache on hosting
+Route::get('/ping', function() {
+    die("Routing is working! (Ping Successful)");
+});
+
 Route::get('/clear-config', function() {
-    \Illuminate\Support\Facades\Artisan::call('config:clear');
-    \Illuminate\Support\Facades\Artisan::call('cache:clear');
-    \Illuminate\Support\Facades\Artisan::call('view:clear');
-    \Illuminate\Support\Facades\Artisan::call('route:clear');
-    return "All cache cleared successfully!";
+    try {
+        \Illuminate\Support\Facades\Artisan::call('config:clear');
+        \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        \Illuminate\Support\Facades\Artisan::call('view:clear');
+        \Illuminate\Support\Facades\Artisan::call('route:clear');
+        die("All cache cleared successfully!");
+    } catch (\Exception $e) {
+        die("Error during clearing: " . $e->getMessage());
+    }
 });
 
 Route::get('/test-email', function() {
@@ -21,8 +29,8 @@ Route::get('/test-email', function() {
             $message->to('asswadi.edu@gmail.com')
                     ->subject('SMTP Connection Test');
         });
-        return "Email sent successfully!";
+        die("Email sent successfully!");
     } catch (\Exception $e) {
-        return "Mail Error: " . $e->getMessage();
+        die("Mail Error: " . $e->getMessage());
     }
 });
