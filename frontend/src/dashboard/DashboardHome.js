@@ -162,14 +162,14 @@ export default function DashboardHome({ setPage, isUniversity: propIsUniversity,
                 <PiGraduationCapDuotone size={20} color={C.blue}/>
                 <div style={{ display:'flex', flexDirection:'column' }}>
                     <span style={{ fontSize:'0.7rem', color:C.muted, fontWeight:600, textTransform:'uppercase' }}>{t("التخصص")}</span>
-                    <span style={{ fontSize:'0.88rem', fontWeight:700, color:C.dark }}>{user?.university_info?.major?.name || t("غير محدد")}</span>
+                    <span style={{ fontSize:'0.88rem', fontWeight:700, color:C.dark }}>{(user?.university_info || user?.universityInfo)?.major?.name || t("غير محدد")}</span>
                 </div>
             </div>
             <div style={{ display:'flex', alignItems:'center', gap:10, background:C.white, padding:'10px 18px', borderRadius:50, border:`1px solid ${C.border}`, boxShadow:'0 2px 5px rgba(0,0,0,0.02)' }}>
                 <PiUserCircleDuotone size={20} color={C.green}/>
                 <div style={{ display:'flex', flexDirection:'column' }}>
                     <span style={{ fontSize:'0.7rem', color:C.muted, fontWeight:600, textTransform:'uppercase' }}>{t("المستوى")}</span>
-                    <span style={{ fontSize:'0.88rem', fontWeight:700, color:C.dark }}>{getLevelLabel(user?.university_info?.study_level)}</span>
+                    <span style={{ fontSize:'0.88rem', fontWeight:700, color:C.dark }}>{getLevelLabel((user?.university_info || user?.universityInfo)?.study_level)}</span>
                 </div>
             </div>
         </div>

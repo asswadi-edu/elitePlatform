@@ -13,6 +13,7 @@ export default function DashResources({ setPage, user }) {
   const [tab, setTab] = useState('summaries');
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [myCourses, setMyCourses] = useState([]); // Enrolled subjects for dropdown
   
   // States for modals
@@ -166,13 +167,8 @@ export default function DashResources({ setPage, user }) {
     }
   };
 
-  const [courses, setCourses] = useState([
-    { id: 1, title: t('دورة Python للمبتدئين'), platform: 'YouTube', duration: '12 ساعة', description: t('شرح أساسيات لغة بايثون من الصفر حتى الاحتراف مع تطبيقات عملية.'), likes: 45, clicks: 320, url: 'https://youtube.com' },
-    { id: 2, title: t('شرح Data Structures'), platform: 'Udemy', duration: '8 ساعات', description: t('تعلم هياكل البيانات بكفاءة عالية بلغة ++C والمفاهيم المتقدمة.'), likes: 38, clicks: 145, url: 'https://udemy.com' }
-  ]);
-
   function handleOldInteraction(type, id) {
-    // This is old but I will remove it and leave just the new one above
+    // Legacy function - kept for compatibility
   }
 
   const formatFileSize = (bytes) => {

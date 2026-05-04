@@ -25,7 +25,7 @@ export function UserProvider({ children }) {
       else if (roles.includes('student_school') || roles.includes('student_university')) roleName = 'student';
 
       setUserRole(roleName);
-      setIsUniversity(!!u.is_university || !!u.universityInfo);
+      setIsUniversity(!!u.is_university || !!u.universityInfo || !!u.university_info);
       
       // Robust subscription detection
       const hasActiveSub = !!u.active_subscription || !!u.activeSubscription || (u.active_subscription && u.active_subscription.status === 1);
