@@ -83,7 +83,12 @@ class ProfileController extends Controller
         $user = $request->user();
         $profile = $user->profile;
         if (!$profile) {
-            $profile = $user->profile()->create([]);
+            $profile = $user->profile()->create([
+                'first_name' => 'مستخدم',
+                'father_name' => '-',
+                'grandfather_name' => '-',
+                'last_name' => '-',
+            ]);
         }
 
         if ($request->hasFile('avatar')) {
