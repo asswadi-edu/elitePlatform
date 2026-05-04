@@ -399,7 +399,9 @@ class AdminAcademicController extends Controller
             ]);
 
             if ($request->hasFile('image')) {
-                if (env('CLOUDINARY_URL')) {
+                $uploadedToCloudinary = false;
+
+                if (env('CLOUDINARY_URL') && strlen(env('CLOUDINARY_URL')) > 10) {
                     try {
                         // Upload to Cloudinary
                         $result = cloudinary()->upload($request->file('image')->getRealPath(), [
@@ -410,10 +412,14 @@ class AdminAcademicController extends Controller
 
                         $major->image_url            = $result->getSecurePath();
                         $major->cloudinary_image_id  = $result->getPublicId();
+                        $uploadedToCloudinary = true;
                     } catch (\Throwable $e) {
-                        return response()->json(['message' => 'Cloudinary error: ' . $e->getMessage()], 500);
+                        // Silent catch to allow fallback to local storage
+                        \Illuminate\Support\Facades\Log::error('Cloudinary error: ' . $e->getMessage());
                     }
-                } else {
+                }
+                
+                if (!$uploadedToCloudinary) {
                     try {
                         // Local Fallback
                         if ($major->image_url && str_contains($major->image_url, '/storage/')) {

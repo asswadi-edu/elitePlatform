@@ -93,7 +93,9 @@ class ProfileController extends Controller
             }
 
             if ($request->hasFile('avatar')) {
-                if (env('CLOUDINARY_URL')) {
+                $uploadedToCloudinary = false;
+                
+                if (env('CLOUDINARY_URL') && strlen(env('CLOUDINARY_URL')) > 10) {
                     try {
                         // Delete old avatar from Cloudinary if it exists
                         if ($profile->cloudinary_avatar_id) {
@@ -109,10 +111,14 @@ class ProfileController extends Controller
 
                         $profile->avatar_url           = $result->getSecurePath();
                         $profile->cloudinary_avatar_id = $result->getPublicId();
+                        $uploadedToCloudinary = true;
                     } catch (\Throwable $e) {
-                        return response()->json(['message' => 'Cloudinary error: ' . $e->getMessage()], 500);
+                        // Silent catch to allow fallback to local storage
+                        \Illuminate\Support\Facades\Log::error('Cloudinary error: ' . $e->getMessage());
                     }
-                } else {
+                }
+                
+                if (!$uploadedToCloudinary) {
                     try {
                         // Local Fallback
                         if ($profile->avatar_url && str_contains($profile->avatar_url, '/storage/')) {
