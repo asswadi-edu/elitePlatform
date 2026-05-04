@@ -392,44 +392,54 @@ class AdminAcademicController extends Controller
      */
     public function uploadMajorImage(Request $request, $id)
     {
-        $major = Major::findOrFail($id);
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
-        ]);
-
-        if ($request->hasFile('image')) {
-            if (env('CLOUDINARY_URL')) {
-                // Upload to Cloudinary
-                $result = cloudinary()->upload($request->file('image')->getRealPath(), [
-                    'folder'         => 'eliteplatform/majors',
-                    'public_id'      => 'major_' . $id . '_' . time(),
-                    'transformation' => [['width' => 800, 'height' => 600, 'crop' => 'fill']],
-                ]);
-
-                $major->image_url            = $result->getSecurePath();
-                $major->cloudinary_image_id  = $result->getPublicId();
-            } else {
-                try {
-                    // Local Fallback
-                    if ($major->image_url && str_contains($major->image_url, '/storage/')) {
-                        $oldPath = str_replace(asset('storage/'), '', $major->image_url);
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
-                    }
-                    $path = $request->file('image')->store('majors', 'public');
-                    $major->image_url = asset('storage/' . $path);
-                    $major->cloudinary_image_id = null;
-                } catch (\Exception $e) {
-                    return response()->json(['message' => 'Local storage error: ' . $e->getMessage()], 500);
-                }
-            }
-            $major->save();
-
-            return response()->json([
-                'image_url' => $major->image_url,
-                'major'     => $major
+        try {
+            $major = Major::findOrFail($id);
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:10240',
             ]);
-        }
 
-        return response()->json(['message' => 'No image uploaded'], 400);
+            if ($request->hasFile('image')) {
+                if (env('CLOUDINARY_URL')) {
+                    try {
+                        // Upload to Cloudinary
+                        $result = cloudinary()->upload($request->file('image')->getRealPath(), [
+                            'folder'         => 'eliteplatform/majors',
+                            'public_id'      => 'major_' . $id . '_' . time(),
+                            'transformation' => [['width' => 800, 'height' => 600, 'crop' => 'fill']],
+                        ]);
+
+                        $major->image_url            = $result->getSecurePath();
+                        $major->cloudinary_image_id  = $result->getPublicId();
+                    } catch (\Throwable $e) {
+                        return response()->json(['message' => 'Cloudinary error: ' . $e->getMessage()], 500);
+                    }
+                } else {
+                    try {
+                        // Local Fallback
+                        if ($major->image_url && str_contains($major->image_url, '/storage/')) {
+                            $oldPath = str_replace(asset('storage/'), '', $major->image_url);
+                            \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                        }
+                        $path = $request->file('image')->store('majors', 'public');
+                        $major->image_url = asset('storage/' . $path);
+                        $major->cloudinary_image_id = null;
+                    } catch (\Throwable $e) {
+                        return response()->json(['message' => 'Local storage error: ' . $e->getMessage()], 500);
+                    }
+                }
+                $major->save();
+
+                return response()->json([
+                    'image_url' => $major->image_url,
+                    'major'     => $major
+                ]);
+            }
+
+            return response()->json(['message' => 'No image uploaded'], 400);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => 'Server Crash: ' . $e->getMessage()], 500);
+        }
     }
 }

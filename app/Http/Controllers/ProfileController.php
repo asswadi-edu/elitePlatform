@@ -76,60 +76,70 @@ class ProfileController extends Controller
      */
     public function uploadAvatar(Request $request)
     {
-        $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
-        ]);
-
-        $user = $request->user();
-        $profile = $user->profile;
-        if (!$profile) {
-            $profile = $user->profile()->create([
-                'first_name' => 'مستخدم',
-                'father_name' => '-',
-                'grandfather_name' => '-',
-                'last_name' => '-',
+        try {
+            $request->validate([
+                'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:10240',
             ]);
-        }
 
-        if ($request->hasFile('avatar')) {
-            if (env('CLOUDINARY_URL')) {
-                // Delete old avatar from Cloudinary if it exists
-                if ($profile->cloudinary_avatar_id) {
-                    try { cloudinary()->destroy($profile->cloudinary_avatar_id); } catch (\Exception $e) {}
-                }
-
-                // Upload new avatar to Cloudinary
-                $result = cloudinary()->upload($request->file('avatar')->getRealPath(), [
-                    'folder'         => 'eliteplatform/avatars',
-                    'public_id'      => 'user_' . $user->id . '_' . time(),
-                    'transformation' => [['width' => 300, 'height' => 300, 'crop' => 'fill']],
+            $user = $request->user();
+            $profile = $user->profile;
+            if (!$profile) {
+                $profile = $user->profile()->create([
+                    'first_name' => 'مستخدم',
+                    'father_name' => '-',
+                    'grandfather_name' => '-',
+                    'last_name' => '-',
                 ]);
-
-                $profile->avatar_url           = $result->getSecurePath();
-                $profile->cloudinary_avatar_id = $result->getPublicId();
-            } else {
-                try {
-                    // Local Fallback
-                    if ($profile->avatar_url && str_contains($profile->avatar_url, '/storage/')) {
-                        $oldPath = str_replace(asset('storage/'), '', $profile->avatar_url);
-                        \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
-                    }
-                    $path = $request->file('avatar')->store('avatars', 'public');
-                    $profile->avatar_url = asset('storage/' . $path);
-                    $profile->cloudinary_avatar_id = null;
-                } catch (\Exception $e) {
-                    return response()->json(['message' => 'Local storage error: ' . $e->getMessage()], 500);
-                }
             }
-            $profile->save();
 
-            return response()->json([
-                'message'    => 'Avatar uploaded successfully',
-                'avatar_url' => $profile->avatar_url
-            ]);
+            if ($request->hasFile('avatar')) {
+                if (env('CLOUDINARY_URL')) {
+                    try {
+                        // Delete old avatar from Cloudinary if it exists
+                        if ($profile->cloudinary_avatar_id) {
+                            try { cloudinary()->destroy($profile->cloudinary_avatar_id); } catch (\Throwable $e) {}
+                        }
+
+                        // Upload new avatar to Cloudinary
+                        $result = cloudinary()->upload($request->file('avatar')->getRealPath(), [
+                            'folder'         => 'eliteplatform/avatars',
+                            'public_id'      => 'user_' . $user->id . '_' . time(),
+                            'transformation' => [['width' => 300, 'height' => 300, 'crop' => 'fill']],
+                        ]);
+
+                        $profile->avatar_url           = $result->getSecurePath();
+                        $profile->cloudinary_avatar_id = $result->getPublicId();
+                    } catch (\Throwable $e) {
+                        return response()->json(['message' => 'Cloudinary error: ' . $e->getMessage()], 500);
+                    }
+                } else {
+                    try {
+                        // Local Fallback
+                        if ($profile->avatar_url && str_contains($profile->avatar_url, '/storage/')) {
+                            $oldPath = str_replace(asset('storage/'), '', $profile->avatar_url);
+                            \Illuminate\Support\Facades\Storage::disk('public')->delete($oldPath);
+                        }
+                        $path = $request->file('avatar')->store('avatars', 'public');
+                        $profile->avatar_url = asset('storage/' . $path);
+                        $profile->cloudinary_avatar_id = null;
+                    } catch (\Throwable $e) {
+                        return response()->json(['message' => 'Local storage error: ' . $e->getMessage()], 500);
+                    }
+                }
+                $profile->save();
+
+                return response()->json([
+                    'message'    => 'Avatar uploaded successfully',
+                    'avatar_url' => $profile->avatar_url
+                ]);
+            }
+
+            return response()->json(['message' => 'No file was uploaded or file is invalid.'], 400);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Throwable $e) {
+            return response()->json(['message' => 'Server Crash: ' . $e->getMessage()], 500);
         }
-
-        return response()->json(['message' => 'No file was uploaded or file is invalid.'], 400);
     }
 
     /**
