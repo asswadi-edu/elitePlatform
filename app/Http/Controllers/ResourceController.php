@@ -68,8 +68,11 @@ class ResourceController extends Controller
 
         $user = $request->user();
 
-        if (!$user->can('upload_resources') && !$user->is_university) {
-            return response()->json(['message' => 'غير مصرح لك برفع الموارد.'], 403);
+        // Check if student is university (is_university is determined by universityInfo presence)
+        $isUniversity = $user->is_university || $user->universityInfo()->exists();
+
+        if (!$isUniversity && !$user->can('upload_resources')) {
+            return response()->json(['message' => 'عذراً، ميزة رفع الموارد متاحة للطلاب الجامعيين فقط حالياً.'], 403);
         }
 
         $file = $request->file('file');

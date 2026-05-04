@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+﻿import React, { useState, useContext } from 'react';
 import { C, inputStyle } from '../tokens';
 import { Btn, Badge, Card, Field, Skeleton } from '../components/Common';
 import DashboardLayout from '../layouts/DashboardLayout';
@@ -62,7 +62,7 @@ export default function DashResources({ setPage, user }) {
          id: i.id,
          title: i.title,
          platform: i.platform || 'Other',
-         duration: i.duration || t('غير محدد'),
+         duration: i.duration || t('ط؛ظٹط± ظ…ط­ط¯ط¯'),
          description: i.description,
          likes: i.likes_count,
          clicks: i.clicks || 0,
@@ -123,10 +123,10 @@ export default function DashResources({ setPage, user }) {
             setShowUploadModal(false);
             fetchData();
         } else {
-            alert(data.message || "فشل الرفع");
+            alert(data.message || "ظپط´ظ„ ط§ظ„ط±ظپط¹");
         }
     } catch(e) {
-        alert("حدث خطأ أثناء الرفع");
+        alert("ط­ط¯ط« ط®ط·ط£ ط£ط«ظ†ط§ط، ط§ظ„ط±ظپط¹");
     } finally {
         setLoading(false);
     }
@@ -158,10 +158,10 @@ export default function DashResources({ setPage, user }) {
             setCourseData({ title: '', platform: 'YouTube', duration: '', url: '', description: '', subject_id: '' });
             fetchData();
         } else {
-            alert(data.message || "فشل الإرسال");
+            alert(data.message || "ظپط´ظ„ ط§ظ„ط¥ط±ط³ط§ظ„");
         }
     } catch(e) {
-        alert("حدث خطأ أثناء الإرسال");
+        alert("ط­ط¯ط« ط®ط·ط£ ط£ط«ظ†ط§ط، ط§ظ„ط¥ط±ط³ط§ظ„");
     } finally {
         setLoading(false);
     }
@@ -183,12 +183,12 @@ export default function DashResources({ setPage, user }) {
     <DashboardLayout activeSub="resources" setPage={setPage}>
       <FadeIn>
         <div style={{ marginBottom:28 }}>
-          <h1 style={{ fontSize:'1.4rem', fontWeight:800, color:C.dark, margin:'0 0 6px' }}>{t("مواردي")}</h1>
-          <p style={{ color:C.muted, fontSize:'0.88rem' }}>{t("ملخصاتك ودوراتك الدراسية المشتركة")}</p>
+          <h1 style={{ fontSize:'1.4rem', fontWeight:800, color:C.dark, margin:'0 0 6px' }}>{t("ظ…ظˆط§ط±ط¯ظٹ")}</h1>
+          <p style={{ color:C.muted, fontSize:'0.88rem' }}>{t("ظ…ظ„ط®طµط§طھظƒ ظˆط¯ظˆط±ط§طھظƒ ط§ظ„ط¯ط±ط§ط³ظٹط© ط§ظ„ظ…ط´طھط±ظƒط©")}</p>
         </div>
         
         <div style={{ display:'flex', gap:0, borderBottom:`1px solid ${C.border}`, marginBottom:28 }}>
-          {[['summaries',t('الملخصات')],['courses',t('الدورات')]].map(([id,l]) => (
+          {[['summaries',t('ط§ظ„ظ…ظ„ط®طµط§طھ')],['courses',t('ط§ظ„ط¯ظˆط±ط§طھ')]].map(([id,l]) => (
             <div key={id} onClick={() => setTab(id)} style={{ padding:'10px 24px', cursor:'pointer', fontWeight: tab===id ? 700 : 400, color: tab===id ? C.blue : C.muted, borderBottom:`2px solid ${tab===id ? C.blue : 'transparent'}`, marginBottom:-1, fontSize:'0.9rem', transition:'all .2s' }}>{l}</div>
           ))}
         </div>
@@ -218,29 +218,29 @@ export default function DashResources({ setPage, user }) {
         {!loading && tab==='summaries' && (
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             <div style={{ display:'flex', gap:12, marginBottom:10 }}>
-              <Btn variant="secondary" onClick={() => setShowUploadModal(true)} style={{ padding:'12px 24px' }}>{t("+ رفع ملخص جديد")}</Btn>
+              <Btn variant="secondary" onClick={() => setShowUploadModal(true)} style={{ padding:'12px 24px' }}>{t("+ ط±ظپط¹ ظ…ظ„ط®طµ ط¬ط¯ظٹط¯")}</Btn>
             </div>
             {items.map(item => { 
               const statusColor = item.is_approved ? C.green : (item.is_rejected ? C.red : C.gold); 
-              const statusLabel = item.is_approved ? t('مقبول') : (item.is_rejected ? t('مرفوض') : t('قيد المراجعة')); 
+              const statusLabel = item.is_approved ? t('ظ…ظ‚ط¨ظˆظ„') : (item.is_rejected ? t('ظ…ط±ظپظˆط¶') : t('ظ‚ظٹط¯ ط§ظ„ظ…ط±ط§ط¬ط¹ط©')); 
               return (
                 <Card key={item.id} style={{ padding:'18px 22px', display:'flex', alignItems:'center', gap:16, opacity: 1 }} hover>
                   <div style={{ width:44, height:44, borderRadius:11, background:C.blueLight, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}><PiFilePdfDuotone size={24} style={{color:C.blue}} /></div>
                   <div style={{ flex:1 }}>
                     <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4 }}>
                       <div style={{ fontWeight:700, color:C.dark, fontSize:'0.9rem' }}>{item.title}</div>
-                      {item.is_anonymous && <Badge color={C.blue} style={{ display:'flex', alignItems:'center', gap:4 }}><PiUserCircleDuotone size={12}/> {t("مجهول")}</Badge>}
-                      {item.user?.is_trusted && <PiSealCheckFill size={16} color={C.blue} title={t("موثق")}/>}
+                      {item.is_anonymous && <Badge color={C.blue} style={{ display:'flex', alignItems:'center', gap:4 }}><PiUserCircleDuotone size={12}/> {t("ظ…ط¬ظ‡ظˆظ„")}</Badge>}
+                      {item.user?.is_trusted && <PiSealCheckFill size={16} color={C.blue} title={t("ظ…ظˆط«ظ‚")}/>}
                     </div>
                     <div style={{ display:'flex', gap:10, alignItems:'center', flexWrap:'wrap' }}>
                       <span style={{ color:statusColor, fontSize:'0.76rem', fontWeight:800 }}>{statusLabel}</span>
-                      <span style={{ color:C.muted, fontSize:'0.76rem' }}>{item.resource_type === 1 ? 'PDF' : item.resource_type} · {item.subject?.code}</span>
-                      <span style={{ color:C.gold, fontSize:'0.76rem', display:'flex', alignItems:'center', gap:4 }}><PiStarDuotone /> {likesToPoints(item.likes_count)}{t(" نقطة")}</span>
+                      <span style={{ color:C.muted, fontSize:'0.76rem' }}>{item.resource_type === 1 ? 'PDF' : item.resource_type} آ· {item.subject?.code}</span>
+                      <span style={{ color:C.gold, fontSize:'0.76rem', display:'flex', alignItems:'center', gap:4 }}><PiStarDuotone /> {likesToPoints(item.likes_count)}{t(" ظ†ظ‚ط·ط©")}</span>
                       {item.is_approved && (
-                        <div style={{ display:'inline-flex', alignItems:'center', gap:5, background:C.blueLight, color:C.blue, borderRadius:8, padding:'2px 10px', fontSize:'0.76rem', fontWeight:700, border:`1px solid ${C.blueMid}` }}><PiDownloadSimpleDuotone size={14} /> {item.downloads_count} {t("تحميل")}</div>
+                        <div style={{ display:'inline-flex', alignItems:'center', gap:5, background:C.blueLight, color:C.blue, borderRadius:8, padding:'2px 10px', fontSize:'0.76rem', fontWeight:700, border:`1px solid ${C.blueMid}` }}><PiDownloadSimpleDuotone size={14} /> {item.downloads_count} {t("طھط­ظ…ظٹظ„")}</div>
                       )}
                       <span style={{ color:C.muted, fontSize:'0.76rem' }}>{formatFileSize(item.file_size)}</span>
-                      {item.doctor && <span style={{ color:C.blue, fontSize:'0.76rem', fontWeight:600 }}>{t("بإشراف: ")}{item.doctor}</span>}
+                      {item.doctor && <span style={{ color:C.blue, fontSize:'0.76rem', fontWeight:600 }}>{t("ط¨ط¥ط´ط±ط§ظپ: ")}{item.doctor}</span>}
                     </div>
                   </div>
                   
@@ -254,7 +254,7 @@ export default function DashResources({ setPage, user }) {
                       <Btn variant="ghost" style={{ fontSize:'0.78rem', padding:'6px 12px' }} onClick={() => {
                         handleInteraction('download', item.id);
                         window.open(getApiUrl() + item.file_url, '_blank');
-                      }}>{t("تحميل ↓")}</Btn>
+                      }}>{t("طھط­ظ…ظٹظ„ â†“")}</Btn>
                     )}
                   </div>
                 </Card>
@@ -267,7 +267,7 @@ export default function DashResources({ setPage, user }) {
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
             <div style={{ marginBottom:10 }}>
               <Btn variant="secondary" style={{ display:'flex', alignItems:'center', gap:8, padding:'12px 24px' }} onClick={() => setShowAddCourseModal(true)}>
-                  {t("+ إضافة دورة / رابط جديد")}
+                  {t("+ ط¥ط¶ط§ظپط© ط¯ظˆط±ط© / ط±ط§ط¨ط· ط¬ط¯ظٹط¯")}
               </Btn>
             </div>
             {courses.map(c => (
@@ -282,16 +282,16 @@ export default function DashResources({ setPage, user }) {
                   </div>
                   <div style={{ fontSize:'0.85rem', color:C.muted, marginBottom:10, lineHeight:1.5, maxWidth:'90%' }}>{c.description}</div>
                   <div style={{ display:'flex', gap:16, alignItems:'center' }}>
-                     <span style={{ fontSize:'0.76rem', color:C.muted, display:'flex', alignItems:'center', gap:5 }}><PiClockDuotone /> {t("المدة المقدرة: ")}{c.duration}</span>
-                     <span style={{ fontSize:'0.76rem', color:C.green, fontWeight:700, display:'flex', alignItems:'center', gap:5 }}><PiThumbsUpDuotone /> {c.likes} {t("إعجاب")}</span>
-                     <div style={{ display:'inline-flex', alignItems:'center', gap:5, background:C.blueLight, color:C.blue, borderRadius:8, padding:'2px 10px', fontSize:'0.76rem', fontWeight:700, border:`1px solid ${C.blueMid}` }}><PiCursorClickDuotone size={14} /> {c.clicks} {t("زيارة")}</div>
+                     <span style={{ fontSize:'0.76rem', color:C.muted, display:'flex', alignItems:'center', gap:5 }}><PiClockDuotone /> {t("ط§ظ„ظ…ط¯ط© ط§ظ„ظ…ظ‚ط¯ط±ط©: ")}{c.duration}</span>
+                     <span style={{ fontSize:'0.76rem', color:C.green, fontWeight:700, display:'flex', alignItems:'center', gap:5 }}><PiThumbsUpDuotone /> {c.likes} {t("ط¥ط¹ط¬ط§ط¨")}</span>
+                     <div style={{ display:'inline-flex', alignItems:'center', gap:5, background:C.blueLight, color:C.blue, borderRadius:8, padding:'2px 10px', fontSize:'0.76rem', fontWeight:700, border:`1px solid ${C.blueMid}` }}><PiCursorClickDuotone size={14} /> {c.clicks} {t("ط²ظٹط§ط±ط©")}</div>
                   </div>
                 </div>
                 <Btn variant="ghost" style={{ fontSize:'0.82rem', padding:'10px 16px', display:'flex', alignItems:'center', gap:6 }} onClick={() => {
                   handleInteraction('download', c.id);
                   window.open(c.url, '_blank');
                 }}>
-                  <PiLinkDuotone /> {t("فتح الرابط")}
+                  <PiLinkDuotone /> {t("ظپطھط­ ط§ظ„ط±ط§ط¨ط·")}
                 </Btn>
               </Card>
             ))}
@@ -302,35 +302,35 @@ export default function DashResources({ setPage, user }) {
         {showUploadModal && (
           <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.5)", zIndex:999, display:"flex", alignItems:"center", justifyContent:"center" }}>
             <div style={{ background:C.white, borderRadius:16, padding:"32px", width:480, maxWidth:"90%", boxShadow:"0 20px 40px rgba(0,0,0,0.15)" }}>
-              <h3 style={{ fontWeight:800, color:C.dark, marginBottom:20 }}>{t("رفع ملخص جديد")}</h3>
+              <h3 style={{ fontWeight:800, color:C.dark, marginBottom:20 }}>{t("ط±ظپط¹ ظ…ظ„ط®طµ ط¬ط¯ظٹط¯")}</h3>
               <form onSubmit={submitUpload}>
-                <Field label={t("المادة الدراسية")}>
+                <Field label={t("ط§ظ„ظ…ط§ط¯ط© ط§ظ„ط¯ط±ط§ط³ظٹط©")}>
                   <select style={inputStyle} required value={uploadData.subject_id} onChange={e => setUploadData({...uploadData, subject_id: e.target.value})}>
-                    <option value="">{t("اختر المادة...")}</option>
+                    <option value="">{t("ط§ط®طھط± ط§ظ„ظ…ط§ط¯ط©...")}</option>
                     {myCourses.map(s => (
                         <option key={s.id} value={s.id}>{s.name} - {s.code}</option>
                     ))}
                   </select>
                 </Field>
-                <Field label={t("عنوان الملخص")}>
-                  <input required placeholder={t("مثال: ملخص الفصل الأول...")} style={inputStyle} value={uploadData.title} onChange={e => setUploadData({...uploadData, title: e.target.value})} />
+                <Field label={t("ط¹ظ†ظˆط§ظ† ط§ظ„ظ…ظ„ط®طµ")}>
+                  <input required placeholder={t("ظ…ط«ط§ظ„: ظ…ظ„ط®طµ ط§ظ„ظپطµظ„ ط§ظ„ط£ظˆظ„...")} style={inputStyle} value={uploadData.title} onChange={e => setUploadData({...uploadData, title: e.target.value})} />
                 </Field>
-                <Field label={t("اسم الدكتور (اختياري)")}>
-                  <input placeholder={t("مثال: د. أحمد محمد")} style={inputStyle} value={uploadData.doctor} onChange={e => setUploadData({...uploadData, doctor: e.target.value})} />
+                <Field label={t("ط§ط³ظ… ط§ظ„ط¯ظƒطھظˆط± (ط§ط®طھظٹط§ط±ظٹ)")}>
+                  <input placeholder={t("ظ…ط«ط§ظ„: ط¯. ط£ط­ظ…ط¯ ظ…ط­ظ…ط¯")} style={inputStyle} value={uploadData.doctor} onChange={e => setUploadData({...uploadData, doctor: e.target.value})} />
                 </Field>
-                <Field label={t("وصف قصير")}>
-                  <textarea rows={3} placeholder={t("اكتب نبذة عن محتوى الملخص...")} style={{...inputStyle, resize:'vertical'}} value={uploadData.description} onChange={e => setUploadData({...uploadData, description: e.target.value})} />
+                <Field label={t("ظˆطµظپ ظ‚طµظٹط±")}>
+                  <textarea rows={3} placeholder={t("ط§ظƒطھط¨ ظ†ط¨ط°ط© ط¹ظ† ظ…ط­طھظˆظ‰ ط§ظ„ظ…ظ„ط®طµ...")} style={{...inputStyle, resize:'vertical'}} value={uploadData.description} onChange={e => setUploadData({...uploadData, description: e.target.value})} />
                 </Field>
-                <Field label={t("ملف الملخص (PDF, PPTX, DOCX)")}>
+                <Field label={t("ظ…ظ„ظپ ط§ظ„ظ…ظ„ط®طµ (PDF, PPTX, DOCX)")}>
                   <input type="file" required style={{...inputStyle, padding:'9px'}} onChange={e => setUploadData({...uploadData, file: e.target.files[0]})} />
                 </Field>
                 <div style={{ display:'flex', gap:10, alignItems:'center', marginBottom:24 }}>
                   <input type="checkbox" id="hideName" style={{ width:16, height:16, accentColor:C.blue }} checked={uploadData.is_anonymous} onChange={e => setUploadData({...uploadData, is_anonymous: e.target.checked})} />
-                  <label htmlFor="hideName" style={{ fontSize:'0.85rem', color:C.dark }}>{t("إخفاء اسمي كمساهم (نشر كـ مجهول)")}</label>
+                  <label htmlFor="hideName" style={{ fontSize:'0.85rem', color:C.dark }}>{t("ط¥ط®ظپط§ط، ط§ط³ظ…ظٹ ظƒظ…ط³ط§ظ‡ظ… (ظ†ط´ط± ظƒظ€ ظ…ط¬ظ‡ظˆظ„)")}</label>
                 </div>
                 <div style={{ display:"flex", gap:12, justifyContent:"flex-end" }}>
-                  <Btn type="button" variant="secondary" onClick={() => setShowUploadModal(false)}>{t("إلغاء")}</Btn>
-                  <Btn type="submit">{t("← رفع الملخص")}</Btn>
+                  <Btn type="button" variant="secondary" onClick={() => setShowUploadModal(false)}>{t("ط¥ظ„ط؛ط§ط،")}</Btn>
+                  <Btn type="submit">{t("â†گ ط±ظپط¹ ط§ظ„ظ…ظ„ط®طµ")}</Btn>
                 </div>
               </form>
             </div>
@@ -341,48 +341,48 @@ export default function DashResources({ setPage, user }) {
         {showAddCourseModal && (
           <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", backdropFilter:'blur(5px)' }} onClick={() => setShowAddCourseModal(false)}>
             <div style={{ background:C.white, borderRadius:20, padding:"32px", width:500, maxWidth:"90%", boxShadow:"0 25px 50px rgba(0,0,0,0.2)", animation:'modalFadeIn 0.3s ease' }} onClick={e => e.stopPropagation()}>
-              <h3 style={{ fontWeight:800, color:C.dark, marginBottom:6 }}>{t("إضافة دورة أو رابط جديد")}</h3>
-              <p style={{ color:C.muted, fontSize:'0.88rem', marginBottom:24 }}>{t("شارك الفائدة مع زملائك بإضافة روابط تعليمية مميزة.")}</p>
+              <h3 style={{ fontWeight:800, color:C.dark, marginBottom:6 }}>{t("ط¥ط¶ط§ظپط© ط¯ظˆط±ط© ط£ظˆ ط±ط§ط¨ط· ط¬ط¯ظٹط¯")}</h3>
+              <p style={{ color:C.muted, fontSize:'0.88rem', marginBottom:24 }}>{t("ط´ط§ط±ظƒ ط§ظ„ظپط§ط¦ط¯ط© ظ…ط¹ ط²ظ…ظ„ط§ط¦ظƒ ط¨ط¥ط¶ط§ظپط© ط±ظˆط§ط¨ط· طھط¹ظ„ظٹظ…ظٹط© ظ…ظ…ظٹط²ط©.")}</p>
               
               <form onSubmit={submitCourse}>
-                  <Field label={t("المادة الدراسية")}>
+                  <Field label={t("ط§ظ„ظ…ط§ط¯ط© ط§ظ„ط¯ط±ط§ط³ظٹط©")}>
                       <select style={inputStyle} required value={courseData.subject_id} onChange={e => setCourseData({...courseData, subject_id: e.target.value})}>
-                          <option value="">{t("اختر المادة...")}</option>
+                          <option value="">{t("ط§ط®طھط± ط§ظ„ظ…ط§ط¯ط©...")}</option>
                           {myCourses.map(s => (
                               <option key={s.id} value={s.id}>{s.name} - {s.code}</option>
                           ))}
                       </select>
                   </Field>
 
-                  <Field label={t("عنوان الدورة / الرابط")}>
-                      <input required placeholder={t("مثال: تعلم بايثون من الصفر...")} style={inputStyle} value={courseData.title} onChange={e => setCourseData({...courseData, title: e.target.value})} />
+                  <Field label={t("ط¹ظ†ظˆط§ظ† ط§ظ„ط¯ظˆط±ط© / ط§ظ„ط±ط§ط¨ط·")}>
+                      <input required placeholder={t("ظ…ط«ط§ظ„: طھط¹ظ„ظ… ط¨ط§ظٹط«ظˆظ† ظ…ظ† ط§ظ„طµظپط±...")} style={inputStyle} value={courseData.title} onChange={e => setCourseData({...courseData, title: e.target.value})} />
                   </Field>
 
                   <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16 }}>
-                      <Field label={t("المنصة")}>
+                      <Field label={t("ط§ظ„ظ…ظ†طµط©")}>
                           <select style={inputStyle} required value={courseData.platform} onChange={e => setCourseData({...courseData, platform: e.target.value})}>
                               <option value="YouTube">YouTube</option>
                               <option value="Udemy">Udemy</option>
                               <option value="Coursera">Coursera</option>
-                              <option value="Other">{t("أخرى")}</option>
+                              <option value="Other">{t("ط£ط®ط±ظ‰")}</option>
                           </select>
                       </Field>
-                      <Field label={t("الوقت اللازم للإنهاء")}>
-                          <input required placeholder={t("مثال: 10 ساعات")} style={inputStyle} value={courseData.duration} onChange={e => setCourseData({...courseData, duration: e.target.value})} />
+                      <Field label={t("ط§ظ„ظˆظ‚طھ ط§ظ„ظ„ط§ط²ظ… ظ„ظ„ط¥ظ†ظ‡ط§ط،")}>
+                          <input required placeholder={t("ظ…ط«ط§ظ„: 10 ط³ط§ط¹ط§طھ")} style={inputStyle} value={courseData.duration} onChange={e => setCourseData({...courseData, duration: e.target.value})} />
                       </Field>
                   </div>
 
-                  <Field label={t("رابط الدورة (URL)")}>
+                  <Field label={t("ط±ط§ط¨ط· ط§ظ„ط¯ظˆط±ط© (URL)")}>
                       <input type="url" required placeholder="https://..." style={inputStyle} value={courseData.url} onChange={e => setCourseData({...courseData, url: e.target.value})} />
                   </Field>
 
-                  <Field label={t("وصف محتوى الدورة")}>
-                      <textarea required rows={3} placeholder={t("ماذا تقدم هذه الدورة؟ وما أهم ميزاتها؟")} style={{...inputStyle, resize:'vertical'}} value={courseData.description} onChange={e => setCourseData({...courseData, description: e.target.value})} />
+                  <Field label={t("ظˆطµظپ ظ…ط­طھظˆظ‰ ط§ظ„ط¯ظˆط±ط©")}>
+                      <textarea required rows={3} placeholder={t("ظ…ط§ط°ط§ طھظ‚ط¯ظ… ظ‡ط°ظ‡ ط§ظ„ط¯ظˆط±ط©طں ظˆظ…ط§ ط£ظ‡ظ… ظ…ظٹط²ط§طھظ‡ط§طں")} style={{...inputStyle, resize:'vertical'}} value={courseData.description} onChange={e => setCourseData({...courseData, description: e.target.value})} />
                   </Field>
 
                   <div style={{ display:"flex", gap:12, justifyContent:"flex-end", marginTop:24 }}>
-                      <Btn type="button" variant="secondary" style={{ padding:'10px 24px' }} onClick={() => setShowAddCourseModal(false)}>{t("إلغاء")}</Btn>
-                      <Btn type="submit" style={{ padding:'10px 32px' }}>{t("نشر الرابط")}</Btn>
+                      <Btn type="button" variant="secondary" style={{ padding:'10px 24px' }} onClick={() => setShowAddCourseModal(false)}>{t("ط¥ظ„ط؛ط§ط،")}</Btn>
+                      <Btn type="submit" style={{ padding:'10px 32px' }}>{t("ظ†ط´ط± ط§ظ„ط±ط§ط¨ط·")}</Btn>
                   </div>
               </form>
             </div>
@@ -393,34 +393,34 @@ export default function DashResources({ setPage, user }) {
         {showEditModal && editingItem && (
           <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.6)", zIndex:1000, display:"flex", alignItems:"center", justifyContent:"center", backdropFilter:'blur(5px)' }} onClick={() => setShowEditModal(false)}>
             <div style={{ background:C.white, borderRadius:20, padding:"32px", width:440, maxWidth:"90%", boxShadow:"0 25px 50px rgba(0,0,0,0.2)", animation:'modalFadeIn 0.3s ease' }} onClick={e => e.stopPropagation()}>
-              <h3 style={{ fontWeight:800, color:C.dark, marginBottom:20 }}>{t("تعديل تفاصيل المورد")}</h3>
+              <h3 style={{ fontWeight:800, color:C.dark, marginBottom:20 }}>{t("طھط¹ط¯ظٹظ„ طھظپط§طµظٹظ„ ط§ظ„ظ…ظˆط±ط¯")}</h3>
               
-              <Field label={t("اسم الدكتور")}>
-                <input value={editingItem.doctor} onChange={e => setEditingItem({ ...editingItem, doctor: e.target.value })} placeholder={t("مثال: د. أحمد محمد")} style={inputStyle} />
+              <Field label={t("ط§ط³ظ… ط§ظ„ط¯ظƒطھظˆط±")}>
+                <input value={editingItem.doctor} onChange={e => setEditingItem({ ...editingItem, doctor: e.target.value })} placeholder={t("ظ…ط«ط§ظ„: ط¯. ط£ط­ظ…ط¯ ظ…ط­ظ…ط¯")} style={inputStyle} />
               </Field>
               
               <div style={{ marginBottom:20 }}>
                   <div style={{ display:'flex', gap:12, alignItems:'center', padding:'12px 14px', borderRadius:12, background: editingItem.isAnonymous ? C.blueLight : C.bg, border:`1.5px solid ${editingItem.isAnonymous ? C.blue : C.border}`, cursor:'pointer', transition:'all .2s' }} onClick={()=>setEditingItem({...editingItem, isAnonymous:!editingItem.isAnonymous})}>
                       <input type="checkbox" checked={editingItem.isAnonymous} readOnly style={{ width:18, height:18, accentColor:C.blue }} />
-                      <label style={{ fontSize:'0.9rem', color:C.dark, cursor:'pointer', fontWeight:600 }}>{t("إظهار كمساهم مجهول")}</label>
+                      <label style={{ fontSize:'0.9rem', color:C.dark, cursor:'pointer', fontWeight:600 }}>{t("ط¥ط¸ظ‡ط§ط± ظƒظ…ط³ط§ظ‡ظ… ظ…ط¬ظ‡ظˆظ„")}</label>
                   </div>
-                  <p style={{ color:C.muted, fontSize:'0.75rem', marginTop:6, paddingRight:32 }}>{t("لن يظهر اسمك الحقيقي للمستخدمين الآخرين عند تفعيل هذا الخيار.")}</p>
+                  <p style={{ color:C.muted, fontSize:'0.75rem', marginTop:6, paddingRight:32 }}>{t("ظ„ظ† ظٹط¸ظ‡ط± ط§ط³ظ…ظƒ ط§ظ„ط­ظ‚ظٹظ‚ظٹ ظ„ظ„ظ…ط³طھط®ط¯ظ…ظٹظ† ط§ظ„ط¢ط®ط±ظٹظ† ط¹ظ†ط¯ طھظپط¹ظٹظ„ ظ‡ط°ط§ ط§ظ„ط®ظٹط§ط±.")}</p>
               </div>
 
               <div style={{ marginBottom:28 }}>
                   <div style={{ display:'flex', gap:12, alignItems:'center', padding:'12px 14px', borderRadius:12, background: editingItem.isActive ? C.greenBg : C.bg, border:`1.5px solid ${editingItem.isActive ? C.green : C.border}`, cursor:'pointer', transition:'all .2s' }} onClick={()=>setEditingItem({...editingItem, isActive:!editingItem.isActive})}>
                       <input type="checkbox" checked={editingItem.isActive} readOnly style={{ width:18, height:18, accentColor:C.green }} />
-                      <label style={{ fontSize:'0.9rem', color:C.dark, cursor:'pointer', fontWeight:600 }}>{t("المورد نشط (ظاهر للعامة)")}</label>
+                      <label style={{ fontSize:'0.9rem', color:C.dark, cursor:'pointer', fontWeight:600 }}>{t("ط§ظ„ظ…ظˆط±ط¯ ظ†ط´ط· (ط¸ط§ظ‡ط± ظ„ظ„ط¹ط§ظ…ط©)")}</label>
                   </div>
-                  <p style={{ color:C.muted, fontSize:'0.75rem', marginTop:6, paddingRight:32 }}>{t("يمكنك إيقاف تنشيط المورد مؤقتاً لمنع الآخرين من الوصول إليه.")}</p>
+                  <p style={{ color:C.muted, fontSize:'0.75rem', marginTop:6, paddingRight:32 }}>{t("ظٹظ…ظƒظ†ظƒ ط¥ظٹظ‚ط§ظپ طھظ†ط´ظٹط· ط§ظ„ظ…ظˆط±ط¯ ظ…ط¤ظ‚طھط§ظ‹ ظ„ظ…ظ†ط¹ ط§ظ„ط¢ط®ط±ظٹظ† ظ…ظ† ط§ظ„ظˆطµظˆظ„ ط¥ظ„ظٹظ‡.")}</p>
               </div>
 
               <div style={{ display:"flex", gap:12, justifyContent:"flex-end" }}>
-                <Btn variant="secondary" style={{ padding:'10px 24px' }} onClick={() => setShowEditModal(false)}>{t("إلغاء")}</Btn>
+                <Btn variant="secondary" style={{ padding:'10px 24px' }} onClick={() => setShowEditModal(false)}>{t("ط¥ظ„ط؛ط§ط،")}</Btn>
                 <Btn style={{ padding:'10px 32px' }} onClick={() => {
                   setItems(arr => arr.map(it => it.id === editingItem.id ? editingItem : it));
                   setShowEditModal(false);
-                }}>{t("حفظ التغييرات")}</Btn>
+                }}>{t("ط­ظپط¸ ط§ظ„طھط؛ظٹظٹط±ط§طھ")}</Btn>
               </div>
             </div>
           </div>
@@ -429,3 +429,4 @@ export default function DashResources({ setPage, user }) {
     </DashboardLayout>
   );
 }
+
